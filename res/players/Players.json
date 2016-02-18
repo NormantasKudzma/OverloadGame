@@ -1,0 +1,29 @@
+{
+	"spritesheet":"spritesheet_players.png",
+	"collider":[
+		{"x":-50,	"y":-80},
+		{"x":-64,	"y":40},
+		{"x":-24,	"y":60},
+		{"x":24,	"y":60},
+		{"x":64,	"y":40},
+		{"x":50,	"y":-80}
+	],
+	"sensors":[
+		[{"x":-50,"y":-80}, {"x":50,"y":-80}, {"x":50,"y":-82}, {"x":-50,"y":-82}]
+	],
+	"players":[
+		{
+			"comment":"player0, gray",
+			"animations":[
+				[{"x":0,"y":0,"w":128,"h":160}, {"x":128,"y":0,"w":128,"h":160}, {"x":256,"y":0,"w":128,"h":160}],
+				[{"x":384,"y":0,"w":128,"h":160}]
+			],
+			"controlmethod":"LWJGLKEYBOARDCONTROLLER",
+			"controlindex":0,
+			"controls":[
+				{"keymask":203, "method":"moveLeft"},
+				{"keymask":205, "method":"moveRight"}
+			]
+		}
+	]
+}
