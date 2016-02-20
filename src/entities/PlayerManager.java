@@ -5,6 +5,7 @@ import game.Paths;
 import graphics.Sprite2D;
 import graphics.SpriteAnimation;
 
+import org.jbox2d.dynamics.Fixture;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
@@ -50,7 +51,8 @@ public class PlayerManager {
 			player.getBody().attachPolygonCollider(colliderVerts);
 			
 			for (int j = 0; j < sensorVerts.length; ++j){
-				player.getBody().attachPolygonCollider(sensorVerts[j], true);
+				Fixture f = player.getBody().attachPolygonCollider(sensorVerts[j], true);
+				player.addSensor(f, PlayerEntity.SensorType.FOOT); // FIXME string -> type
 			}
 
 			player.getBody().getBody().getFixtureList().setRestitution(0.0f);
