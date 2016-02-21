@@ -1,6 +1,7 @@
 package entities;
 
 import game.Entity;
+import game.OverloadMain;
 import graphics.SpriteAnimation;
 
 import java.lang.reflect.InvocationTargetException;
@@ -16,15 +17,36 @@ import controls.ControllerEventListener;
 public class PlayerEntity extends Entity<SpriteAnimation> {
 	public enum SensorType {
 		FOOT,
+		LEFT,
+		RIGHT,
 		INVALID
 	}
 	
+	public enum AnimationState {
+		RUN(0),
+		JUMP(1);
+		
+		private final int index;
+		
+		private AnimationState(int i){
+			index = i;
+		}
+		
+		public final int index(){
+			return index;
+		}
+	}
+	
 	private static final int MAX_JUMP_LENGTH = 7;
+	private static final float MAX_MOVE_SPEED = 14.0f;
 	private int jumpLength = 0;
-	private float moveSpeed = 10.0f;
+	private float acceleration = 1.0f;
+	private float movementDirection = 0.0f;
 	private float jumpStrength = 36.0f;
-	private boolean jumpStarted = false;
 	private boolean canJump = false;
+	private boolean jumpStarted = false;
+	private boolean leftSensorTouching = false;
+	private boolean rightSensorTouching = false;
 	private Vector2 movementVector = new Vector2();
 	private HashMap<SensorType, Fixture> sensors = new HashMap<SensorType, Fixture>();
 	
@@ -40,7 +62,9 @@ public class PlayerEntity extends Entity<SpriteAnimation> {
 						method.invoke(object);
 					}
 					catch (IllegalAccessException | IllegalArgumentException | InvocationTargetException e) {
-						e.printStackTrace();
+						if (OverloadMain.IS_DEBUG_BUILD){
+							e.printStackTrace();
+						}
 					}
 				}
 			};
@@ -65,6 +89,14 @@ public class PlayerEntity extends Entity<SpriteAnimation> {
 		if (me == sensors.get(SensorType.FOOT)){
 			canJump = false;
 		}
+		
+		if (me == sensors.get(SensorType.LEFT)){
+			leftSensorTouching = false;
+		}
+		
+		if (me == sensors.get(SensorType.RIGHT)){
+			rightSensorTouching = false;
+		}
 	}
 	
 	@Override
@@ -73,21 +105,49 @@ public class PlayerEntity extends Entity<SpriteAnimation> {
 			canJump = true;
 			jumpStarted = false;
 			jumpLength = 0;
+			sprite.setState(AnimationState.RUN.index());
+		}
+		
+		if (me == sensors.get(SensorType.LEFT)){
+			leftSensorTouching = true;
+		}
+		
+		if (me == sensors.get(SensorType.RIGHT)){
+			rightSensorTouching = true;
 		}
 	}
 	
-	public void moveLeft(){
-		movementVector.x = -moveSpeed;
+	public final void moveLeft(){
+		if (leftSensorTouching){
+			return;
+		}
+		
+		if (movementVector.x > 0.0f){
+			movementVector.x = 0.0f;
+			setScale(getScale().mul(-1.0f, 1.0f));
+		}
+		
+		movementDirection = -1.0f;
 	}
 	
-	public void moveRight(){
-		movementVector.x = moveSpeed;
+	public final void moveRight(){
+		if (rightSensorTouching){
+			return;
+		}
+		
+		if (movementVector.x < 0.0f){
+			movementVector.x = 0.0f;
+			setScale(getScale().mul(-1.0f, 1.0f));
+		}
+		
+		movementDirection = 1.0f;
 	}
 	
-	public void moveUp(){
+	public final void moveUp(){
 		if (canJump || (jumpStarted && jumpLength < MAX_JUMP_LENGTH)){
 			movementVector.y = jumpStrength;
 			jumpStarted = true;
+			sprite.setState(AnimationState.JUMP.index());
 		}
 	}
 
@@ -99,15 +159,27 @@ public class PlayerEntity extends Entity<SpriteAnimation> {
 			jumpLength++;
 		}
 		
-		if (movementVector.x != 0.0f){
-			//applyForce(horizontalMovement);
-			getBody().getBody().m_linearVelocity.x = movementVector.x;
-			movementVector.x = 0.0f;
+		if (movementDirection != 0.0f){
+			if (Math.abs(movementVector.x) > MAX_MOVE_SPEED){
+				movementVector.x = MAX_MOVE_SPEED * movementDirection;
+			}
+			else {
+				movementVector.x += acceleration * movementDirection;
+			}
+			setHorizontalVelocity(movementVector.x);
+			movementDirection = 0.0f;
+			sprite.setPaused(false);
+		}
+		else {
+			sprite.setPaused(true);
+			/*if (Math.abs(movementVector.x) > 0.0f){
+				setHorizontalVelocity(movementVector.x * 0.5f);
+				movementVector.x = 0.0f;
+			}*/
 		}
 		
 		if (movementVector.y != 0.0f){
-			//applyImpulse(verticalMovement);
-			getBody().getBody().m_linearVelocity.y = movementVector.y;
+			setVerticalVelocity(movementVector.y);
 			movementVector.y = 0.0f;
 		}
 	}

@@ -1,5 +1,6 @@
 package entities;
 
+import entities.PlayerEntity.SensorType;
 import game.OverloadEngine;
 import game.Paths;
 import graphics.Sprite2D;
@@ -33,10 +34,13 @@ public class PlayerManager {
 		Vector2 sheetSizeCoef = new Vector2(spritesheet.getTexture().getWidth(), spritesheet.getTexture().getHeight());
 		sheetSizeCoef.div(spritesheet.getTexture().getImageWidth(), spritesheet.getTexture().getImageHeight());
 		JSONArray playerArrayJson = playerFileJson.getJSONArray("players");
+		JSONObject scaleJson = playerFileJson.getJSONObject("scale");
+		Vector2 playerScale = new Vector2((float)scaleJson.getDouble("x"), (float)scaleJson.getDouble("y"));
 		
 		Vector2 aspectRatioScale = new Vector2(OverloadEngine.aspectRatio, 1.0f / OverloadEngine.aspectRatio);
-		Vector2[] colliderVerts = loadCollider(playerFileJson);
-		Vector2[][] sensorVerts = loadSensors(playerFileJson);
+		Vector2[] colliderVerts = loadCollider(playerFileJson, playerScale);
+		Vector2[][] sensorVerts = loadSensors(playerFileJson, playerScale);
+		SensorType[] sensorTypes = new SensorType[]{SensorType.FOOT, SensorType.LEFT, SensorType.RIGHT};
 		
 		for (int i = 0; i < playerArrayJson.length(); ++i){
 			JSONObject playerJson = playerArrayJson.getJSONObject(i);
@@ -46,23 +50,24 @@ public class PlayerManager {
 			loadAnimations(playerJson, player, spritesheet, sheetSizeCoef);
 			loadControls(playerJson, player);
 			
-			player.setPosition(1.0f, 1.0f);
-			player.setScale(player.getScale().div(aspectRatioScale));
+			player.setPosition(1.0f, 1.0f); // FIXME load position from map
+			player.setScale(player.getScale().div(aspectRatioScale).mul(playerScale));
 			player.getBody().attachPolygonCollider(colliderVerts);
 			
 			for (int j = 0; j < sensorVerts.length; ++j){
 				Fixture f = player.getBody().attachPolygonCollider(sensorVerts[j], true);
-				player.addSensor(f, PlayerEntity.SensorType.FOOT); // FIXME string -> type
+				player.addSensor(f, sensorTypes[j]);
 			}
 
 			player.getBody().getBody().getFixtureList().setRestitution(0.0f);
 			player.getBody().getBody().getFixtureList().setFriction(1.7f);
 			player.getBody().getBody().getFixtureList().setDensity(2.0f);
+			//player.getBody().getBody().setLinearDamping(0.2f);
 			playerEntities[i] = player;
 		}
 	}
 
-	private Vector2[][] loadSensors(JSONObject json) {
+	private Vector2[][] loadSensors(JSONObject json, Vector2 globalScale) {
 		Vector2[][] sensorVerts = null;
 		JSONArray sensorArrayJson = json.getJSONArray("sensors");
 		sensorVerts = new Vector2[sensorArrayJson.length()][];
@@ -75,6 +80,7 @@ public class PlayerManager {
 				// Convert pixel coordinates to normalized coordinates
 				sensorVerts[i][j].div(OverloadEngine.frameWidth, OverloadEngine.frameHeight);
 				sensorVerts[i][j].mul(1.25f);
+				sensorVerts[i][j].mul(globalScale);
 			}
 		}
 		return sensorVerts;
@@ -95,7 +101,7 @@ public class PlayerManager {
 		}
 	}
 
-	private Vector2[] loadCollider(JSONObject json) {
+	private Vector2[] loadCollider(JSONObject json, Vector2 globalScale) {
 		JSONArray colliderArrayJson = json.getJSONArray("collider");
 
 		Vector2[] collVerts = new Vector2[colliderArrayJson.length()];
@@ -105,6 +111,7 @@ public class PlayerManager {
 			// Also, convert pixel coordinates to normalized coordinates
 			collVerts[i].div(OverloadEngine.frameWidth, OverloadEngine.frameHeight);
 			collVerts[i].mul(1.25f);
+			collVerts[i].mul(globalScale);
 		}
 		
 		return collVerts;
