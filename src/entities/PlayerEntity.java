@@ -48,6 +48,7 @@ public class PlayerEntity extends Entity<SpriteAnimation> {
 	private boolean leftSensorTouching = false;
 	private boolean rightSensorTouching = false;
 	private Vector2 movementVector = new Vector2();
+	private Vector2 scale = null;
 	private HashMap<SensorType, Fixture> sensors = new HashMap<SensorType, Fixture>();
 	
 	public final ControllerEventListener getEventListenerForMethod(final String methodName) {
@@ -124,9 +125,9 @@ public class PlayerEntity extends Entity<SpriteAnimation> {
 		
 		if (movementVector.x > 0.0f){
 			movementVector.x = 0.0f;
-			setScale(getScale().mul(-1.0f, 1.0f));
 		}
-		
+
+		super.setScale(-scale.x, scale.y);
 		movementDirection = -1.0f;
 	}
 	
@@ -137,9 +138,9 @@ public class PlayerEntity extends Entity<SpriteAnimation> {
 		
 		if (movementVector.x < 0.0f){
 			movementVector.x = 0.0f;
-			setScale(getScale().mul(-1.0f, 1.0f));
 		}
-		
+
+		super.setScale(scale.x, scale.y);
 		movementDirection = 1.0f;
 	}
 	
@@ -151,6 +152,12 @@ public class PlayerEntity extends Entity<SpriteAnimation> {
 		}
 	}
 
+	@Override
+	public void setScale(Vector2 scale) {
+		super.setScale(scale);
+		this.scale = scale.copy();
+	}
+	
 	@Override
 	public void update(float deltaTime) {
 		super.update(deltaTime);
@@ -172,10 +179,10 @@ public class PlayerEntity extends Entity<SpriteAnimation> {
 		}
 		else {
 			sprite.setPaused(true);
-			/*if (Math.abs(movementVector.x) > 0.0f){
+			if (Math.abs(movementVector.x) > 0.0f){
 				setHorizontalVelocity(movementVector.x * 0.5f);
 				movementVector.x = 0.0f;
-			}*/
+			}
 		}
 		
 		if (movementVector.y != 0.0f){
