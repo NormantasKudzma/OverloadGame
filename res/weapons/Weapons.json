@@ -1,0 +1,26 @@
+{
+	"spritesheet":"spritesheet_weapons.png",
+	"weapons":[
+		{
+			"name":"shotgun",
+			"x":0,
+			"y":0,
+			"w":128,
+			"h":32,
+			"scale":1.0,
+			"type":"entities.ShotgunEntity"
+		}			
+	],
+	"misc":[
+		{
+			"name":"shotgun_shell",
+			"x":0,
+			"y":32,
+			"w":16,
+			"h":16,
+			"scale":1.0,
+			"parent":"shotgun",
+			"type":"entities.AmmoEntity"
+		}
+	]
+}

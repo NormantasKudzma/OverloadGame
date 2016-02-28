@@ -1,5 +1,6 @@
-package entities;
+package managers;
 
+import entities.PlayerEntity;
 import entities.PlayerEntity.SensorType;
 import game.OverloadEngine;
 import game.Paths;
@@ -18,7 +19,7 @@ import controls.ControllerKeybind;
 import controls.ControllerManager;
 import controls.EController;
 
-public class PlayerManager {
+public class PlayerManager extends EntityManager{
 	private PlayerEntity[] playerEntities = new PlayerEntity[4];
 	
 	public PlayerEntity getPlayer(int index){
@@ -30,9 +31,7 @@ public class PlayerManager {
 	
 	public void loadPlayers(){
 		JSONObject playerFileJson = ConfigManager.loadConfigAsJson(Paths.PLAYERS + "Players.json");
-		Sprite2D spritesheet = new Sprite2D(Paths.SPRITESHEETS + playerFileJson.getString("spritesheet"));
-		Vector2 sheetSizeCoef = new Vector2(spritesheet.getTexture().getWidth(), spritesheet.getTexture().getHeight());
-		sheetSizeCoef.div(spritesheet.getTexture().getImageWidth(), spritesheet.getTexture().getImageHeight());
+		Sprite2D spriteSheet = new Sprite2D(Paths.SPRITESHEETS + playerFileJson.getString("spritesheet"));
 		JSONArray playerArrayJson = playerFileJson.getJSONArray("players");
 		JSONObject scaleJson = playerFileJson.getJSONObject("scale");
 		Vector2 playerScale = new Vector2((float)scaleJson.getDouble("x"), (float)scaleJson.getDouble("y"));
@@ -47,7 +46,7 @@ public class PlayerManager {
 			PlayerEntity player = new PlayerEntity();
 			player.initEntity();
 			
-			loadAnimations(playerJson, player, spritesheet, sheetSizeCoef);
+			loadAnimations(playerJson, player, spriteSheet);
 			loadControls(playerJson, player);
 			
 			player.setPosition(1.0f, 1.0f); // FIXME load position from map
@@ -62,7 +61,7 @@ public class PlayerManager {
 			player.getBody().getBody().getFixtureList().setRestitution(0.0f);
 			player.getBody().getBody().getFixtureList().setFriction(1.7f);
 			player.getBody().getBody().getFixtureList().setDensity(2.0f);
-			//player.getBody().getBody().setLinearDamping(0.2f);
+
 			playerEntities[i] = player;
 		}
 	}
@@ -117,7 +116,7 @@ public class PlayerManager {
 		return collVerts;
 	}
 
-	private void loadAnimations(JSONObject playerJson, PlayerEntity player, Sprite2D spritesheet, Vector2 sheetSizeCoef) {
+	private void loadAnimations(JSONObject playerJson, PlayerEntity player, Sprite2D spritesheet) {
 		JSONArray animationsJson = playerJson.getJSONArray("animations");
 		Sprite2D[][] spriteAnimations = new Sprite2D[animationsJson.length()][];
 		for (int j = 0; j < animationsJson.length(); ++j){
@@ -125,12 +124,12 @@ public class PlayerManager {
 			Sprite2D[] sprites = new Sprite2D[animation.length()];
 			for (int k = 0; k < animation.length(); k++){
 				JSONObject frameJson = animation.getJSONObject(k);
-				Vector2 topLeft = new Vector2((float)frameJson.getDouble("x"), (float)frameJson.getDouble("y"));
-				Vector2 botRight = new Vector2((float)frameJson.getDouble("w"), (float)frameJson.getDouble("h")).add(topLeft);
-				topLeft.mul(sheetSizeCoef);
-				botRight.mul(sheetSizeCoef);
 				
-				sprites[k] = new Sprite2D(spritesheet.getTexture(), topLeft, botRight);
+				int x = frameJson.getInt("x");
+				int y = frameJson.getInt("y");
+				int w = frameJson.getInt("w");
+				int h = frameJson.getInt("h");				
+				sprites[k] = getSpriteFromSheet(x, y, w, h, spritesheet);
 			}
 			spriteAnimations[j] = sprites;
 		}

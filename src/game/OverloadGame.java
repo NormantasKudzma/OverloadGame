@@ -1,16 +1,18 @@
 package game;
 
+import managers.MapManager;
+import managers.PlayerManager;
+import managers.WeaponManager;
 import mapping.GameMap;
 import mapping.GameMap.Layer;
-import mapping.MapLoader;
 import utils.Vector2;
-import entities.PlayerManager;
 
 public class OverloadGame extends BaseGame {
 	public static Vector2 GRAVITY = new Vector2(0.0f, -4.0f);
 	
-	private MapLoader mapLoader = new MapLoader();
+	private MapManager mapManager = new MapManager();
 	private PlayerManager playerManager = new PlayerManager();
+	private WeaponManager weaponManager = new WeaponManager();
 	
 	private GameMap map;
 	
@@ -19,7 +21,8 @@ public class OverloadGame extends BaseGame {
 		super.init();
 		physicsWorld.getWorld().setGravity(GRAVITY.toVec2());
 		playerManager.loadPlayers();
-		map = mapLoader.loadMap(Paths.MAPS + "Map_01.json", entityList);
+		weaponManager.loadWeapons();
+		map = mapManager.loadMap(Paths.MAPS + "Map_01.json", entityList);
 		
 		addEntity(playerManager.getPlayer(0));
 		playerManager.getPlayer(0).setPosition(new Vector2(0.2f, 0.8f));

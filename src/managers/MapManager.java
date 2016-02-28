@@ -1,4 +1,4 @@
-package mapping;
+package managers;
 
 import entities.WallEntity;
 import game.Entity;
@@ -9,6 +9,7 @@ import graphics.Sprite2D;
 import java.util.ArrayList;
 import java.util.HashMap;
 
+import mapping.GameMap;
 import mapping.GameMap.Layer;
 
 import org.json.JSONArray;
@@ -17,8 +18,8 @@ import org.json.JSONObject;
 import utils.ConfigManager;
 import utils.Vector2;
 
-public class MapLoader {
-	public MapLoader(){
+public class MapManager extends EntityManager{
+	public MapManager(){
 		
 	}
 	
@@ -98,14 +99,11 @@ public class MapLoader {
 					Entity e = (Entity) obj;
 					e.initEntity();
 					Sprite2D sheet = spriteSheets.get(entityJson.get("sheet"));
-					Vector2 sheetSizeCoef = new Vector2(sheet.getTexture().getWidth(), sheet.getTexture().getHeight());
-					sheetSizeCoef.div(sheet.getTexture().getImageWidth(), sheet.getTexture().getImageHeight());
-					Vector2 topLeft = new Vector2((float)entityJson.getDouble("x"), (float) entityJson.getDouble("y"));
-					Vector2 botRight = topLeft.copy().add(new Vector2((float)entityJson.getDouble("w"), (float)entityJson.getDouble("h")));
-					topLeft.mul(sheetSizeCoef);
-					botRight.mul(sheetSizeCoef);
-					Sprite2D sprite = new Sprite2D(sheet.getTexture(), topLeft, botRight);
-					e.setSprite(sprite);
+					int x = entityJson.getInt("x");
+					int y = entityJson.getInt("y");
+					int w = entityJson.getInt("w");
+					int h = entityJson.getInt("h");
+					e.setSprite(getSpriteFromSheet(x, y, w, h, sheet));
 					// some magic (probably not)
 					e.setScale(e.getScale().mul((float)entityJson.getDouble("scale")).div(OverloadEngine.aspectRatio, 1.0f / OverloadEngine.aspectRatio));
 					entities.put(entityJson.getString("name"), e);
