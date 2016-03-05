@@ -56,7 +56,7 @@ public class MapManager extends EntityManager{
 				collVerts[j] = new Vector2((float)coll.getDouble("x"), (float)coll.getDouble("y"));
 				collVerts[j].div(mapSize);
 			}
-			colliderEntity.getBody().attachPolygonCollider(collVerts);
+			colliderEntity.getPhysicsBody().attachPolygonCollider(collVerts);
 		}
 		
 		map.addEntity(Layer.MIDDLE, colliderEntity);

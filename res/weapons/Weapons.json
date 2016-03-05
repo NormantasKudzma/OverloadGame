@@ -8,8 +8,22 @@
 			"w":128,
 			"h":32,
 			"scale":1.0,
+			"collider":[-64, -16, 64, 16],
 			"type":"entities.ShotgunEntity"
 		}			
+	],
+	"bullets":[
+		{
+			"name":"shotgun_bullet",
+			"x":16,
+			"y":32,
+			"w":16,
+			"h":16,
+			"scale":1.0,
+			"parent":"shotgun",
+			"collider":[-7, -2, 8, 3],
+			"type":"entities.BulletEntity"
+		}
 	],
 	"misc":[
 		{

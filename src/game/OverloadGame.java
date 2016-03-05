@@ -1,5 +1,6 @@
 package game;
 
+import entities.WeaponEntity;
 import managers.MapManager;
 import managers.PlayerManager;
 import managers.WeaponManager;
@@ -25,7 +26,12 @@ public class OverloadGame extends BaseGame {
 		map = mapManager.loadMap(Paths.MAPS + "Map_01.json", entityList);
 		
 		addEntity(playerManager.getPlayer(0));
-		playerManager.getPlayer(0).setPosition(new Vector2(0.2f, 0.8f));
+		playerManager.getPlayer(0).setPosition(new Vector2(0.8f, 1.5f));
+		
+		WeaponEntity weap = weaponManager.getWeapon("shotgun");
+		weap.getPhysicsBody().getBody().setActive(true);
+		weap.setPosition(new Vector2(1.0f, 1.5f));
+		addEntity(weap);
 	}
 	
 	@Override

@@ -49,6 +49,7 @@ public class PlayerEntity extends Entity<SpriteAnimation> {
 	private boolean rightSensorTouching = false;
 	private Vector2 movementVector = new Vector2();
 	private Vector2 scale = null;
+	private WeaponEntity currentWeapon = null;
 	private HashMap<SensorType, Fixture> sensors = new HashMap<SensorType, Fixture>();
 	
 	public final ControllerEventListener getEventListenerForMethod(final String methodName) {
@@ -102,6 +103,16 @@ public class PlayerEntity extends Entity<SpriteAnimation> {
 	
 	@Override
 	public void collisionStart(Fixture me, ICollidable other) {
+		if (other instanceof WeaponEntity){
+			WeaponEntity weapon = (WeaponEntity)other;
+			if (currentWeapon != null){
+				currentWeapon.detachFromPlayer();
+			}
+			currentWeapon = weapon;
+			currentWeapon.attachToPlayer(this);
+			return;
+		}
+		
 		if (me == sensors.get(SensorType.FOOT)){
 			canJump = true;
 			jumpStarted = false;
@@ -126,9 +137,13 @@ public class PlayerEntity extends Entity<SpriteAnimation> {
 		if (movementVector.x > 0.0f){
 			movementVector.x = 0.0f;
 		}
-
+		
 		super.setScale(-scale.x, scale.y);
 		movementDirection = -1.0f;
+		
+		if (currentWeapon != null){
+			currentWeapon.flip(movementDirection);
+		}
 	}
 	
 	public final void moveRight(){
@@ -142,6 +157,10 @@ public class PlayerEntity extends Entity<SpriteAnimation> {
 
 		super.setScale(scale.x, scale.y);
 		movementDirection = 1.0f;
+		
+		if (currentWeapon != null){
+			currentWeapon.flip(movementDirection);
+		}
 	}
 	
 	public final void moveUp(){

@@ -51,16 +51,16 @@ public class PlayerManager extends EntityManager{
 			
 			player.setPosition(1.0f, 1.0f); // FIXME load position from map
 			player.setScale(player.getScale().div(aspectRatioScale).mul(playerScale));
-			player.getBody().attachPolygonCollider(colliderVerts);
+			player.getPhysicsBody().attachPolygonCollider(colliderVerts);
 			
 			for (int j = 0; j < sensorVerts.length; ++j){
-				Fixture f = player.getBody().attachPolygonCollider(sensorVerts[j], true);
+				Fixture f = player.getPhysicsBody().attachPolygonCollider(sensorVerts[j], true);
 				player.addSensor(f, sensorTypes[j]);
 			}
 
-			player.getBody().getBody().getFixtureList().setRestitution(0.0f);
-			player.getBody().getBody().getFixtureList().setFriction(1.7f);
-			player.getBody().getBody().getFixtureList().setDensity(2.0f);
+			player.getPhysicsBody().getBody().getFixtureList().setRestitution(0.0f);
+			player.getPhysicsBody().getBody().getFixtureList().setFriction(1.7f);
+			player.getPhysicsBody().getBody().getFixtureList().setDensity(2.0f);
 
 			playerEntities[i] = player;
 		}
@@ -77,8 +77,9 @@ public class PlayerManager extends EntityManager{
 				JSONObject sensor = sensorJson.getJSONObject(j);
 				sensorVerts[i][j] = new Vector2((float)sensor.getDouble("x"), (float)sensor.getDouble("y"));
 				// Convert pixel coordinates to normalized coordinates
-				sensorVerts[i][j].div(OverloadEngine.frameWidth, OverloadEngine.frameHeight);
-				sensorVerts[i][j].mul(1.25f);
+				//sensorVerts[i][j].div(OverloadEngine.frameWidth, OverloadEngine.frameHeight);
+				//sensorVerts[i][j].mul(1.25f);
+				pixelCoordsToNormal(sensorVerts[i][j]);
 				sensorVerts[i][j].mul(globalScale);
 			}
 		}
@@ -108,8 +109,9 @@ public class PlayerManager extends EntityManager{
 			JSONObject coll = colliderArrayJson.getJSONObject(i);
 			collVerts[i] = new Vector2((float)coll.getDouble("x"), (float)coll.getDouble("y"));
 			// Also, convert pixel coordinates to normalized coordinates
-			collVerts[i].div(OverloadEngine.frameWidth, OverloadEngine.frameHeight);
-			collVerts[i].mul(1.25f);
+			//collVerts[i].div(OverloadEngine.frameWidth, OverloadEngine.frameHeight);
+			//collVerts[i].mul(1.25f);
+			pixelCoordsToNormal(collVerts[i]);
 			collVerts[i].mul(globalScale);
 		}
 		
