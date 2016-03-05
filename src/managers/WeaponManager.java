@@ -1,8 +1,8 @@
 package managers;
 
+import engine.Entity;
+import engine.OverloadEngine;
 import entities.WeaponEntity;
-import game.Entity;
-import game.OverloadEngine;
 import game.Paths;
 import graphics.Sprite2D;
 
@@ -31,7 +31,7 @@ public class WeaponManager extends EntityManager {
 			verts[3] = new Vector2(collJson.getInt(0), collJson.getInt(3));
 			
 			for (int i = 0; i < verts.length; ++i){
-				pixelCoordsToNormal(verts[i]);
+				Vector2.pixelCoordsToNormal(verts[i]);
 			}
 			
 			e.getPhysicsBody().attachPolygonCollider(verts, true);
@@ -73,7 +73,7 @@ public class WeaponManager extends EntityManager {
 				Entity e = (Entity)obj;
 				e.initEntity();
 				e.setSprite(sprite);
-				e.setScale(e.getScale().mul((float)childJson.getDouble("scale")).div(OverloadEngine.aspectRatio, 1.0f / OverloadEngine.aspectRatio));
+				e.setScale(e.getScale().mul((float)childJson.getDouble("scale")));
 				e.getPhysicsBody().getBody().setActive(false);
 				attachCollider(childJson, e);
 				
@@ -88,7 +88,7 @@ public class WeaponManager extends EntityManager {
 		}
 	}
 
-	private void loadWeapons(JSONObject weaponFileJson, Sprite2D sheet) {	
+	private void loadWeapons(JSONObject weaponFileJson, Sprite2D sheet){
 		JSONArray weaponArrayJson = weaponFileJson.getJSONArray("weapons");
 		JSONObject weaponJson = null;
 		for (int i = 0; i < weaponArrayJson.length(); ++i){
@@ -105,10 +105,7 @@ public class WeaponManager extends EntityManager {
 				WeaponEntity e = (WeaponEntity)obj;
 				e.initEntity();
 				e.setSprite(sprite);
-				Vector2 ddddd = new Vector2(128, 32);
-				pixelCoordsToNormal(ddddd);
-				float dra = ddddd.ratio();
-				//e.setScale(e.getScale().mul((float)weaponJson.getDouble("scale")).mul(ddddd));
+				e.setScale(e.getScale().mul((float)weaponJson.getDouble("scale")));
 				e.getPhysicsBody().getBody().setActive(false);
 				attachCollider(weaponJson, e);
 				weaponMap.put(weaponJson.getString("name"), e);

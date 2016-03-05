@@ -1,12 +1,5 @@
 package managers;
 
-import entities.PlayerEntity;
-import entities.PlayerEntity.SensorType;
-import game.OverloadEngine;
-import game.Paths;
-import graphics.Sprite2D;
-import graphics.SpriteAnimation;
-
 import org.jbox2d.dynamics.Fixture;
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -18,6 +11,11 @@ import controls.ControllerEventListener;
 import controls.ControllerKeybind;
 import controls.ControllerManager;
 import controls.EController;
+import entities.PlayerEntity;
+import entities.PlayerEntity.SensorType;
+import game.Paths;
+import graphics.Sprite2D;
+import graphics.SpriteAnimation;
 
 public class PlayerManager extends EntityManager{
 	private PlayerEntity[] playerEntities = new PlayerEntity[4];
@@ -33,10 +31,8 @@ public class PlayerManager extends EntityManager{
 		JSONObject playerFileJson = ConfigManager.loadConfigAsJson(Paths.PLAYERS + "Players.json");
 		Sprite2D spriteSheet = new Sprite2D(Paths.SPRITESHEETS + playerFileJson.getString("spritesheet"));
 		JSONArray playerArrayJson = playerFileJson.getJSONArray("players");
-		JSONObject scaleJson = playerFileJson.getJSONObject("scale");
-		Vector2 playerScale = new Vector2((float)scaleJson.getDouble("x"), (float)scaleJson.getDouble("y"));
+		Vector2 playerScale = new Vector2((float)playerFileJson.getDouble("scale"), (float)playerFileJson.getDouble("scale"));
 		
-		Vector2 aspectRatioScale = new Vector2(OverloadEngine.aspectRatio, 1.0f / OverloadEngine.aspectRatio);
 		Vector2[] colliderVerts = loadCollider(playerFileJson, playerScale);
 		Vector2[][] sensorVerts = loadSensors(playerFileJson, playerScale);
 		SensorType[] sensorTypes = new SensorType[]{SensorType.FOOT, SensorType.LEFT, SensorType.RIGHT};
@@ -50,7 +46,7 @@ public class PlayerManager extends EntityManager{
 			loadControls(playerJson, player);
 			
 			player.setPosition(1.0f, 1.0f); // FIXME load position from map
-			player.setScale(player.getScale().div(aspectRatioScale).mul(playerScale));
+			player.setScale(player.getScale().mul(playerScale));
 			player.getPhysicsBody().attachPolygonCollider(colliderVerts);
 			
 			for (int j = 0; j < sensorVerts.length; ++j){
@@ -79,7 +75,7 @@ public class PlayerManager extends EntityManager{
 				// Convert pixel coordinates to normalized coordinates
 				//sensorVerts[i][j].div(OverloadEngine.frameWidth, OverloadEngine.frameHeight);
 				//sensorVerts[i][j].mul(1.25f);
-				pixelCoordsToNormal(sensorVerts[i][j]);
+				Vector2.pixelCoordsToNormal(sensorVerts[i][j]);
 				sensorVerts[i][j].mul(globalScale);
 			}
 		}
@@ -108,10 +104,7 @@ public class PlayerManager extends EntityManager{
 		for (int i = 0; i < colliderArrayJson.length(); ++i){
 			JSONObject coll = colliderArrayJson.getJSONObject(i);
 			collVerts[i] = new Vector2((float)coll.getDouble("x"), (float)coll.getDouble("y"));
-			// Also, convert pixel coordinates to normalized coordinates
-			//collVerts[i].div(OverloadEngine.frameWidth, OverloadEngine.frameHeight);
-			//collVerts[i].mul(1.25f);
-			pixelCoordsToNormal(collVerts[i]);
+			Vector2.pixelCoordsToNormal(collVerts[i]);
 			collVerts[i].mul(globalScale);
 		}
 		

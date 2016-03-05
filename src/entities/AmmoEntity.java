@@ -1,6 +1,6 @@
 package entities;
 
-import game.Entity;
+import engine.Entity;
 import graphics.Sprite2D;
 
 public class AmmoEntity extends Entity<Sprite2D>{

@@ -1,5 +1,6 @@
 package game;
 
+import engine.BaseGame;
 import entities.WeaponEntity;
 import managers.MapManager;
 import managers.PlayerManager;
@@ -30,7 +31,7 @@ public class OverloadGame extends BaseGame {
 		
 		WeaponEntity weap = weaponManager.getWeapon("shotgun");
 		weap.getPhysicsBody().getBody().setActive(true);
-		weap.setPosition(new Vector2(1.0f, 1.5f));
+		weap.setPosition(new Vector2(1.0f, 1.0f));
 		addEntity(weap);
 	}
 	

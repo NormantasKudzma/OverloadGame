@@ -1,8 +1,8 @@
 package managers;
 
+import engine.Entity;
+import engine.OverloadEngine;
 import entities.WallEntity;
-import game.Entity;
-import game.OverloadEngine;
 import game.Paths;
 import graphics.Sprite2D;
 
@@ -76,8 +76,8 @@ public class MapManager extends EntityManager{
 				Entity clone = (Entity)e.getClass().newInstance();
 				clone.initEntity();
 				clone.setSprite(e.getSprite());
-				clone.setScale(e.getScale().copy().mul((float)scaleJson.getDouble(0), (float)scaleJson.getDouble(1)));
-				clone.setScale(clone.getScale().mul(mapSize.x * 0.5f / mapSize.y, 1.0f));
+				clone.setScale(e.getScale().copy().mul((float)scaleJson.getDouble(0), (float)scaleJson.getDouble(1)).mul(mapSize.x * 0.5f / mapSize.y, 1.0f));
+				//clone.setScale(clone.getScale());
 				clone.setPosition(new Vector2((float)positionJson.getDouble(0), (float)positionJson.getDouble(1)).div(mapSize));
 				map.addEntity(layer, clone);
 				//System.out.printf("Entity pos[%s], scale[%s]\n", clone.getPosition(), clone.getScale());
@@ -104,8 +104,7 @@ public class MapManager extends EntityManager{
 					int w = entityJson.getInt("w");
 					int h = entityJson.getInt("h");
 					e.setSprite(getSpriteFromSheet(x, y, w, h, sheet));
-					// some magic (probably not)
-					e.setScale(e.getScale().mul((float)entityJson.getDouble("scale")).div(OverloadEngine.aspectRatio, 1.0f / OverloadEngine.aspectRatio));
+					e.setScale(e.getScale().mul((float)entityJson.getDouble("scale")));
 					entities.put(entityJson.getString("name"), e);
 				}
 			}
