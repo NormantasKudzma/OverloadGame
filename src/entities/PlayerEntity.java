@@ -106,6 +106,9 @@ public class PlayerEntity extends Entity<SpriteAnimation> {
 		if (other instanceof WeaponEntity){
 			WeaponEntity weapon = (WeaponEntity)other;
 			if (currentWeapon != null){
+				if (currentWeapon.equals(weapon)){
+					return;
+				}
 				currentWeapon.detachFromPlayer();
 			}
 			currentWeapon = weapon;

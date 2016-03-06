@@ -10,6 +10,7 @@ import utils.Vector2;
 public abstract class WeaponEntity extends Entity<Sprite2D>{
 	protected int numBullets = 6;
 	protected float shootCooldown = 1.0f;
+	protected boolean deleteFixtures = false;
 	protected Vector2 positionOffset = new Vector2();
 	protected Vector2 muzzleOffset = new Vector2();
 	
@@ -41,7 +42,8 @@ public abstract class WeaponEntity extends Entity<Sprite2D>{
 	public void attachToPlayer(PlayerEntity e){
 		player = e;
 		if (player != null){
-			body.destroyFixtures();
+			body.getBody().setActive(false);
+			deleteFixtures = true;
 			body.getBody().setGravityScale(0.0f);
 			flip(e.getScale().x);
 		}
@@ -107,6 +109,11 @@ public abstract class WeaponEntity extends Entity<Sprite2D>{
 			else {
 				setPosition(player.getPosition().copy().sub(positionOffset));
 			}
+		}
+		
+		if (deleteFixtures){
+			deleteFixtures = false;
+			body.destroyFixtures();
 		}
 	}
 }

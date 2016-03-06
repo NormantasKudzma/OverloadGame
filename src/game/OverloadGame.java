@@ -31,7 +31,7 @@ public class OverloadGame extends BaseGame {
 		
 		WeaponEntity weap = weaponManager.getWeapon("shotgun");
 		weap.getPhysicsBody().getBody().setActive(true);
-		weap.setPosition(new Vector2(1.0f, 1.0f));
+		weap.setPosition(new Vector2(1.0f, 1.8f));
 		addEntity(weap);
 	}
 	
