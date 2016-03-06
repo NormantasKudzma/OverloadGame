@@ -12,7 +12,7 @@
 			"y":"0",
 			"w":"128",
 			"h":"128",
-			"scale":"0.5"
+			"scale":"1"
 		},
 		{
 			"comment":"ground, grass on top",
@@ -23,7 +23,7 @@
 			"y":"128",
 			"w":"128",
 			"h":"128",
-			"scale":"0.5"
+			"scale":"1"
 		},
 		{
 			"comment":"ground, half top, grass on top",
@@ -34,7 +34,7 @@
 			"y":"768",
 			"w":"128",
 			"h":"128",
-			"scale":"0.5"
+			"scale":"1"
 		}
 	],
 	"mapsize":[64,36],
