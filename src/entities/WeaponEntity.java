@@ -10,6 +10,7 @@ import utils.Vector2;
 public abstract class WeaponEntity extends Entity<Sprite2D>{
 	protected int numBullets = 6;
 	protected float shootCooldown = 1.0f;
+	protected float shootTimer = 0.0f;
 	protected boolean deleteFixtures = false;
 	protected Vector2 positionOffset = new Vector2();
 	protected Vector2 muzzleOffset = new Vector2();
@@ -96,11 +97,26 @@ public abstract class WeaponEntity extends Entity<Sprite2D>{
 		positionOffset = offset;
 	}
 	
+	public void tryShoot(){
+		if (shootTimer <= 0.0f && numBullets > 0){
+			--numBullets;
+			shootTimer = shootCooldown;
+			shoot();
+			if (numBullets < 0){
+				detachFromPlayer();
+			}
+		}
+	}
+	
 	public abstract void shoot();
 	
 	@Override
 	public void update(float deltaTime) {
 		super.update(deltaTime);
+		
+		if (shootCooldown > 0.0f){
+			shootCooldown -= deltaTime;
+		}
 		
 		if (player != null){
 			if (player.getScale().x > 0){

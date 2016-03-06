@@ -47,6 +47,7 @@ public class PlayerEntity extends Entity<SpriteAnimation> {
 	private boolean jumpStarted = false;
 	private boolean leftSensorTouching = false;
 	private boolean rightSensorTouching = false;
+	private boolean tryShoot = false;
 	private Vector2 movementVector = new Vector2();
 	private Vector2 scale = null;
 	private WeaponEntity currentWeapon = null;
@@ -87,24 +88,24 @@ public class PlayerEntity extends Entity<SpriteAnimation> {
 	}
 	
 	@Override
-	public void collisionEnd(Fixture me, ICollidable other) {
-		if (me == sensors.get(SensorType.FOOT)){
+	public void collisionEnd(Fixture myFixture, Fixture otherFixture, ICollidable otherCollidable) {
+		if (myFixture == sensors.get(SensorType.FOOT)){
 			canJump = false;
 		}
 		
-		if (me == sensors.get(SensorType.LEFT)){
+		if (myFixture == sensors.get(SensorType.LEFT)){
 			leftSensorTouching = false;
 		}
 		
-		if (me == sensors.get(SensorType.RIGHT)){
+		if (myFixture == sensors.get(SensorType.RIGHT)){
 			rightSensorTouching = false;
 		}
 	}
 	
 	@Override
-	public void collisionStart(Fixture me, ICollidable other) {
-		if (other instanceof WeaponEntity){
-			WeaponEntity weapon = (WeaponEntity)other;
+	public void collisionStart(Fixture myFixture, Fixture otherFixture, ICollidable otherCollidable) {
+		if (otherCollidable instanceof WeaponEntity){
+			WeaponEntity weapon = (WeaponEntity)otherCollidable;
 			if (currentWeapon != null){
 				if (currentWeapon.equals(weapon)){
 					return;
@@ -116,18 +117,18 @@ public class PlayerEntity extends Entity<SpriteAnimation> {
 			return;
 		}
 		
-		if (me == sensors.get(SensorType.FOOT)){
+		if (myFixture == sensors.get(SensorType.FOOT)){
 			canJump = true;
 			jumpStarted = false;
 			jumpLength = 0;
 			sprite.setState(AnimationState.RUN.index());
 		}
 		
-		if (me == sensors.get(SensorType.LEFT)){
+		if (myFixture == sensors.get(SensorType.LEFT)){
 			leftSensorTouching = true;
 		}
 		
-		if (me == sensors.get(SensorType.RIGHT)){
+		if (myFixture == sensors.get(SensorType.RIGHT)){
 			rightSensorTouching = true;
 		}
 	}
@@ -180,6 +181,10 @@ public class PlayerEntity extends Entity<SpriteAnimation> {
 		this.scale = scale.copy();
 	}
 	
+	public final void shoot(){
+		tryShoot = true;
+	}
+	
 	@Override
 	public void update(float deltaTime) {
 		super.update(deltaTime);
@@ -210,6 +215,13 @@ public class PlayerEntity extends Entity<SpriteAnimation> {
 		if (movementVector.y != 0.0f){
 			setVerticalVelocity(movementVector.y);
 			movementVector.y = 0.0f;
+		}
+		
+		if (tryShoot){
+			tryShoot = false;
+			if (currentWeapon != null){
+				currentWeapon.shoot();
+			}
 		}
 	}
 }

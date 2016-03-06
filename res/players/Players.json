@@ -26,7 +26,8 @@
 			"controls":[
 				{"keymask":203, "method":"moveLeft"},
 				{"keymask":205, "method":"moveRight"},
-				{"keymask":200, "method":"moveUp"}
+				{"keymask":200, "method":"moveUp"},
+				{"keymask":57, "method":"shoot"}
 			]
 		}
 	]
