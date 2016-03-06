@@ -4,16 +4,18 @@ import org.jbox2d.dynamics.Fixture;
 
 import physics.ICollidable;
 import utils.Vector2;
+import engine.BaseGame;
 import engine.Entity;
 import graphics.Sprite2D;
 
 public class BulletEntity extends Entity<Sprite2D>{
-	protected float movementSpeed = 10.0f;
+	protected float movementSpeed = 1.25f;
+	protected float totalLifetime = 1.0f;
 	protected Vector2 direction = new Vector2();
 	protected WeaponEntity parent = null;
 	
-	public BulletEntity(){
-		
+	public BulletEntity(BaseGame game){
+		super(game);
 	}
 	
 	@Override
@@ -36,6 +38,12 @@ public class BulletEntity extends Entity<Sprite2D>{
 		super.initEntity();
 		body.getBody().setBullet(true);
 		body.getBody().setGravityScale(0.0f);
+		body.getBody().setSleepingAllowed(false);
+		body.getBody().setLinearDamping(0.0f);
+	}
+	
+	public float getSpeed(){
+		return movementSpeed;
 	}
 	
 	public void setDirection(Vector2 dir){
@@ -47,6 +55,7 @@ public class BulletEntity extends Entity<Sprite2D>{
 		this.movementSpeed = movementSpeed;
 		direction.mul(movementSpeed);
 		setLinearVelocity(direction);
+		setLifetime(totalLifetime);
 	}
 	
 	public void setParent(WeaponEntity parent){

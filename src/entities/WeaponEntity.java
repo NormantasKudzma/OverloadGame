@@ -1,15 +1,13 @@
 package entities;
 
-import org.jbox2d.dynamics.Fixture;
-
-import engine.Entity;
-
-import graphics.Sprite2D;
 import utils.Vector2;
+import engine.BaseGame;
+import engine.Entity;
+import graphics.Sprite2D;
 
 public abstract class WeaponEntity extends Entity<Sprite2D>{
 	protected int numBullets = 6;
-	protected float shootCooldown = 1.0f;
+	protected float shootCooldown = 2.0f;
 	protected float shootTimer = 0.0f;
 	protected boolean deleteFixtures = false;
 	protected Vector2 positionOffset = new Vector2();
@@ -19,8 +17,8 @@ public abstract class WeaponEntity extends Entity<Sprite2D>{
 	protected BulletEntity bullet = null;
 	protected PlayerEntity player = null;
 	
-	public WeaponEntity(){
-		
+	public WeaponEntity(BaseGame game){
+		super(game);
 	}
 	
 	public void addChild(Entity e){
@@ -43,9 +41,7 @@ public abstract class WeaponEntity extends Entity<Sprite2D>{
 	public void attachToPlayer(PlayerEntity e){
 		player = e;
 		if (player != null){
-			body.getBody().setActive(false);
 			deleteFixtures = true;
-			body.getBody().setGravityScale(0.0f);
 			flip(e.getScale().x);
 		}
 	}
@@ -110,12 +106,31 @@ public abstract class WeaponEntity extends Entity<Sprite2D>{
 	
 	public abstract void shoot();
 	
+	protected BulletEntity spawnBullet(Vector2 pos, Vector2 dir){
+		if (bullet != null){
+			return spawnBullet(pos, dir, bullet.getSpeed());
+		}
+		return null;
+	}
+	
+	protected BulletEntity spawnBullet(Vector2 pos, Vector2 dir, float speed){
+		if (bullet != null){
+			BulletEntity e = (BulletEntity)bullet.clone();
+			e.setPosition(pos);
+			e.setDirection(dir);
+			e.setMovementSpeed(speed);
+			game.addEntity(e);
+			return e;
+		}
+		return null;
+	}
+	
 	@Override
 	public void update(float deltaTime) {
 		super.update(deltaTime);
 		
-		if (shootCooldown > 0.0f){
-			shootCooldown -= deltaTime;
+		if (shootTimer > 0.0f){
+			shootTimer -= deltaTime;
 		}
 		
 		if (player != null){

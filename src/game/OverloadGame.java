@@ -12,9 +12,9 @@ import utils.Vector2;
 public class OverloadGame extends BaseGame {
 	public static Vector2 GRAVITY = new Vector2(0.0f, -4.0f);
 	
-	private MapManager mapManager = new MapManager();
-	private PlayerManager playerManager = new PlayerManager();
-	private WeaponManager weaponManager = new WeaponManager();
+	private MapManager mapManager = new MapManager(this);
+	private PlayerManager playerManager = new PlayerManager(this);
+	private WeaponManager weaponManager = new WeaponManager(this);
 	
 	private GameMap map;
 	

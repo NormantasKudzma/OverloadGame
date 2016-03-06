@@ -1,11 +1,5 @@
 package managers;
 
-import engine.Entity;
-import engine.OverloadEngine;
-import entities.WeaponEntity;
-import game.Paths;
-import graphics.Sprite2D;
-
 import java.util.HashMap;
 
 import org.json.JSONArray;
@@ -13,12 +7,17 @@ import org.json.JSONObject;
 
 import utils.ConfigManager;
 import utils.Vector2;
+import engine.BaseGame;
+import engine.Entity;
+import entities.WeaponEntity;
+import game.Paths;
+import graphics.Sprite2D;
 
 public class WeaponManager extends EntityManager {
 	private HashMap<String, WeaponEntity> weaponMap = new HashMap<String, WeaponEntity>();
 	
-	public WeaponManager(){
-		
+	public WeaponManager(BaseGame game){
+		super(game);
 	}
 
 	private void attachCollider(JSONObject childJson, Entity e) {
@@ -69,7 +68,7 @@ public class WeaponManager extends EntityManager {
 				int h = childJson.getInt("h");
 				Sprite2D sprite = getSpriteFromSheet(x, y, w, h, sheet);
 				
-				Object obj = Class.forName(childJson.getString("type")).newInstance();
+				Object obj = Class.forName(childJson.getString("type")).getDeclaredConstructor(BaseGame.class).newInstance(game);
 				Entity e = (Entity)obj;
 				e.initEntity();
 				e.setSprite(sprite);
@@ -101,7 +100,7 @@ public class WeaponManager extends EntityManager {
 				int h = weaponJson.getInt("h");
 				Sprite2D sprite = getSpriteFromSheet(x, y, w, h, sheet);
 				
-				Object obj = Class.forName(weaponJson.getString("type")).newInstance();
+				Object obj = Class.forName(weaponJson.getString("type")).getDeclaredConstructor(BaseGame.class).newInstance(game);
 				WeaponEntity e = (WeaponEntity)obj;
 				e.initEntity();
 				e.setSprite(sprite);

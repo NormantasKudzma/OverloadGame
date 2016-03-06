@@ -1,9 +1,5 @@
 package entities;
 
-import engine.Entity;
-import game.OverloadMain;
-import graphics.SpriteAnimation;
-
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.HashMap;
@@ -13,6 +9,10 @@ import org.jbox2d.dynamics.Fixture;
 import physics.ICollidable;
 import utils.Vector2;
 import controls.ControllerEventListener;
+import engine.BaseGame;
+import engine.Entity;
+import game.OverloadMain;
+import graphics.SpriteAnimation;
 
 public class PlayerEntity extends Entity<SpriteAnimation> {
 	public enum SensorType {
@@ -52,6 +52,10 @@ public class PlayerEntity extends Entity<SpriteAnimation> {
 	private Vector2 scale = null;
 	private WeaponEntity currentWeapon = null;
 	private HashMap<SensorType, Fixture> sensors = new HashMap<SensorType, Fixture>();
+	
+	public PlayerEntity(BaseGame game) {
+		super(game);
+	}
 	
 	public final ControllerEventListener getEventListenerForMethod(final String methodName) {
 		try {
@@ -131,6 +135,12 @@ public class PlayerEntity extends Entity<SpriteAnimation> {
 		if (myFixture == sensors.get(SensorType.RIGHT)){
 			rightSensorTouching = true;
 		}
+	}
+	
+	@Override
+	public void initEntity() {
+		super.initEntity();
+		body.getBody().setSleepingAllowed(false);
 	}
 	
 	public final void moveLeft(){
@@ -220,7 +230,7 @@ public class PlayerEntity extends Entity<SpriteAnimation> {
 		if (tryShoot){
 			tryShoot = false;
 			if (currentWeapon != null){
-				currentWeapon.shoot();
+				currentWeapon.tryShoot();
 			}
 		}
 	}

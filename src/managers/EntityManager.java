@@ -1,13 +1,14 @@
 package managers;
 
-import engine.OverloadEngine;
+import engine.BaseGame;
 import graphics.Sprite2D;
 import utils.Vector2;
 
 public class EntityManager {
+	protected BaseGame game;
 	
-	public EntityManager(){
-		
+	public EntityManager(BaseGame game){
+		this.game = game;
 	}
 	
 	public Sprite2D getSpriteFromSheet(int x, int y, int w, int h, Sprite2D sheet){

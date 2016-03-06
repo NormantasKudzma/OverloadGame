@@ -11,6 +11,7 @@ import org.json.JSONObject;
 
 import utils.ConfigManager;
 import utils.Vector2;
+import engine.BaseGame;
 import engine.Entity;
 import engine.OverloadEngine;
 import entities.WallEntity;
@@ -18,10 +19,10 @@ import game.Paths;
 import graphics.Sprite2D;
 
 public class MapManager extends EntityManager{
-	public MapManager(){
-		
+	public MapManager(BaseGame game) {
+		super(game);
 	}
-	
+
 	public GameMap loadMap(String path, ArrayList<Entity> entityList){
 		JSONObject json = ConfigManager.loadConfigAsJson(path);
 		GameMap map = new GameMap(path);
@@ -46,7 +47,7 @@ public class MapManager extends EntityManager{
 		JSONArray colliderArrayJson = json.getJSONArray("colliders");
 		JSONArray mapSizeJson = json.getJSONArray("mapsize");
 		Vector2 mapSize = new Vector2((float)mapSizeJson.getDouble(0), (float)mapSizeJson.getDouble(1)).div(2.0f);
-		WallEntity colliderEntity = new WallEntity();
+		WallEntity colliderEntity = new WallEntity(game);
 		colliderEntity.initEntity();
 		colliderEntity.setVisible(false);
 		
@@ -74,7 +75,7 @@ public class MapManager extends EntityManager{
 				Vector2 tileScale = new Vector2((float)scaleJson.getDouble(0), (float)scaleJson.getDouble(1));
 				JSONArray positionJson = entityJson.getJSONArray("position");
 				Entity e = mapEntities.get(entityJson.getString("entity"));
-				Entity clone = (Entity)e.getClass().newInstance();
+				Entity clone = (Entity)e.getClass().getDeclaredConstructor(BaseGame.class).newInstance(game);
 				clone.initEntity();
 				clone.setSprite(e.getSprite());
 				clone.setScale(e.getScale().copy().mul(tileScale));
@@ -94,7 +95,7 @@ public class MapManager extends EntityManager{
 		for (int i = 0; i < entityArrayJson.length(); ++i){
 			try {
 				JSONObject entityJson = entityArrayJson.getJSONObject(i);
-				Object obj = Class.forName(entityJson.getString("type")).newInstance();
+				Object obj = Class.forName(entityJson.getString("type")).getDeclaredConstructor(BaseGame.class).newInstance(game);
 				if (obj instanceof Entity){
 					Entity e = (Entity) obj;
 					e.initEntity();

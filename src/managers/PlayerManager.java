@@ -11,6 +11,7 @@ import controls.ControllerEventListener;
 import controls.ControllerKeybind;
 import controls.ControllerManager;
 import controls.EController;
+import engine.BaseGame;
 import entities.PlayerEntity;
 import entities.PlayerEntity.SensorType;
 import game.Paths;
@@ -19,6 +20,10 @@ import graphics.SpriteAnimation;
 
 public class PlayerManager extends EntityManager{
 	private PlayerEntity[] playerEntities = new PlayerEntity[4];
+
+	public PlayerManager(BaseGame game) {
+		super(game);
+	}
 	
 	public PlayerEntity getPlayer(int index){
 		if (index < 0 || index >= playerEntities.length){
@@ -39,7 +44,7 @@ public class PlayerManager extends EntityManager{
 		
 		for (int i = 0; i < playerArrayJson.length(); ++i){
 			JSONObject playerJson = playerArrayJson.getJSONObject(i);
-			PlayerEntity player = new PlayerEntity();
+			PlayerEntity player = new PlayerEntity(game);
 			player.initEntity();
 			
 			loadAnimations(playerJson, player, spriteSheet);
