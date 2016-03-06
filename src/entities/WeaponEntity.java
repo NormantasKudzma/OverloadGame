@@ -2,7 +2,8 @@ package entities;
 
 import org.jbox2d.dynamics.Fixture;
 
-import game.Entity;
+import engine.Entity;
+
 import graphics.Sprite2D;
 import utils.Vector2;
 

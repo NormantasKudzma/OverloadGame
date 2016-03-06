@@ -1,7 +1,7 @@
 package mapping;
 
-import game.Entity;
-import game.IUpdatable;
+import engine.Entity;
+import engine.IUpdatable;
 
 import java.util.ArrayList;
 

@@ -2,7 +2,8 @@ package entities;
 
 import org.jbox2d.dynamics.BodyType;
 
-import game.Entity;
+import engine.Entity;
+
 
 public class WallEntity extends Entity{
 	public WallEntity(){

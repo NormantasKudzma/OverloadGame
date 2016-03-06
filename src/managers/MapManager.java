@@ -1,11 +1,5 @@
 package managers;
 
-import entities.WallEntity;
-import game.Entity;
-import game.OverloadEngine;
-import game.Paths;
-import graphics.Sprite2D;
-
 import java.util.ArrayList;
 import java.util.HashMap;
 
@@ -17,6 +11,11 @@ import org.json.JSONObject;
 
 import utils.ConfigManager;
 import utils.Vector2;
+import engine.Entity;
+import engine.OverloadEngine;
+import entities.WallEntity;
+import game.Paths;
+import graphics.Sprite2D;
 
 public class MapManager extends EntityManager{
 	public MapManager(){
@@ -28,13 +27,16 @@ public class MapManager extends EntityManager{
 		GameMap map = new GameMap(path);
 		
 		HashMap<String, Sprite2D> spriteSheets = new HashMap<String, Sprite2D>();
-		HashMap<String, Entity> entities = new HashMap<String, Entity>();
+		HashMap<String, Entity> entities = new HashMap<String, Entity>();		
+
+		JSONArray mapSizeJson = json.getJSONArray("mapsize");
+		Vector2 mapSize = new Vector2((float)mapSizeJson.getDouble(0), (float)mapSizeJson.getDouble(1)).div(2.0f);
 		
 		loadSpriteSheets(json, spriteSheets);
-		loadEntities(json, spriteSheets, entities);
-		loadLayer(json, GameMap.Layer.BACKGROUND, entities, map);
-		loadLayer(json, GameMap.Layer.MIDDLE, entities, map);
-		loadLayer(json, GameMap.Layer.FOREGROUND, entities, map);
+		loadEntities(json, spriteSheets, entities, mapSize);
+		loadLayer(json, GameMap.Layer.BACKGROUND, entities, map, mapSize);
+		loadLayer(json, GameMap.Layer.MIDDLE, entities, map, mapSize);
+		loadLayer(json, GameMap.Layer.FOREGROUND, entities, map, mapSize);
 		loadColliders(json, map);
 		
 		return map;
@@ -62,25 +64,22 @@ public class MapManager extends EntityManager{
 		map.addEntity(Layer.MIDDLE, colliderEntity);
 	}
 
-	private void loadLayer(JSONObject json, Layer layer, HashMap<String, Entity> mapEntities, GameMap map) {
+	private void loadLayer(JSONObject json, Layer layer, HashMap<String, Entity> mapEntities, GameMap map, Vector2 mapSize) {
 		JSONArray layerArrayJson = json.getJSONArray(layer.getLayerName());
-		JSONArray mapSizeJson = json.getJSONArray("mapsize");
-		Vector2 mapSize = new Vector2((float)mapSizeJson.getDouble(0), (float)mapSizeJson.getDouble(1)).div(2.0f);
 		
 		for (int i = 0; i < layerArrayJson.length(); ++i){
 			try {
 				JSONObject entityJson = layerArrayJson.getJSONObject(i);
 				JSONArray scaleJson = entityJson.getJSONArray("scale");
+				Vector2 tileScale = new Vector2((float)scaleJson.getDouble(0), (float)scaleJson.getDouble(1));
 				JSONArray positionJson = entityJson.getJSONArray("position");
 				Entity e = mapEntities.get(entityJson.getString("entity"));
 				Entity clone = (Entity)e.getClass().newInstance();
 				clone.initEntity();
 				clone.setSprite(e.getSprite());
-				clone.setScale(e.getScale().copy().mul((float)scaleJson.getDouble(0), (float)scaleJson.getDouble(1)));
-				clone.setScale(clone.getScale().mul(mapSize.x * 0.5f / mapSize.y, 1.0f));
+				clone.setScale(e.getScale().copy().mul(tileScale));
 				clone.setPosition(new Vector2((float)positionJson.getDouble(0), (float)positionJson.getDouble(1)).div(mapSize));
 				map.addEntity(layer, clone);
-				//System.out.printf("Entity pos[%s], scale[%s]\n", clone.getPosition(), clone.getScale());
 			}
 			catch (Exception e){
 				e.printStackTrace();
@@ -88,8 +87,9 @@ public class MapManager extends EntityManager{
 		}
 	}
 
-	private void loadEntities(JSONObject json, HashMap<String, Sprite2D> spriteSheets, HashMap<String, Entity> entities) {
+	private void loadEntities(JSONObject json, HashMap<String, Sprite2D> spriteSheets, HashMap<String, Entity> entities, Vector2 mapSize) {
 		JSONArray entityArrayJson = json.getJSONArray("entities");
+		float gridSize = OverloadEngine.frameWidth / mapSize.x;
 		
 		for (int i = 0; i < entityArrayJson.length(); ++i){
 			try {
@@ -104,8 +104,7 @@ public class MapManager extends EntityManager{
 					int w = entityJson.getInt("w");
 					int h = entityJson.getInt("h");
 					e.setSprite(getSpriteFromSheet(x, y, w, h, sheet));
-					// some magic (probably not)
-					e.setScale(e.getScale().mul((float)entityJson.getDouble("scale")).div(OverloadEngine.aspectRatio, 1.0f / OverloadEngine.aspectRatio));
+					e.setScale(e.getScale().mul((float)entityJson.getDouble("scale")).mul(gridSize / (float)w));
 					entities.put(entityJson.getString("name"), e);
 				}
 			}

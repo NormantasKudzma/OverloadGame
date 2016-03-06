@@ -1,6 +1,6 @@
 package entities;
 
-import game.Entity;
+import engine.Entity;
 import game.OverloadMain;
 import graphics.SpriteAnimation;
 
