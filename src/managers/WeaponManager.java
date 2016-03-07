@@ -29,8 +29,10 @@ public class WeaponManager extends EntityManager {
 			verts[2] = new Vector2(collJson.getInt(2), collJson.getInt(3));
 			verts[3] = new Vector2(collJson.getInt(0), collJson.getInt(3));
 			
+			Vector2 scale = e.getScale();
 			for (int i = 0; i < verts.length; ++i){
 				Vector2.pixelCoordsToNormal(verts[i]);
+				verts[i].mul(scale);
 			}
 			
 			e.getPhysicsBody().attachPolygonCollider(verts, true);
@@ -107,6 +109,25 @@ public class WeaponManager extends EntityManager {
 				e.setScale(e.getScale().mul((float)weaponJson.getDouble("scale")));
 				e.getPhysicsBody().getBody().setActive(false);
 				attachCollider(weaponJson, e);
+				
+				if (weaponJson.has("muzzleOffset")){
+					JSONArray muzzleOffsetJson = weaponJson.getJSONArray("muzzleOffset");
+					int xOffset = muzzleOffsetJson.getInt(0);
+					int yOffset = -muzzleOffsetJson.getInt(1);
+					Vector2 muzzleOffset = new Vector2(xOffset, yOffset);
+					Vector2.pixelCoordsToNormal(muzzleOffset);
+					e.setMuzzleOffset(muzzleOffset);
+				}
+				
+				if (weaponJson.has("positionOffset")){
+					JSONArray positionOffsetJson = weaponJson.getJSONArray("positionOffset");
+					int xOffset = positionOffsetJson.getInt(0);
+					int yOffset = -positionOffsetJson.getInt(1);
+					Vector2 positionOffset = new Vector2(xOffset, yOffset);
+					Vector2.pixelCoordsToNormal(positionOffset);
+					e.setPositionOffset(positionOffset);
+				}
+				
 				weaponMap.put(weaponJson.getString("name"), e);
 			}
 			catch (Exception e){

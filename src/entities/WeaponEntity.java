@@ -7,9 +7,10 @@ import graphics.Sprite2D;
 
 public abstract class WeaponEntity extends Entity<Sprite2D>{
 	protected int numBullets = 6;
+	protected float oldDirection = 0.0f;
 	protected float shootCooldown = 2.0f;
 	protected float shootTimer = 0.0f;
-	protected boolean deleteFixtures = false;
+	protected boolean destroyWeaponFixtures = false;
 	protected Vector2 positionOffset = new Vector2();
 	protected Vector2 muzzleOffset = new Vector2();
 	
@@ -41,7 +42,7 @@ public abstract class WeaponEntity extends Entity<Sprite2D>{
 	public void attachToPlayer(PlayerEntity e){
 		player = e;
 		if (player != null){
-			deleteFixtures = true;
+			destroyWeaponFixtures = true;
 			flip(e.getScale().x);
 		}
 	}
@@ -68,15 +69,21 @@ public abstract class WeaponEntity extends Entity<Sprite2D>{
 	}
 	
 	public void flip(float direction){
+		if (direction == oldDirection){
+			return;
+		}
+		
+		Vector2 playerPos = player.getPosition();
 		if (direction > 0.0f){
-			setPosition(player.getPosition().copy().add(positionOffset));
+			setPosition(playerPos.x + positionOffset.x, playerPos.y + positionOffset.y);
 			setScale(getScale().setX(Math.abs(getScale().x)));
 		}
 		else
 		{
-			setPosition(player.getPosition().copy().sub(positionOffset));
+			setPosition(playerPos.x - positionOffset.x, playerPos.y + positionOffset.y);
 			setScale(getScale().setX(-Math.abs(getScale().x)));
 		}
+		oldDirection = direction;
 	}
 	
 	@Override
@@ -142,8 +149,8 @@ public abstract class WeaponEntity extends Entity<Sprite2D>{
 			}
 		}
 		
-		if (deleteFixtures){
-			deleteFixtures = false;
+		if (destroyWeaponFixtures){
+			destroyWeaponFixtures = false;
 			body.destroyFixtures();
 		}
 	}

@@ -15,6 +15,7 @@ public class ShotgunEntity extends WeaponEntity{
 	@Override
 	public void shoot() {
 		Vector2 side = getScale().x > 0 ? Vector2.right : Vector2.left;
+		Vector2 spawnPos = getPosition().copy().add(muzzleOffset);
 		
 		float angle = 0.0f;
 		Vector2 direction = null;
@@ -22,7 +23,7 @@ public class ShotgunEntity extends WeaponEntity{
 			angle = OverloadRandom.nextRandom((int)(2.0f * maxAngle)) - maxAngle;
 			direction = side.copy().rotate(angle);
 			
-			BulletEntity e = spawnBullet(getPosition().copy().add(muzzleOffset), direction);
+			BulletEntity e = spawnBullet(spawnPos, direction);
 			e.setRotation(-angle);
 		}
 	}

@@ -151,12 +151,14 @@ public class PlayerEntity extends Entity<SpriteAnimation> {
 		if (movementVector.x > 0.0f){
 			movementVector.x = 0.0f;
 		}
-		
-		super.setScale(-scale.x, scale.y);
-		movementDirection = -1.0f;
-		
-		if (currentWeapon != null){
-			currentWeapon.flip(movementDirection);
+
+		if (movementDirection != -1.0f){
+			setScale(-scale.x, scale.y);
+			movementDirection = -1.0f;
+			
+			if (currentWeapon != null){
+				currentWeapon.flip(movementDirection);
+			}
 		}
 	}
 	
@@ -168,12 +170,14 @@ public class PlayerEntity extends Entity<SpriteAnimation> {
 		if (movementVector.x < 0.0f){
 			movementVector.x = 0.0f;
 		}
-
-		super.setScale(scale.x, scale.y);
-		movementDirection = 1.0f;
 		
-		if (currentWeapon != null){
-			currentWeapon.flip(movementDirection);
+		if (movementDirection != 1.0f){
+			setScale(scale.x, scale.y);
+			movementDirection = 1.0f;
+			
+			if (currentWeapon != null){
+				currentWeapon.flip(movementDirection);
+			}
 		}
 	}
 	
