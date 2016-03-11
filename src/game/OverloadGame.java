@@ -33,6 +33,11 @@ public class OverloadGame extends BaseGame {
 		weap.getPhysicsBody().getBody().setActive(true);
 		weap.setPosition(new Vector2(1.0f, 1.8f));
 		addEntity(weap);
+		
+		WeaponEntity weap2 = weaponManager.getWeapon("shotgun");
+		weap2.getPhysicsBody().getBody().setActive(true);
+		weap2.setPosition(new Vector2(1.5f, 1.8f));
+		addEntity(weap2);
 	}
 	
 	@Override

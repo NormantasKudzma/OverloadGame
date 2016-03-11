@@ -61,6 +61,7 @@ public class MapManager extends EntityManager{
 			}
 			colliderEntity.getPhysicsBody().attachPolygonCollider(collVerts);
 		}
+		colliderEntity.setCollisionFlags(WALL_CATEGORY, WALL_COLLIDER);
 		
 		map.addEntity(Layer.MIDDLE, colliderEntity);
 	}

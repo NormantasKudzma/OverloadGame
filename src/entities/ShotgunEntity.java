@@ -7,6 +7,7 @@ import engine.BaseGame;
 public class ShotgunEntity extends WeaponEntity{
 	protected int shellsPerShot = 4;
 	protected float maxAngle = 30.0f;
+	protected float maxSpeedDeviation = 15.0f;
 	
 	public ShotgunEntity(BaseGame game) {
 		super(game);
@@ -16,6 +17,7 @@ public class ShotgunEntity extends WeaponEntity{
 	@Override
 	public void shoot(Vector2 spawnPos, Vector2 weaponDir) {		
 		float angle = 0.0f;
+		float speed = 0.0f;
 		Vector2 direction = null;
 		for (int i = 0; i < shellsPerShot; ++i){
 			angle = OverloadRandom.nextRandom((int)(2.0f * maxAngle)) - maxAngle;
@@ -23,6 +25,10 @@ public class ShotgunEntity extends WeaponEntity{
 			
 			BulletEntity e = spawnBullet(spawnPos, direction);
 			e.setRotation(-angle);
+			
+			speed = (OverloadRandom.nextRandom((int)(2.0f * maxSpeedDeviation)) - maxSpeedDeviation);
+			speed = e.getSpeed() * (1.0f + 0.01f * speed);
+			e.setMovementSpeed(speed);
 		}
 	}
 }

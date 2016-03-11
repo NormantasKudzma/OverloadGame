@@ -12,6 +12,7 @@ import engine.Entity;
 import entities.WeaponEntity;
 import game.Paths;
 import graphics.Sprite2D;
+import graphics.SpriteAnimation;
 
 public class WeaponManager extends EntityManager {
 	private HashMap<String, WeaponEntity> weaponMap = new HashMap<String, WeaponEntity>();
@@ -53,11 +54,11 @@ public class WeaponManager extends EntityManager {
 		Sprite2D sheet = new Sprite2D(Paths.SPRITESHEETS + weaponFileJson.getString("spritesheet"));
 		
 		loadWeapons(weaponFileJson, sheet);
-		loadChildren(weaponFileJson, "bullets", sheet);
-		loadChildren(weaponFileJson, "misc", sheet);	
+		loadChildren(weaponFileJson, "bullets", sheet, BULLET_CATEGORY, BULLET_COLLIDER);
+		loadChildren(weaponFileJson, "ammo", sheet, AMMO_CATEGORY, AMMO_COLLIDER);	
 	}
 
-	private void loadChildren(JSONObject weaponFileJson, String arrayName, Sprite2D sheet) {
+	private void loadChildren(JSONObject weaponFileJson, String arrayName, Sprite2D sheet, int category, int mask) {
 		JSONArray childrenArrayJson = weaponFileJson.getJSONArray(arrayName);
 		JSONObject childJson = null;
 		for (int i = 0; i < childrenArrayJson.length(); ++i){
@@ -77,6 +78,7 @@ public class WeaponManager extends EntityManager {
 				e.setScale(e.getScale().mul((float)childJson.getDouble("scale")));
 				e.getPhysicsBody().getBody().setActive(false);
 				attachCollider(childJson, e);
+				e.setCollisionFlags(category, mask);
 				
 				WeaponEntity parent = weaponMap.get(childJson.getString("parent"));
 				if (parent != null){
@@ -96,19 +98,32 @@ public class WeaponManager extends EntityManager {
 			try {
 				weaponJson = weaponArrayJson.getJSONObject(i);
 				
-				int x = weaponJson.getInt("x");
-				int y = weaponJson.getInt("y");
-				int w = weaponJson.getInt("w");
-				int h = weaponJson.getInt("h");
-				Sprite2D sprite = getSpriteFromSheet(x, y, w, h, sheet);
+				// Load weapon sprite animations (with all states)
+				JSONArray allAnimArrayJson = weaponJson.getJSONArray("animations");
+				SpriteAnimation spriteAnim = new SpriteAnimation();
+				Sprite2D animations[][] = new Sprite2D[allAnimArrayJson.length()][];
+				for (int j = 0; j < allAnimArrayJson.length(); ++j){
+					JSONArray animationArrayJson = allAnimArrayJson.getJSONArray(j);
+					animations[j] = new Sprite2D[animationArrayJson.length()];
+					for (int k = 0; k < animationArrayJson.length(); ++k){
+						JSONObject animationJson = animationArrayJson.getJSONObject(k);
+						int x = animationJson.getInt("x");
+						int y = animationJson.getInt("y");
+						int w = animationJson.getInt("w");
+						int h = animationJson.getInt("h");
+						animations[j][k] = getSpriteFromSheet(x, y, w, h, sheet);
+					}
+				}
+				spriteAnim.setSpriteArray(animations);
 				
 				Object obj = Class.forName(weaponJson.getString("type")).getDeclaredConstructor(BaseGame.class).newInstance(game);
 				WeaponEntity e = (WeaponEntity)obj;
 				e.initEntity();
-				e.setSprite(sprite);
+				e.setSprite(spriteAnim);
 				e.setScale(e.getScale().mul((float)weaponJson.getDouble("scale")));
 				e.getPhysicsBody().getBody().setActive(false);
 				attachCollider(weaponJson, e);
+				e.setCollisionFlags(WEAPON_CATEGORY, WEAPON_COLLIDER);
 				
 				if (weaponJson.has("muzzleOffset")){
 					JSONArray muzzleOffsetJson = weaponJson.getJSONArray("muzzleOffset");

@@ -1,11 +1,28 @@
 package entities;
 
+import physics.PhysicsBody;
 import utils.Vector2;
 import engine.BaseGame;
 import engine.Entity;
 import graphics.Sprite2D;
+import graphics.SpriteAnimation;
 
-public abstract class WeaponEntity extends Entity<Sprite2D>{
+public abstract class WeaponEntity extends Entity<SpriteAnimation>{
+	enum WeaponAnimation {
+		IDLE(0),
+		ON_COOLDOWN(1);
+		
+		private int index;
+		
+		private WeaponAnimation(int i){
+			index = i;
+		}
+		
+		public int getIndex(){
+			return index;
+		}
+	}
+	
 	protected int numBullets = 6;
 	protected float oldDirection = 0.0f;
 	protected float shootCooldown = 2.0f;
@@ -49,7 +66,7 @@ public abstract class WeaponEntity extends Entity<Sprite2D>{
 	
 	@Override
 	public WeaponEntity clone() {
-		Entity<Sprite2D> e = super.clone();
+		Entity<SpriteAnimation> e = super.clone();
 		WeaponEntity we = (WeaponEntity)e;
 		we.numBullets = numBullets;
 		we.shootCooldown = shootCooldown;
@@ -112,6 +129,7 @@ public abstract class WeaponEntity extends Entity<Sprite2D>{
 			Vector2 weaponDirection = getScale().x > 0 ? Vector2.right : Vector2.left;
 			Vector2 spawnPos = getPosition().copy().add(muzzleOffset.x * weaponDirection.x, muzzleOffset.y);
 			shoot(spawnPos, weaponDirection);
+			sprite.setState(WeaponAnimation.ON_COOLDOWN.getIndex());
 			if (numBullets < 0){
 				detachFromPlayer();
 			}
@@ -136,6 +154,10 @@ public abstract class WeaponEntity extends Entity<Sprite2D>{
 			e.setPosition(pos);
 			e.setDirection(dir);
 			e.setMovementSpeed(speed);
+			if (player != null){
+				e.getPhysicsBody().setCollisionFlags(player.getCategory(), PhysicsBody.MaskType.EXCLUDE);
+				e.getPhysicsBody().setCollisionCategory(player.getCategory(), PhysicsBody.MaskType.SET);
+			}
 			game.addEntity(e);
 			return e;
 		}
@@ -148,14 +170,18 @@ public abstract class WeaponEntity extends Entity<Sprite2D>{
 		
 		if (shootTimer > 0.0f){
 			shootTimer -= deltaTime;
+			if (shootTimer <= 0.0f && numBullets > 0){
+				sprite.setState(WeaponAnimation.IDLE.getIndex());
+			}
 		}
 		
 		if (player != null){
+			Vector2 playerPos = player.getPosition();
 			if (player.getScale().x > 0){
-				setPosition(player.getPosition().copy().add(positionOffset.x, positionOffset.y));
+				setPosition(playerPos.x + positionOffset.x, playerPos.y + positionOffset.y);
 			}
 			else {
-				setPosition(player.getPosition().copy().add(-positionOffset.x, positionOffset.y));
+				setPosition(playerPos.x - positionOffset.x, playerPos.y + positionOffset.y);
 			}
 		}
 		

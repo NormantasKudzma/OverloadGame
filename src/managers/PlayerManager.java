@@ -19,6 +19,10 @@ import graphics.Sprite2D;
 import graphics.SpriteAnimation;
 
 public class PlayerManager extends EntityManager{
+	public static final int PLAYER_COLLIDERS[] = {EntityManager.PLAYER1_CATEGORY, 
+												EntityManager.PLAYER2_CATEGORY, 
+												EntityManager.PLAYER3_CATEGORY, 
+												EntityManager.PLAYER4_CATEGORY};
 	private PlayerEntity[] playerEntities = new PlayerEntity[4];
 
 	public PlayerManager(BaseGame game) {
@@ -46,13 +50,15 @@ public class PlayerManager extends EntityManager{
 			JSONObject playerJson = playerArrayJson.getJSONObject(i);
 			PlayerEntity player = new PlayerEntity(game);
 			player.initEntity();
+			player.setCategory(PLAYER_COLLIDERS[i]);
 			
 			loadAnimations(playerJson, player, spriteSheet);
 			loadControls(playerJson, player);
 			
-			player.setPosition(1.0f, 1.0f); // FIXME load position from map
+			player.setPosition(-1.0f, -1.0f); // FIXME load position from map
 			player.setScale(player.getScale().mul(playerScale));
 			player.getPhysicsBody().attachPolygonCollider(colliderVerts);
+			player.setCollisionFlags(PLAYER_COLLIDERS[i], PLAYER_COLLIDER);
 			
 			for (int j = 0; j < sensorVerts.length; ++j){
 				Fixture f = player.getPhysicsBody().attachPolygonCollider(sensorVerts[j], true);

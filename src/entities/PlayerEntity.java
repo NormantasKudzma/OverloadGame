@@ -40,6 +40,7 @@ public class PlayerEntity extends Entity<SpriteAnimation> {
 	private static final int MAX_JUMP_LENGTH = 7;
 	private static final float MAX_MOVE_SPEED = 14.0f;
 	private int jumpLength = 0;
+	private int categoryMask = 0;
 	private float acceleration = 1.0f;
 	private float movementDirection = 0.0f;
 	private float jumpStrength = 36.0f;
@@ -137,6 +138,10 @@ public class PlayerEntity extends Entity<SpriteAnimation> {
 		}
 	}
 	
+	public int getCategory(){
+		return categoryMask;
+	}
+	
 	@Override
 	public void initEntity() {
 		super.initEntity();
@@ -189,6 +194,10 @@ public class PlayerEntity extends Entity<SpriteAnimation> {
 		}
 	}
 
+	public void setCategory(int category){
+		categoryMask = category;
+	}
+	
 	@Override
 	public void setScale(Vector2 scale) {
 		super.setScale(scale);

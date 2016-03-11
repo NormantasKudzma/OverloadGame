@@ -1,5 +1,6 @@
 package entities;
 
+import org.jbox2d.dynamics.Filter;
 import org.jbox2d.dynamics.Fixture;
 
 import physics.ICollidable;
@@ -26,10 +27,18 @@ public class BulletEntity extends Entity<Sprite2D>{
 		markForDestruction();
 		
 		if (otherCollidable instanceof Entity){
-			if (otherCollidable instanceof PlayerEntity){
+			/*if (otherCollidable instanceof PlayerEntity){
 				PlayerEntity player = (PlayerEntity)otherCollidable;
 				player.markForDestruction();
-			}
+			}*/
+			
+			Filter f1 = myFixture.getFilterData();
+			Filter f2 = otherFixture.getFilterData();
+			System.out.printf("My category[%s], mask[%s], other category[%s], mask[%s]\n", 
+												Integer.toBinaryString(f1.categoryBits), 
+												Integer.toBinaryString(f1.maskBits), 
+												Integer.toBinaryString(f2.categoryBits), 
+												Integer.toBinaryString(f2.maskBits));
 		}
 	}
 	
