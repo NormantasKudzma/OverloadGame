@@ -15,7 +15,7 @@ public class ShotgunEntity extends WeaponEntity{
 	@Override
 	public void shoot() {
 		Vector2 side = getScale().x > 0 ? Vector2.right : Vector2.left;
-		Vector2 spawnPos = getPosition().copy().add(muzzleOffset);
+		Vector2 spawnPos = getPosition().copy().add(muzzleOffset.x * side.x, muzzleOffset.y);
 		
 		float angle = 0.0f;
 		Vector2 direction = null;

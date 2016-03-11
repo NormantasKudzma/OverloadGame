@@ -10,7 +10,7 @@
 			"scale":0.625,
 			"collider":[-64, -16, 64, 16],
 			"positionOffset":[8, 17],
-			"muzzleOffset":[36, -4],
+			"muzzleOffset":[42, -4],
 			"type":"entities.ShotgunEntity"
 		}			
 	],
