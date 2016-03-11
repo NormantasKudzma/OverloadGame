@@ -142,10 +142,10 @@ public abstract class WeaponEntity extends Entity<Sprite2D>{
 		
 		if (player != null){
 			if (player.getScale().x > 0){
-				setPosition(player.getPosition().copy().add(positionOffset));
+				setPosition(player.getPosition().copy().add(positionOffset.x, positionOffset.y));
 			}
 			else {
-				setPosition(player.getPosition().copy().sub(positionOffset));
+				setPosition(player.getPosition().copy().add(-positionOffset.x, positionOffset.y));
 			}
 		}
 		

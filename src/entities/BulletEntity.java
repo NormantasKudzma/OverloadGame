@@ -19,16 +19,16 @@ public class BulletEntity extends Entity<Sprite2D>{
 	}
 	
 	@Override
-	public void collisionStart(Fixture myFixture, Fixture otherFixture, ICollidable otherCollidable) {	
+	public void collisionStart(Fixture myFixture, Fixture otherFixture, ICollidable otherCollidable) {		
+		if (otherFixture.isSensor()){
+			return;
+		}
+		markForDestruction();
+		
 		if (otherCollidable instanceof Entity){
 			if (otherCollidable instanceof PlayerEntity){
 				PlayerEntity player = (PlayerEntity)otherCollidable;
 				player.markForDestruction();
-			}
-			
-			// If bullet collides with a normal fixture
-			if (!otherFixture.isSensor()){
-				this.markForDestruction();
 			}
 		}
 	}
