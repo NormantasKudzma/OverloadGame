@@ -2,41 +2,32 @@
 	"spritesheet":"spritesheet_weapons.png",
 	"weapons":[
 		{
-			"name":"shotgun",
+			"name":"pistol",
 			"x":0,
 			"y":0,
-			"w":128,
+			"w":48,
 			"h":32,
-			"scale":0.625,
-			"collider":[-64, -16, 64, 16],
-			"positionOffset":[8, 17],
-			"muzzleOffset":[42, -4],
-			"type":"entities.ShotgunEntity"
+			"scale":1.0,
+			"collider":[-18, -13, 18, 2],
+			"positionOffset":[30, 8],
+			"muzzleOffset":[22, 4],
+			"type":"entities.PistolEntity"
 		}			
 	],
 	"bullets":[
 		{
-			"name":"shotgun_bullet",
-			"x":16,
-			"y":32,
-			"w":16,
-			"h":16,
-			"scale":1.0,
-			"parent":"shotgun",
-			"collider":[-7, -2, 8, 3],
-			"type":"entities.BulletEntity"
-		}
-	],
-	"misc":[
-		{
-			"name":"shotgun_shell",
+			"name":"pistol_bullet",
 			"x":0,
 			"y":32,
 			"w":16,
 			"h":16,
-			"scale":1.0,
-			"parent":"shotgun",
-			"type":"entities.AmmoEntity"
+			"scale":1.5,
+			"parent":"pistol",
+			"collider":[-4, -4, 4, 4],
+			"type":"entities.BulletEntity"
 		}
+	],
+	"misc":[
+	
 	]
 }

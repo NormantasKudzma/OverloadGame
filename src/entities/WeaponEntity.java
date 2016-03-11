@@ -86,6 +86,10 @@ public abstract class WeaponEntity extends Entity<Sprite2D>{
 		oldDirection = direction;
 	}
 	
+	public void initBullet(){
+		//stub
+	}
+	
 	@Override
 	public void initEntity() {
 		super.initEntity();
@@ -104,14 +108,20 @@ public abstract class WeaponEntity extends Entity<Sprite2D>{
 		if (shootTimer <= 0.0f && numBullets > 0){
 			--numBullets;
 			shootTimer = shootCooldown;
-			shoot();
+			
+			Vector2 weaponDirection = getScale().x > 0 ? Vector2.right : Vector2.left;
+			Vector2 spawnPos = getPosition().copy().add(muzzleOffset.x * weaponDirection.x, muzzleOffset.y);
+			shoot(spawnPos, weaponDirection);
 			if (numBullets < 0){
 				detachFromPlayer();
 			}
 		}
 	}
 	
-	public abstract void shoot();
+	// Perform a shot.
+	// spawnPos - spawn position for the bullet
+	// weaponDir - normalized weapon direction (left/right)
+	public abstract void shoot(Vector2 spawnPos, Vector2 weaponDir);
 	
 	protected BulletEntity spawnBullet(Vector2 pos, Vector2 dir){
 		if (bullet != null){

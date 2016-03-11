@@ -60,5 +60,6 @@ public class BulletEntity extends Entity<Sprite2D>{
 	
 	public void setParent(WeaponEntity parent){
 		this.parent = parent;
+		parent.initBullet();
 	}
 }
