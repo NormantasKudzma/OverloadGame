@@ -98,13 +98,16 @@ public class PlayerManager extends EntityManager{
 		int controllerIndex = playerJson.getInt("controlindex");
 		AbstractController controller = ControllerManager.getInstance().getController(controlMethod, controllerIndex);
 		
-		JSONArray controlsArrayJson = playerJson.getJSONArray("controls");
-		for (int i = 0; i < controlsArrayJson.length(); ++i){
-			JSONObject control = controlsArrayJson.getJSONObject(i);
-			long keyMask = control.getLong("keymask");
-			String methodName = control.getString("method");
-			final ControllerEventListener listener = player.getEventListenerForMethod(methodName);
-			controller.addKeybind(new ControllerKeybind(keyMask, listener));
+		if (controller != null){
+			JSONArray controlsArrayJson = playerJson.getJSONArray("controls");
+			for (int i = 0; i < controlsArrayJson.length(); ++i){
+				JSONObject control = controlsArrayJson.getJSONObject(i);
+				long keyMask = control.getLong("keymask");
+				String methodName = control.getString("method");
+				final ControllerEventListener listener = player.getEventListenerForMethod(methodName);
+				controller.addKeybind(new ControllerKeybind(keyMask, listener));
+			}
+			controller.startController();
 		}
 	}
 
@@ -135,7 +138,7 @@ public class PlayerManager extends EntityManager{
 				int y = frameJson.getInt("y");
 				int w = frameJson.getInt("w");
 				int h = frameJson.getInt("h");				
-				sprites[k] = getSpriteFromSheet(x, y, w, h, spritesheet);
+				sprites[k] = Sprite2D.getSpriteFromSheet(x, y, w, h, spritesheet);
 			}
 			spriteAnimations[j] = sprites;
 		}

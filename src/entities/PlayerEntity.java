@@ -78,7 +78,9 @@ public class PlayerEntity extends Entity<SpriteAnimation> {
 			};
 		}
 		catch (NoSuchMethodException e) {
-			e.printStackTrace();
+			if (OverloadMain.IS_DEBUG_BUILD){
+				e.printStackTrace();
+			}
 			return null;
 		}
 	}

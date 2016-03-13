@@ -16,7 +16,7 @@
 	],
 	"players":[
 		{
-			"comment":"player0",
+			"comment":"player1",
 			"animations":[
 				[{"x":0,"y":0,"w":128,"h":160}, {"x":128,"y":0,"w":128,"h":160}, {"x":256,"y":0,"w":128,"h":160}],
 				[{"x":384,"y":0,"w":128,"h":160}]
@@ -27,7 +27,52 @@
 				{"keymask":203, "method":"moveLeft"},
 				{"keymask":205, "method":"moveRight"},
 				{"keymask":200, "method":"moveUp"},
-				{"keymask":57, "method":"shoot"}
+				{"keymask":157, "method":"shoot"}
+			]
+		},
+		{
+			"comment":"player2",
+			"animations":[
+				[{"x":0,"y":160,"w":128,"h":160}, {"x":128,"y":160,"w":128,"h":160}, {"x":256,"y":160,"w":128,"h":160}],
+				[{"x":384,"y":160,"w":128,"h":160}]
+			],
+			"controlmethod":"USBCONTROLLER",
+			"controlindex":0,
+			"controls":[
+				{"keymask":545460846592, "method":"moveLeft"},
+				{"keymask":549755813888, "method":"moveRight"},
+				{"keymask":2097152, "method":"moveUp"},
+				{"keymask":1048576, "method":"shoot"}
+			]
+		},
+		{
+			"comment":"player3",
+			"animations":[
+				[{"x":0,"y":320,"w":128,"h":160}, {"x":128,"y":320,"w":128,"h":160}, {"x":256,"y":320,"w":128,"h":160}],
+				[{"x":384,"y":320,"w":128,"h":160}]
+			],
+			"controlmethod":"USBCONTROLLER",
+			"controlindex":1,
+			"controls":[
+				{"keymask":545460846592, "method":"moveLeft"},
+				{"keymask":549755813888, "method":"moveRight"},
+				{"keymask":2097152, "method":"moveUp"},
+				{"keymask":1048576, "method":"shoot"}
+			]
+		},
+		{
+			"comment":"player4",
+			"animations":[
+				[{"x":0,"y":480,"w":128,"h":160}, {"x":128,"y":480,"w":128,"h":160}, {"x":256,"y":480,"w":128,"h":160}],
+				[{"x":384,"y":480,"w":128,"h":160}]
+			],
+			"controlmethod":"LWJGLKEYBOARDCONTROLLER",
+			"controlindex":0,
+			"controls":[
+				{"keymask":30, "method":"moveLeft"},
+				{"keymask":32, "method":"moveRight"},
+				{"keymask":17, "method":"moveUp"},
+				{"keymask":19, "method":"shoot"}
 			]
 		}
 	]

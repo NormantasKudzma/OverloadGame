@@ -69,7 +69,7 @@ public class WeaponManager extends EntityManager {
 				int y = childJson.getInt("y");
 				int w = childJson.getInt("w");
 				int h = childJson.getInt("h");
-				Sprite2D sprite = getSpriteFromSheet(x, y, w, h, sheet);
+				Sprite2D sprite = Sprite2D.getSpriteFromSheet(x, y, w, h, sheet);
 				
 				Object obj = Class.forName(childJson.getString("type")).getDeclaredConstructor(BaseGame.class).newInstance(game);
 				Entity e = (Entity)obj;
@@ -111,7 +111,7 @@ public class WeaponManager extends EntityManager {
 						int y = animationJson.getInt("y");
 						int w = animationJson.getInt("w");
 						int h = animationJson.getInt("h");
-						animations[j][k] = getSpriteFromSheet(x, y, w, h, sheet);
+						animations[j][k] = Sprite2D.getSpriteFromSheet(x, y, w, h, sheet);
 					}
 				}
 				spriteAnim.setSpriteArray(animations);

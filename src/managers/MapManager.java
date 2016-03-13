@@ -105,7 +105,7 @@ public class MapManager extends EntityManager{
 					int y = entityJson.getInt("y");
 					int w = entityJson.getInt("w");
 					int h = entityJson.getInt("h");
-					e.setSprite(getSpriteFromSheet(x, y, w, h, sheet));
+					e.setSprite(Sprite2D.getSpriteFromSheet(x, y, w, h, sheet));
 					e.setScale(e.getScale().mul((float)entityJson.getDouble("scale")).mul(gridSize / (float)w));
 					entities.put(entityJson.getString("name"), e);
 				}

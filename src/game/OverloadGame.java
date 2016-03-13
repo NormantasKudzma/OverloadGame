@@ -29,6 +29,15 @@ public class OverloadGame extends BaseGame {
 		addEntity(playerManager.getPlayer(0));
 		playerManager.getPlayer(0).setPosition(new Vector2(0.8f, 1.5f));
 		
+		addEntity(playerManager.getPlayer(1));
+		playerManager.getPlayer(1).setPosition(new Vector2(1.2f, 1.5f));
+		
+		addEntity(playerManager.getPlayer(2));
+		playerManager.getPlayer(2).setPosition(new Vector2(0.5f, 0.5f));
+		
+		addEntity(playerManager.getPlayer(3));
+		playerManager.getPlayer(3).setPosition(new Vector2(1.5f, 0.5f));
+		
 		WeaponEntity weap = weaponManager.getWeapon("pistol");
 		weap.getPhysicsBody().getBody().setActive(true);
 		weap.setPosition(new Vector2(1.0f, 1.8f));
