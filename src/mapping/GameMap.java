@@ -9,6 +9,7 @@ import utils.Vector2;
 
 public class GameMap implements IUpdatable {
 	public enum Layer {
+		ZERO("zero"),
 		BACKGROUND("back"),
 		FOREGROUND("front"),
 		MIDDLE("middle"),
@@ -26,6 +27,7 @@ public class GameMap implements IUpdatable {
 	}
 	
 	private ArrayList<Entity> mapEntities = new ArrayList<Entity>();
+	private ArrayList<Entity> zeroEntities = new ArrayList<Entity>();
 	private ArrayList<Entity> backEntities = new ArrayList<Entity>();
 	private ArrayList<Entity> middleEntities = new ArrayList<Entity>();
 	private ArrayList<Entity> frontEntities = new ArrayList<Entity>();
@@ -41,6 +43,10 @@ public class GameMap implements IUpdatable {
 		}
 		
 		switch (layer){
+			case ZERO:{
+				zeroEntities.add(e);
+				break;
+			}
 			case BACKGROUND:{
 				backEntities.add(e);
 				break;
@@ -63,6 +69,10 @@ public class GameMap implements IUpdatable {
 
 	public void pan(Layer layer, Vector2 offset){
 		switch (layer){
+			case ZERO:{
+				pan(zeroEntities, offset);
+				break;
+			}
 			case BACKGROUND:{
 				pan(backEntities, offset);
 				break;
@@ -89,6 +99,10 @@ public class GameMap implements IUpdatable {
 	
 	public void renderLayer(Layer layer){
 		switch (layer){
+			case ZERO:{
+				render(zeroEntities);
+				break;
+			}
 			case BACKGROUND:{
 				render(backEntities);
 				break;

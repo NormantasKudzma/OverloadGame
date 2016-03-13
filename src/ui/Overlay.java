@@ -1,5 +1,6 @@
 package ui;
 
+import game.OverloadGame;
 import game.Paths;
 import graphics.SimpleFont;
 import graphics.Sprite2D;
@@ -19,11 +20,17 @@ import dialogs.Label;
 import dialogs.SpriteComponent;
 import engine.BaseGame;
 import engine.OverloadEngine;
+import entities.PlayerEntity;
+import entities.WeaponEntity;
 
 public class Overlay extends Component{
 	private HashMap<Character, Symbol> overlayFont;
 	private Label ammoTexts[];
 	private Label scoreTexts[];
+	private int ammoValues[];
+	private int scoreValues[];
+	
+	private float textUpdateTimer = 0.0f;
 	
 	public Overlay(BaseGame game) {
 		super(game);
@@ -65,12 +72,14 @@ public class Overlay extends Component{
 		overlayFont = SimpleFont.createFont(Paths.SPRITESHEETS + "spritesheet_overlay.png", Paths.FONTS + "overlay_font.json");
 		scoreTexts = new Label[PlayerManager.NUM_PLAYERS];
 		ammoTexts = new Label[PlayerManager.NUM_PLAYERS];
+		ammoValues = new int[PlayerManager.NUM_PLAYERS];
+		scoreValues = new int[PlayerManager.NUM_PLAYERS];
 		
 		JSONArray scoreTextArrayJson = overlayJson.getJSONArray("scoreTexts");
 		loadLabels(scoreTextArrayJson, scoreTexts);
 		
 		JSONArray ammoTextArrayJson = overlayJson.getJSONArray("ammoTexts");
-		loadLabels(ammoTextArrayJson, scoreTexts);
+		loadLabels(ammoTextArrayJson, ammoTexts);
 	}
 	
 	private void loadLabels(JSONArray json, Label array[]){
@@ -110,5 +119,32 @@ public class Overlay extends Component{
 	@Override
 	public void update(float deltaTime) {
 		super.update(deltaTime);
+		
+		textUpdateTimer -= deltaTime;
+		if (textUpdateTimer <= 0.0f){
+			textUpdateTimer = 0.25f;
+			updateTexts();
+		}
+	}
+	
+	public void updateTexts(){
+		PlayerEntity player = null;
+		PlayerManager manager = ((OverloadGame)game).getPlayerManager();
+		WeaponEntity weapon = null;
+		int numBullets = -1;
+		
+		for (int i = 0; i < PlayerManager.NUM_PLAYERS; ++i){
+			player = manager.getPlayer(i);
+			if (player != null){
+				weapon = player.getWeapon();
+				if (weapon != null){
+					numBullets = weapon.getNumBullets();
+					if (numBullets != ammoValues[i]){
+						ammoValues[i] = numBullets;
+						ammoTexts[i].setText("" + numBullets);
+					}
+				}
+			}
+		}
 	}
 }

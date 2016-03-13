@@ -35,6 +35,7 @@ public class MapManager extends EntityManager{
 		
 		loadSpriteSheets(json, spriteSheets);
 		loadEntities(json, spriteSheets, entities, mapSize);
+		loadLayer(json, GameMap.Layer.ZERO, entities, map, mapSize);
 		loadLayer(json, GameMap.Layer.BACKGROUND, entities, map, mapSize);
 		loadLayer(json, GameMap.Layer.MIDDLE, entities, map, mapSize);
 		loadLayer(json, GameMap.Layer.FOREGROUND, entities, map, mapSize);
@@ -46,7 +47,7 @@ public class MapManager extends EntityManager{
 	private void loadColliders(JSONObject json, GameMap map) {
 		JSONArray colliderArrayJson = json.getJSONArray("colliders");
 		JSONArray mapSizeJson = json.getJSONArray("mapsize");
-		Vector2 mapSize = new Vector2((float)mapSizeJson.getDouble(0), (float)mapSizeJson.getDouble(1)).div(2.0f);
+		Vector2 mapSize = Vector2.fromJsonArray(mapSizeJson).div(2.0f);
 		WallEntity colliderEntity = new WallEntity(game);
 		colliderEntity.initEntity();
 		colliderEntity.setVisible(false);
@@ -73,14 +74,14 @@ public class MapManager extends EntityManager{
 			try {
 				JSONObject entityJson = layerArrayJson.getJSONObject(i);
 				JSONArray scaleJson = entityJson.getJSONArray("scale");
-				Vector2 tileScale = new Vector2((float)scaleJson.getDouble(0), (float)scaleJson.getDouble(1));
+				Vector2 tileScale = Vector2.fromJsonArray(scaleJson);
 				JSONArray positionJson = entityJson.getJSONArray("position");
 				Entity e = mapEntities.get(entityJson.getString("entity"));
 				Entity clone = (Entity)e.getClass().getDeclaredConstructor(BaseGame.class).newInstance(game);
 				clone.initEntity();
 				clone.setSprite(e.getSprite());
 				clone.setScale(e.getScale().copy().mul(tileScale));
-				clone.setPosition(new Vector2((float)positionJson.getDouble(0), (float)positionJson.getDouble(1)).div(mapSize));
+				clone.setPosition(Vector2.fromJsonArray(positionJson).div(mapSize));
 				map.addEntity(layer, clone);
 			}
 			catch (Exception e){

@@ -144,6 +144,10 @@ public class PlayerEntity extends Entity<SpriteAnimation> {
 		return categoryMask;
 	}
 	
+	public WeaponEntity getWeapon(){
+		return currentWeapon;
+	}
+	
 	@Override
 	public void initEntity() {
 		super.initEntity();

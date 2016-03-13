@@ -1,5 +1,6 @@
 package entities;
 
+import managers.EntityManager;
 import physics.PhysicsBody;
 import utils.Vector2;
 import engine.BaseGame;
@@ -28,6 +29,7 @@ public abstract class WeaponEntity extends Entity<SpriteAnimation>{
 	protected float shootCooldown = 2.0f;
 	protected float shootTimer = 0.0f;
 	protected boolean destroyWeaponFixtures = false;
+	protected boolean detachFromPlayer = false;
 	protected Vector2 positionOffset = new Vector2();
 	protected Vector2 muzzleOffset = new Vector2();
 	
@@ -79,10 +81,7 @@ public abstract class WeaponEntity extends Entity<SpriteAnimation>{
 	}
 	
 	public void detachFromPlayer(){
-		// stub
-
-		body.getBody().setGravityScale(1.0f);
-		setLifetime(2.0f);
+		detachFromPlayer = true;
 	}
 	
 	public void flip(float direction){
@@ -101,6 +100,10 @@ public abstract class WeaponEntity extends Entity<SpriteAnimation>{
 			setScale(getScale().setX(-Math.abs(getScale().x)));
 		}
 		oldDirection = direction;
+	}
+	
+	public int getNumBullets(){
+		return numBullets;
 	}
 	
 	public void initBullet(){
@@ -130,7 +133,7 @@ public abstract class WeaponEntity extends Entity<SpriteAnimation>{
 			Vector2 spawnPos = getPosition().copy().add(muzzleOffset.x * weaponDirection.x, muzzleOffset.y);
 			shoot(spawnPos, weaponDirection);
 			sprite.setState(WeaponAnimation.ON_COOLDOWN.getIndex());
-			if (numBullets < 0){
+			if (numBullets <= 0){
 				detachFromPlayer();
 			}
 		}
@@ -187,7 +190,15 @@ public abstract class WeaponEntity extends Entity<SpriteAnimation>{
 		
 		if (destroyWeaponFixtures){
 			destroyWeaponFixtures = false;
-			body.destroyFixtures();
+			body.setCollisionFlags(EntityManager.NO_COLLISIONS, PhysicsBody.MaskType.SET);
+		}
+		
+		if (detachFromPlayer){
+			detachFromPlayer = false;
+			player = null;
+			body.getBody().setGravityScale(0.4f);
+			body.getBody().setAwake(true);
+			setLifetime(1.0f);
 		}
 	}
 }

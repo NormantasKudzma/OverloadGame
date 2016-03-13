@@ -20,13 +20,17 @@ public class OverloadGame extends BaseGame {
 	private GameMap map;
 	private Overlay overlay;
 	
+	public PlayerManager getPlayerManager(){
+		return playerManager;
+	}
+	
 	@Override
 	public void init() {
 		super.init();
 		physicsWorld.getWorld().setGravity(GRAVITY.toVec2());
 		playerManager.loadPlayers();
 		weaponManager.loadWeapons();
-		map = mapManager.loadMap(Paths.MAPS + "Map_01.json", entityList);
+		map = mapManager.loadMap(Paths.MAPS + "Map_02.json", entityList);
 		
 		addEntity(playerManager.getPlayer(0));
 		playerManager.getPlayer(0).setPosition(new Vector2(0.8f, 1.5f));
@@ -55,10 +59,17 @@ public class OverloadGame extends BaseGame {
 	
 	@Override
 	protected void renderGame() {
+		map.renderLayer(Layer.ZERO);
 		map.renderLayer(Layer.BACKGROUND);
 		map.renderLayer(Layer.MIDDLE);
 		super.renderGame();
 		map.renderLayer(Layer.FOREGROUND);
 		overlay.render();
+	}
+	
+	@Override
+	public void update(float deltaTime) {
+		super.update(deltaTime);
+		overlay.update(deltaTime);
 	}
 }
