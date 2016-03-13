@@ -1,13 +1,14 @@
 package game;
 
-import engine.BaseGame;
-import entities.WeaponEntity;
 import managers.MapManager;
 import managers.PlayerManager;
 import managers.WeaponManager;
 import mapping.GameMap;
 import mapping.GameMap.Layer;
+import ui.Overlay;
 import utils.Vector2;
+import engine.BaseGame;
+import entities.WeaponEntity;
 
 public class OverloadGame extends BaseGame {
 	public static Vector2 GRAVITY = new Vector2(0.0f, -4.0f);
@@ -17,6 +18,7 @@ public class OverloadGame extends BaseGame {
 	private WeaponManager weaponManager = new WeaponManager(this);
 	
 	private GameMap map;
+	private Overlay overlay;
 	
 	@Override
 	public void init() {
@@ -47,6 +49,8 @@ public class OverloadGame extends BaseGame {
 		weap2.getPhysicsBody().getBody().setActive(true);
 		weap2.setPosition(new Vector2(1.5f, 1.8f));
 		addEntity(weap2);
+		
+		overlay = new Overlay(this);
 	}
 	
 	@Override
@@ -55,5 +59,6 @@ public class OverloadGame extends BaseGame {
 		map.renderLayer(Layer.MIDDLE);
 		super.renderGame();
 		map.renderLayer(Layer.FOREGROUND);
+		overlay.render();
 	}
 }

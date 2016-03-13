@@ -23,7 +23,8 @@ public class PlayerManager extends EntityManager{
 												EntityManager.PLAYER2_CATEGORY, 
 												EntityManager.PLAYER3_CATEGORY, 
 												EntityManager.PLAYER4_CATEGORY};
-	private PlayerEntity[] playerEntities = new PlayerEntity[4];
+	public static final int NUM_PLAYERS = 4;
+	private PlayerEntity[] playerEntities = new PlayerEntity[NUM_PLAYERS];
 
 	public PlayerManager(BaseGame game) {
 		super(game);
