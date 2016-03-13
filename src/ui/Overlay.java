@@ -22,6 +22,7 @@ import engine.OverloadEngine;
 
 public class Overlay extends Component{
 	private HashMap<Character, Symbol> overlayFont;
+	private Label ammoTexts[];
 	private Label scoreTexts[];
 	
 	public Overlay(BaseGame game) {
@@ -29,62 +30,80 @@ public class Overlay extends Component{
 	}
 
 	protected void initialize() {
-		setPosition(Vector2.one);
+		setPosition(new Vector2(0.0f, 1.92f));
 		
 		JSONObject overlayJson = ConfigManager.loadConfigAsJson(Paths.UI + "overlay.json");
 		Sprite2D sheet = new Sprite2D(Paths.SPRITESHEETS + overlayJson.getString("spritesheet"));
 		
-		int x, y, w, h;
-		
-		JSONObject background = overlayJson.getJSONObject("background");
-		x = background.getInt("x");
-		y = background.getInt("y");
-		w = background.getInt("w");
-		h = background.getInt("h");
-		Sprite2D bgSprite = Sprite2D.getSpriteFromSheet(x, y, w, h, sheet);
-		bgSprite.setInternalScale(OverloadEngine.frameWidth, OverloadEngine.frameHeight * 0.12f);
-		SpriteComponent bgComponent = new SpriteComponent(game);
-		bgComponent.setSprite(bgSprite);
-		bgComponent.setPosition(Vector2.pixelCoordsToNormal(new Vector2(OverloadEngine.frameWidth * 0.5f, OverloadEngine.frameHeight * 0.6f)));
-		addChild(bgComponent);
+		int x, y, w, h;		
+		JSONArray backgroundArrayJson = overlayJson.getJSONArray("background");
+		for (int i = 0; i < backgroundArrayJson.length(); ++i){
+			JSONObject bgJson = backgroundArrayJson.getJSONObject(i);
+			x = bgJson.getInt("x");
+			y = bgJson.getInt("y");
+			w = bgJson.getInt("w");
+			h = bgJson.getInt("h");
+			
+			Sprite2D bgSprite = Sprite2D.getSpriteFromSheet(x, y, w, h, sheet);
+			bgSprite.setInternalScale(OverloadEngine.frameWidth * 0.25f, OverloadEngine.frameHeight * 0.08f);
+			
+			SpriteComponent bgComponent = new SpriteComponent(game);
+			bgComponent.setSprite(bgSprite);
+			JSONArray posJson = bgJson.getJSONArray("pos");
+			bgComponent.setPosition(Vector2.fromJsonArray(posJson));
+			addChild(bgComponent);
+		}
 		
 		// Load score indicator icons
 		JSONArray scoreArrayJson = overlayJson.getJSONArray("score");
-		for (int i = 0; i < scoreArrayJson.length(); ++i){
-			JSONObject scoreJson = scoreArrayJson.getJSONObject(i);
-			x = scoreJson.getInt("x");
-			y = scoreJson.getInt("y");
-			w = scoreJson.getInt("w");
-			h = scoreJson.getInt("h");
-			Sprite2D scoreSprite = Sprite2D.getSpriteFromSheet(x, y, w, h, sheet);
-			
-			JSONArray posJson = scoreJson.getJSONArray("pos");
-			Vector2 pos = Vector2.pixelCoordsToNormal(new Vector2(posJson.getInt(0), posJson.getInt(1)));
-			
-			SpriteComponent scoreComponent = new SpriteComponent(game);
-			scoreComponent.setSprite(scoreSprite);
-			scoreComponent.setPosition(pos);
-			
-			addChild(scoreComponent);
-		}
+		loadSpriteComponents(scoreArrayJson, sheet);
+
+		JSONArray ammoArrayJson = overlayJson.getJSONArray("ammo");
+		loadSpriteComponents(ammoArrayJson, sheet);
 
 		// Load score texts
 		overlayFont = SimpleFont.createFont(Paths.SPRITESHEETS + "spritesheet_overlay.png", Paths.FONTS + "overlay_font.json");
 		scoreTexts = new Label[PlayerManager.NUM_PLAYERS];
+		ammoTexts = new Label[PlayerManager.NUM_PLAYERS];
 		
-		JSONArray textArrayJson = overlayJson.getJSONArray("scoreTexts");
-		for (int i = 0; i < textArrayJson.length(); ++i){
-			JSONObject textJson = textArrayJson.getJSONObject(i);
-			x = textJson.getInt("x");
-			y = textJson.getInt("y");
+		JSONArray scoreTextArrayJson = overlayJson.getJSONArray("scoreTexts");
+		loadLabels(scoreTextArrayJson, scoreTexts);
+		
+		JSONArray ammoTextArrayJson = overlayJson.getJSONArray("ammoTexts");
+		loadLabels(ammoTextArrayJson, scoreTexts);
+	}
+	
+	private void loadLabels(JSONArray json, Label array[]){
+		for (int i = 0; i < json.length(); ++i){
+			JSONObject textJson = json.getJSONObject(i);
+			JSONArray posJson = textJson.getJSONArray("pos");
+			JSONArray scaleJson = textJson.getJSONArray("scale");
 			
-			Vector2 pos = Vector2.pixelCoordsToNormal(new Vector2(x, y));
 			SimpleFont textFont = new SimpleFont("0", overlayFont);
 			Label textLabel = new Label(game, textFont);
-			textLabel.setPosition(pos);
-			
+			textLabel.setPosition(Vector2.fromJsonArray(posJson));
+			textLabel.setScale(Vector2.fromJsonArray(scaleJson));
 			addChild(textLabel);
-			scoreTexts[i] = textLabel;
+			array[i] = textLabel;
+		}
+	}
+	
+	private void loadSpriteComponents(JSONArray json, Sprite2D sheet){
+		for (int i = 0; i < json.length(); ++i){
+			JSONObject itemJson = json.getJSONObject(i);
+			JSONArray posJson = itemJson.getJSONArray("pos");
+			JSONArray scaleJson = itemJson.getJSONArray("scale");
+			int x = itemJson.getInt("x");
+			int y = itemJson.getInt("y");
+			int w = itemJson.getInt("w");
+			int h = itemJson.getInt("h");
+			Sprite2D sprite = Sprite2D.getSpriteFromSheet(x, y, w, h, sheet);
+			
+			SpriteComponent spriteComponent = new SpriteComponent(game);
+			spriteComponent.setSprite(sprite);
+			spriteComponent.setPosition(Vector2.fromJsonArray(posJson));
+			spriteComponent.setScale(Vector2.fromJsonArray(scaleJson));			
+			addChild(spriteComponent);
 		}
 	}
 	
