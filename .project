@@ -3,6 +3,7 @@
 	<name>OverloadGame</name>
 	<comment></comment>
 	<projects>
+		<project>OverloadEngine</project>
 	</projects>
 	<buildSpec>
 		<buildCommand>
@@ -14,4 +15,11 @@
 	<natures>
 		<nature>org.eclipse.jdt.core.javanature</nature>
 	</natures>
+	<linkedResources>
+		<link>
+			<name>resources2</name>
+			<type>2</type>
+			<location>C:/Users/Nor-Vartotojas/Desktop/workspace/OverloadEngine/resources</location>
+		</link>
+	</linkedResources>
 </projectDescription>

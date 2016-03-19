@@ -58,7 +58,7 @@ public class PlayerManager extends EntityManager{
 			loadAnimations(playerJson, player, spriteSheet);
 			loadControls(playerJson, player);
 			
-			player.setPosition(-1.0f, -1.0f); // FIXME load position from map
+			player.setPosition(-1.0f, -1.0f);
 			player.setScale(player.getScale().mul(playerScale));
 			player.getPhysicsBody().attachPolygonCollider(colliderVerts);
 			player.setCollisionFlags(PLAYER_COLLIDERS[i], PLAYER_COLLIDER);
