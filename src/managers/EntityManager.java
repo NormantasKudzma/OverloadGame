@@ -1,8 +1,6 @@
 package managers;
 
 import engine.BaseGame;
-import graphics.Sprite2D;
-import utils.Vector2;
 
 public class EntityManager {
 	public static final int NO_COLLISIONS		= 0x0000_0000;

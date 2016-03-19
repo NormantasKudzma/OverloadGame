@@ -9,6 +9,8 @@ import mapping.GameMap.Layer;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
+import physics.PhysicsBody;
+
 import utils.ConfigManager;
 import utils.Vector2;
 import engine.BaseGame;
@@ -49,7 +51,7 @@ public class MapManager extends EntityManager{
 		JSONArray mapSizeJson = json.getJSONArray("mapsize");
 		Vector2 mapSize = Vector2.fromJsonArray(mapSizeJson).div(2.0f);
 		WallEntity colliderEntity = new WallEntity(game);
-		colliderEntity.initEntity();
+		colliderEntity.initEntity(PhysicsBody.EBodyType.INTERACTIVE);
 		colliderEntity.setVisible(false);
 		
 		for (int i = 0; i < colliderArrayJson.length(); ++i){
@@ -78,7 +80,7 @@ public class MapManager extends EntityManager{
 				JSONArray positionJson = entityJson.getJSONArray("position");
 				Entity e = mapEntities.get(entityJson.getString("entity"));
 				Entity clone = (Entity)e.getClass().getDeclaredConstructor(BaseGame.class).newInstance(game);
-				clone.initEntity();
+				clone.initEntity(PhysicsBody.EBodyType.NON_INTERACTIVE);
 				clone.setSprite(e.getSprite());
 				clone.setScale(e.getScale().copy().mul(tileScale));
 				clone.setPosition(Vector2.fromJsonArray(positionJson).div(mapSize));
@@ -100,7 +102,7 @@ public class MapManager extends EntityManager{
 				Object obj = Class.forName(entityJson.getString("type")).getDeclaredConstructor(BaseGame.class).newInstance(game);
 				if (obj instanceof Entity){
 					Entity e = (Entity) obj;
-					e.initEntity();
+					e.initEntity(PhysicsBody.EBodyType.NON_INTERACTIVE);
 					Sprite2D sheet = spriteSheets.get(entityJson.get("sheet"));
 					int x = entityJson.getInt("x");
 					int y = entityJson.getInt("y");

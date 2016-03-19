@@ -111,8 +111,8 @@ public abstract class WeaponEntity extends Entity<SpriteAnimation>{
 	}
 	
 	@Override
-	public void initEntity() {
-		super.initEntity();
+	public void initEntity(PhysicsBody.EBodyType type) {
+		super.initEntity(type);
 		body.getBody().setGravityScale(0.0f);
 	}
 	
@@ -158,8 +158,8 @@ public abstract class WeaponEntity extends Entity<SpriteAnimation>{
 			e.setDirection(dir);
 			e.setMovementSpeed(speed);
 			if (player != null){
-				e.getPhysicsBody().setCollisionFlags(player.getCategory(), PhysicsBody.MaskType.EXCLUDE);
-				e.getPhysicsBody().setCollisionCategory(player.getCategory(), PhysicsBody.MaskType.SET);
+				e.getPhysicsBody().setCollisionFlags(player.getCategory(), PhysicsBody.EMaskType.EXCLUDE);
+				e.getPhysicsBody().setCollisionCategory(player.getCategory(), PhysicsBody.EMaskType.SET);
 			}
 			game.addEntity(e);
 			return e;
@@ -190,7 +190,7 @@ public abstract class WeaponEntity extends Entity<SpriteAnimation>{
 		
 		if (destroyWeaponFixtures){
 			destroyWeaponFixtures = false;
-			body.setCollisionFlags(EntityManager.NO_COLLISIONS, PhysicsBody.MaskType.SET);
+			body.setCollisionFlags(EntityManager.NO_COLLISIONS, PhysicsBody.EMaskType.SET);
 		}
 		
 		if (detachFromPlayer){

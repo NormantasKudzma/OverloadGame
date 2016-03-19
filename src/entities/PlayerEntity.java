@@ -7,6 +7,7 @@ import java.util.HashMap;
 import org.jbox2d.dynamics.Fixture;
 
 import physics.ICollidable;
+import physics.PhysicsBody;
 import utils.Vector2;
 import controls.ControllerEventListener;
 import engine.BaseGame;
@@ -149,8 +150,8 @@ public class PlayerEntity extends Entity<SpriteAnimation> {
 	}
 	
 	@Override
-	public void initEntity() {
-		super.initEntity();
+	public void initEntity(PhysicsBody.EBodyType type) {
+		super.initEntity(type);
 		body.getBody().setSleepingAllowed(false);
 	}
 	

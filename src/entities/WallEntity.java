@@ -2,6 +2,8 @@ package entities;
 
 import org.jbox2d.dynamics.BodyType;
 
+import physics.PhysicsBody;
+
 import engine.BaseGame;
 import engine.Entity;
 
@@ -12,8 +14,11 @@ public class WallEntity extends Entity{
 	}
 	
 	@Override
-	public void initEntity() {
-		super.initEntity();
-		body.getBody().setType(BodyType.STATIC);
+	public void initEntity(PhysicsBody.EBodyType type) {
+		super.initEntity(type);
+		if (type == PhysicsBody.EBodyType.INTERACTIVE)
+		{
+			body.getBody().setType(BodyType.STATIC);
+		}
 	}
 }

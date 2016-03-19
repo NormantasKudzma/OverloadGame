@@ -5,6 +5,8 @@ import java.util.HashMap;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
+import physics.PhysicsBody;
+
 import utils.ConfigManager;
 import utils.Vector2;
 import engine.BaseGame;
@@ -73,7 +75,7 @@ public class WeaponManager extends EntityManager {
 				
 				Object obj = Class.forName(childJson.getString("type")).getDeclaredConstructor(BaseGame.class).newInstance(game);
 				Entity e = (Entity)obj;
-				e.initEntity();
+				e.initEntity(PhysicsBody.EBodyType.INTERACTIVE);
 				e.setSprite(sprite);
 				e.setScale(e.getScale().mul((float)childJson.getDouble("scale")));
 				e.getPhysicsBody().getBody().setActive(false);
@@ -118,7 +120,7 @@ public class WeaponManager extends EntityManager {
 				
 				Object obj = Class.forName(weaponJson.getString("type")).getDeclaredConstructor(BaseGame.class).newInstance(game);
 				WeaponEntity e = (WeaponEntity)obj;
-				e.initEntity();
+				e.initEntity(PhysicsBody.EBodyType.INTERACTIVE);
 				e.setSprite(spriteAnim);
 				e.setScale(e.getScale().mul((float)weaponJson.getDouble("scale")));
 				e.getPhysicsBody().getBody().setActive(false);

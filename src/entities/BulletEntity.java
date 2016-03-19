@@ -4,6 +4,7 @@ import org.jbox2d.dynamics.Filter;
 import org.jbox2d.dynamics.Fixture;
 
 import physics.ICollidable;
+import physics.PhysicsBody;
 import utils.Vector2;
 import engine.BaseGame;
 import engine.Entity;
@@ -43,8 +44,8 @@ public class BulletEntity extends Entity<Sprite2D>{
 	}
 	
 	@Override
-	public void initEntity() {
-		super.initEntity();
+	public void initEntity(PhysicsBody.EBodyType type) {
+		super.initEntity(type);
 		body.getBody().setBullet(true);
 		body.getBody().setGravityScale(0.0f);
 		body.getBody().setSleepingAllowed(false);

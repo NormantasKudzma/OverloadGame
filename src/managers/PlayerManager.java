@@ -4,6 +4,8 @@ import org.jbox2d.dynamics.Fixture;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
+import physics.PhysicsBody;
+
 import utils.ConfigManager;
 import utils.Vector2;
 import controls.AbstractController;
@@ -50,7 +52,7 @@ public class PlayerManager extends EntityManager{
 		for (int i = 0; i < playerArrayJson.length(); ++i){
 			JSONObject playerJson = playerArrayJson.getJSONObject(i);
 			PlayerEntity player = new PlayerEntity(game);
-			player.initEntity();
+			player.initEntity(PhysicsBody.EBodyType.INTERACTIVE);		
 			player.setCategory(PLAYER_COLLIDERS[i]);
 			
 			loadAnimations(playerJson, player, spriteSheet);
