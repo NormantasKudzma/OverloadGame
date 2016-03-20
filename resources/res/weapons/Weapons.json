@@ -22,7 +22,7 @@
 			"scale":1.75,
 			"collider":[-18, -13, 18, 8],
 			"positionOffset":[4, 16],
-			"muzzleOffset":[45, 0],
+			"muzzleOffset":[62, 0],
 			"type":"entities.ShotgunEntity"
 		}		
 	],
@@ -44,9 +44,9 @@
 			"y":64,
 			"w":16,
 			"h":16,
-			"scale":2.0,
+			"scale":3.5,
 			"parent":"shotgun",
-			"collider":[-4, -4, 4, 4],
+			"collider":[-6, -4, 6, 4],
 			"type":"entities.BulletEntity"
 		}
 	],

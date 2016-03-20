@@ -85,6 +85,11 @@ public abstract class WeaponEntity extends Entity<SpriteAnimation>{
 	}
 	
 	public void flip(float direction){
+		if (player == null || player.isDestroyed()){
+			detachFromPlayer();
+			return;
+		}
+		
 		if (direction == oldDirection){
 			return;
 		}
@@ -159,7 +164,7 @@ public abstract class WeaponEntity extends Entity<SpriteAnimation>{
 			e.setMovementSpeed(speed);
 			if (player != null){
 				e.getPhysicsBody().setCollisionFlags(player.getCategory(), PhysicsBody.EMaskType.EXCLUDE);
-				e.getPhysicsBody().setCollisionCategory(player.getCategory(), PhysicsBody.EMaskType.SET);
+				//e.getPhysicsBody().setCollisionCategory(player.getCategory(), PhysicsBody.EMaskType.SET);
 			}
 			game.addEntity(e);
 			return e;
@@ -178,7 +183,7 @@ public abstract class WeaponEntity extends Entity<SpriteAnimation>{
 			}
 		}
 		
-		if (player != null){
+		if (player != null && !player.isDestroyed()){
 			Vector2 playerPos = player.getPosition();
 			if (player.getScale().x > 0){
 				setPosition(playerPos.x + positionOffset.x, playerPos.y + positionOffset.y);
@@ -195,7 +200,10 @@ public abstract class WeaponEntity extends Entity<SpriteAnimation>{
 		
 		if (detachFromPlayer){
 			detachFromPlayer = false;
-			player = null;
+			if (player != null){
+				player.weaponDetached();
+				player = null;
+			}
 			body.getBody().setGravityScale(0.4f);
 			body.getBody().setAwake(true);
 			setLifetime(1.0f);

@@ -52,8 +52,7 @@ public class PlayerManager extends EntityManager{
 		for (int i = 0; i < playerArrayJson.length(); ++i){
 			JSONObject playerJson = playerArrayJson.getJSONObject(i);
 			PlayerEntity player = new PlayerEntity(game);
-			player.initEntity(PhysicsBody.EBodyType.INTERACTIVE);		
-			player.setCategory(PLAYER_COLLIDERS[i]);
+			player.initEntity(PhysicsBody.EBodyType.INTERACTIVE);	
 			
 			loadAnimations(playerJson, player, spriteSheet);
 			loadControls(playerJson, player);
@@ -61,12 +60,15 @@ public class PlayerManager extends EntityManager{
 			player.setPosition(-1.0f, -1.0f);
 			player.setScale(player.getScale().mul(playerScale));
 			player.getPhysicsBody().attachPolygonCollider(colliderVerts);
-			player.setCollisionFlags(PLAYER_COLLIDERS[i], PLAYER_COLLIDER);
 			
 			for (int j = 0; j < sensorVerts.length; ++j){
 				Fixture f = player.getPhysicsBody().attachPolygonCollider(sensorVerts[j], true);
 				player.addSensor(f, sensorTypes[j]);
 			}
+			
+			// Only set collision category and flags after attaching all the fixtures
+			player.setCategory(PLAYER_COLLIDERS[i]);
+			player.setCollisionFlags(PLAYER_COLLIDERS[i], PLAYER_COLLIDER);
 
 			player.getPhysicsBody().getBody().getFixtureList().setRestitution(0.0f);
 			player.getPhysicsBody().getBody().getFixtureList().setFriction(1.7f);
@@ -107,7 +109,7 @@ public class PlayerManager extends EntityManager{
 				JSONObject control = controlsArrayJson.getJSONObject(i);
 				long keyMask = control.getLong("keymask");
 				String methodName = control.getString("method");
-				final ControllerEventListener listener = player.getEventListenerForMethod(methodName);
+				final ControllerEventListener listener = player.getEventListenerForMethod(controller, methodName);
 				controller.addKeybind(new ControllerKeybind(keyMask, listener));
 			}
 			controller.startController();

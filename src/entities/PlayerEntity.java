@@ -2,6 +2,7 @@ package entities;
 
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
+import java.util.ArrayList;
 import java.util.HashMap;
 
 import org.jbox2d.dynamics.Fixture;
@@ -9,6 +10,7 @@ import org.jbox2d.dynamics.Fixture;
 import physics.ICollidable;
 import physics.PhysicsBody;
 import utils.Vector2;
+import controls.AbstractController;
 import controls.ControllerEventListener;
 import engine.BaseGame;
 import engine.Entity;
@@ -54,14 +56,20 @@ public class PlayerEntity extends Entity<SpriteAnimation> {
 	private Vector2 scale = null;
 	private WeaponEntity currentWeapon = null;
 	private HashMap<SensorType, Fixture> sensors = new HashMap<SensorType, Fixture>();
+	private AbstractController controller = null;
+	private ArrayList<ControllerEventListener> controls = new ArrayList<ControllerEventListener>();
 	
 	public PlayerEntity(BaseGame game) {
 		super(game);
 	}
 	
-	public final ControllerEventListener getEventListenerForMethod(final String methodName) {
+	public final ControllerEventListener getEventListenerForMethod(AbstractController controller, final String methodName) {
 		try {
-			return new ControllerEventListener(){
+			if (this.controller == null){
+				this.controller = controller;
+			}
+			
+			ControllerEventListener listener = new ControllerEventListener(){
 				final PlayerEntity object = PlayerEntity.this;
 				final Method method = object.getClass().getMethod(methodName);
 				
@@ -77,6 +85,9 @@ public class PlayerEntity extends Entity<SpriteAnimation> {
 					}
 				}
 			};
+			
+			controls.add(listener);
+			return listener;
 		}
 		catch (NoSuchMethodException e) {
 			if (OverloadMain.IS_DEBUG_BUILD){
@@ -141,6 +152,24 @@ public class PlayerEntity extends Entity<SpriteAnimation> {
 		}
 	}
 	
+	@Override
+	public void destroy() {
+		super.destroy();
+		if (controller != null){
+			for (ControllerEventListener listener : controls){
+				controller.removeKeybind(listener);
+			}
+			controls.clear();
+			controls = null;
+			controller = null;
+		}
+		
+		if (currentWeapon != null){
+			currentWeapon.detachFromPlayer();
+			currentWeapon = null;
+		}
+	}
+	
 	public int getCategory(){
 		return categoryMask;
 	}
@@ -153,6 +182,7 @@ public class PlayerEntity extends Entity<SpriteAnimation> {
 	public void initEntity(PhysicsBody.EBodyType type) {
 		super.initEntity(type);
 		body.getBody().setSleepingAllowed(false);
+		body.getBody().setBullet(true);
 	}
 	
 	public final void moveLeft(){
@@ -253,5 +283,9 @@ public class PlayerEntity extends Entity<SpriteAnimation> {
 				currentWeapon.tryShoot();
 			}
 		}
+	}
+	
+	public void weaponDetached(){
+		currentWeapon = null;
 	}
 }

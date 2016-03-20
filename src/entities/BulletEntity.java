@@ -28,10 +28,10 @@ public class BulletEntity extends Entity<Sprite2D>{
 		markForDestruction();
 		
 		if (otherCollidable instanceof Entity){
-			/*if (otherCollidable instanceof PlayerEntity){
+			if (otherCollidable instanceof PlayerEntity){
 				PlayerEntity player = (PlayerEntity)otherCollidable;
 				player.markForDestruction();
-			}*/
+			}
 			
 			Filter f1 = myFixture.getFilterData();
 			Filter f2 = otherFixture.getFilterData();
@@ -58,6 +58,7 @@ public class BulletEntity extends Entity<Sprite2D>{
 	
 	public void setDirection(Vector2 dir){
 		direction = dir.normalized();
+		setScale(getScale().mul(Math.signum(dir.x), 1.0f));
 		setMovementSpeed(movementSpeed);
 	}
 	
