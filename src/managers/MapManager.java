@@ -10,13 +10,14 @@ import org.json.JSONArray;
 import org.json.JSONObject;
 
 import physics.PhysicsBody;
-
 import utils.ConfigManager;
 import utils.Vector2;
 import engine.BaseGame;
 import engine.Entity;
 import engine.OverloadEngine;
+import entities.PlayerEntity;
 import entities.WallEntity;
+import game.OverloadGame;
 import game.Paths;
 import graphics.Sprite2D;
 
@@ -42,6 +43,7 @@ public class MapManager extends EntityManager{
 		loadLayer(json, GameMap.Layer.MIDDLE, entities, map, mapSize);
 		loadLayer(json, GameMap.Layer.FOREGROUND, entities, map, mapSize);
 		loadColliders(json, map);
+		loadPlayerPositions(json, mapSize);
 		
 		return map;
 	}
@@ -67,29 +69,6 @@ public class MapManager extends EntityManager{
 		colliderEntity.setCollisionFlags(WALL_CATEGORY, WALL_COLLIDER);
 		
 		map.addEntity(Layer.MIDDLE, colliderEntity);
-	}
-
-	private void loadLayer(JSONObject json, Layer layer, HashMap<String, Entity> mapEntities, GameMap map, Vector2 mapSize) {
-		JSONArray layerArrayJson = json.getJSONArray(layer.getLayerName());
-		
-		for (int i = 0; i < layerArrayJson.length(); ++i){
-			try {
-				JSONObject entityJson = layerArrayJson.getJSONObject(i);
-				JSONArray scaleJson = entityJson.getJSONArray("scale");
-				Vector2 tileScale = Vector2.fromJsonArray(scaleJson);
-				JSONArray positionJson = entityJson.getJSONArray("position");
-				Entity e = mapEntities.get(entityJson.getString("entity"));
-				Entity clone = (Entity)e.getClass().getDeclaredConstructor(BaseGame.class).newInstance(game);
-				clone.initEntity(PhysicsBody.EBodyType.NON_INTERACTIVE);
-				clone.setSprite(e.getSprite());
-				clone.setScale(e.getScale().copy().mul(tileScale));
-				clone.setPosition(Vector2.fromJsonArray(positionJson).div(mapSize));
-				map.addEntity(layer, clone);
-			}
-			catch (Exception e){
-				e.printStackTrace();
-			}
-		}
 	}
 
 	private void loadEntities(JSONObject json, HashMap<String, Sprite2D> spriteSheets, HashMap<String, Entity> entities, Vector2 mapSize) {
@@ -118,7 +97,40 @@ public class MapManager extends EntityManager{
 			}
 		}
 	}
+	
+	private void loadLayer(JSONObject json, Layer layer, HashMap<String, Entity> mapEntities, GameMap map, Vector2 mapSize) {
+		JSONArray layerArrayJson = json.getJSONArray(layer.getLayerName());
+		
+		for (int i = 0; i < layerArrayJson.length(); ++i){
+			try {
+				JSONObject entityJson = layerArrayJson.getJSONObject(i);
+				JSONArray scaleJson = entityJson.getJSONArray("scale");
+				Vector2 tileScale = Vector2.fromJsonArray(scaleJson);
+				JSONArray positionJson = entityJson.getJSONArray("position");
+				Entity e = mapEntities.get(entityJson.getString("entity"));
+				Entity clone = (Entity)e.getClass().getDeclaredConstructor(BaseGame.class).newInstance(game);
+				clone.initEntity(PhysicsBody.EBodyType.NON_INTERACTIVE);
+				clone.setSprite(e.getSprite());
+				clone.setScale(e.getScale().copy().mul(tileScale));
+				clone.setPosition(Vector2.fromJsonArray(positionJson).div(mapSize));
+				map.addEntity(layer, clone);
+			}
+			catch (Exception e){
+				e.printStackTrace();
+			}
+		}
+	}
 
+	private void loadPlayerPositions(JSONObject json, Vector2 mapSize) {
+		JSONArray playersArrayJson = json.getJSONArray("players");
+		for (int i = 0; i < playersArrayJson.length(); ++i){
+			JSONObject playerJson = playersArrayJson.getJSONObject(i);
+			Vector2 position = Vector2.fromJsonArray(playerJson.getJSONArray("position")).div(mapSize);
+			PlayerEntity player = ((OverloadGame)game).getPlayerManager().getPlayer(i);
+			player.setPosition(position);
+		}
+	}
+	
 	private void loadSpriteSheets(JSONObject json, HashMap<String, Sprite2D> spriteSheets) {
 		JSONArray spriteSheetJson = json.getJSONArray("spritesheets");
 		

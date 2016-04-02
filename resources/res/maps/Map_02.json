@@ -113,6 +113,98 @@
 			"w":"1280",
 			"h":"720",
 			"scale":"1"
+		},
+		
+		{
+			"comment":"weapon spawner",
+			"name":"spawner",
+			"type":"entities.WeaponSpawner",
+			"sheet":"0",
+			"x":"256",
+			"y":"384",
+			"w":"128",
+			"h":"128",
+			"scale":"1"
+		},
+		{
+			"comment":"cactus 1",
+			"name":"cactus1",
+			"type":"entities.WallEntity",
+			"sheet":"0",
+			"x":"256",
+			"y":"256",
+			"w":"128",
+			"h":"128",
+			"scale":"2"
+		},
+		{
+			"comment":"cactus 2",
+			"name":"cactus2",
+			"type":"entities.WallEntity",
+			"sheet":"0",
+			"x":"384",
+			"y":"256",
+			"w":"128",
+			"h":"128",
+			"scale":"2"
+		},
+		{
+			"comment":"skeleton on ground",
+			"name":"skeleton",
+			"type":"entities.WallEntity",
+			"sheet":"0",
+			"x":"0",
+			"y":"384",
+			"w":"256",
+			"h":"64",
+			"scale":"4"
+		},
+		{
+			"comment":"bush - green",
+			"name":"bush1",
+			"type":"entities.WallEntity",
+			"sheet":"0",
+			"x":"0",
+			"y":"448",
+			"w":"128",
+			"h":"64",
+			"scale":"2"
+		},
+		{
+			"comment":"bush - brown",
+			"name":"bush2",
+			"type":"entities.WallEntity",
+			"sheet":"0",
+			"x":"128",
+			"y":"448",
+			"w":"128",
+			"h":"64",
+			"scale":"2"
+		},
+		{
+			"comment":"thorny bush",
+			"name":"bush3",
+			"type":"entities.WallEntity",
+			"sheet":"0",
+			"x":"384",
+			"y":"384",
+			"w":"128",
+			"h":"128",
+			"scale":"2"
+		}
+	],
+	"players":[
+		{
+			"position":[10, 31]
+		},
+		{
+			"position":[54, 31]
+		},
+		{
+			"position":[7, 10]
+		},
+		{
+			"position":[57, 10]
 		}
 	],
 	"zero":[
@@ -120,7 +212,26 @@
 	],
 	"mapsize":[64,36],
 	"back":[
-	
+		{"position":[23, 23], "scale":[1,1], "entity":"spawner"},
+		{"position":[41, 23], "scale":[1,1], "entity":"spawner"},
+		{"position":[17, 13], "scale":[1,1], "entity":"spawner"},
+		{"position":[47, 13], "scale":[1,1], "entity":"spawner"},
+		
+		{"position":[33, 24], "scale":[1,1], "entity":"cactus1"},
+		{"position":[14, 20], "scale":[-1,1], "entity":"cactus1"},
+		
+		{"position":[12, 19], "scale":[1,1], "entity":"cactus2"},
+		
+		{"position":[22, 6], "scale":[1,1], "entity":"bush3"},
+		{"position":[55, 30], "scale":[1,1], "entity":"bush3"},
+		
+		{"position":[51, 5], "scale":[1,1], "entity":"bush2"},
+		{"position":[27.3, 3], "scale":[1,1], "entity":"bush2"},
+		
+		{"position":[3, 25], "scale":[1,1], "entity":"bush1"},
+		{"position":[58, 7], "scale":[1,1], "entity":"bush1"},
+		
+		{"position":[49, 4.9], "scale":[1,1], "entity":"skeleton"},
 	],
 	"middle":[
 		{"position":[9,27],"scale":[1,1],"entity":"Red"},

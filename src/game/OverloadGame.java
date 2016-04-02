@@ -24,6 +24,10 @@ public class OverloadGame extends BaseGame {
 		return playerManager;
 	}
 	
+	public WeaponManager getWeaponManager(){
+		return weaponManager;
+	}
+	
 	@Override
 	public void init() {
 		super.init();
@@ -32,27 +36,10 @@ public class OverloadGame extends BaseGame {
 		weaponManager.loadWeapons();
 		map = mapManager.loadMap(Paths.MAPS + "Map_02.json", entityList);
 		
-		addEntity(playerManager.getPlayer(0));
-		playerManager.getPlayer(0).setPosition(new Vector2(0.8f, 1.5f));
-		
-		addEntity(playerManager.getPlayer(1));
-		playerManager.getPlayer(1).setPosition(new Vector2(1.2f, 1.5f));
-		
-		addEntity(playerManager.getPlayer(2));
-		playerManager.getPlayer(2).setPosition(new Vector2(0.5f, 0.5f));
-		
+		addEntity(playerManager.getPlayer(0));		
+		addEntity(playerManager.getPlayer(1));		
+		addEntity(playerManager.getPlayer(2));	
 		addEntity(playerManager.getPlayer(3));
-		playerManager.getPlayer(3).setPosition(new Vector2(1.5f, 0.5f));
-		
-		WeaponEntity weap = weaponManager.getWeapon("pistol");
-		weap.getPhysicsBody().getBody().setActive(true);
-		weap.setPosition(new Vector2(1.0f, 1.8f));
-		addEntity(weap);
-		
-		WeaponEntity weap2 = weaponManager.getWeapon("shotgun");
-		weap2.getPhysicsBody().getBody().setActive(true);
-		weap2.setPosition(new Vector2(1.5f, 1.8f));
-		addEntity(weap2);
 		
 		overlay = new Overlay(this);
 	}
@@ -71,5 +58,6 @@ public class OverloadGame extends BaseGame {
 	public void update(float deltaTime) {
 		super.update(deltaTime);
 		overlay.update(deltaTime);
+		map.update(deltaTime);
 	}
 }

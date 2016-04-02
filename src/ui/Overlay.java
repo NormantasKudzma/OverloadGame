@@ -52,7 +52,7 @@ public class Overlay extends Component{
 			h = bgJson.getInt("h");
 			
 			Sprite2D bgSprite = Sprite2D.getSpriteFromSheet(x, y, w, h, sheet);
-			bgSprite.setInternalScale(OverloadEngine.frameWidth * 0.25f, OverloadEngine.frameHeight * 0.08f);
+			bgSprite.setInternalScale((int)(OverloadEngine.frameWidth * 0.25f), (int)(OverloadEngine.frameHeight * 0.08f));
 			
 			SpriteComponent bgComponent = new SpriteComponent(game);
 			bgComponent.setSprite(bgSprite);

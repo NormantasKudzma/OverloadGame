@@ -51,6 +51,10 @@ public class WeaponManager extends EntityManager {
 		return null;
 	}
 	
+	public HashMap<String, WeaponEntity> getWeaponMap(){
+		return weaponMap;
+	}
+	
 	public void loadWeapons(){
 		JSONObject weaponFileJson = ConfigManager.loadConfigAsJson(Paths.WEAPONS + "Weapons.json");
 		Sprite2D sheet = new Sprite2D(Paths.SPRITESHEETS + weaponFileJson.getString("spritesheet"));

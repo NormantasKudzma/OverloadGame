@@ -111,6 +111,10 @@ public abstract class WeaponEntity extends Entity<SpriteAnimation>{
 		return numBullets;
 	}
 	
+	public PlayerEntity getPlayer(){
+		return player;
+	}
+	
 	public void initBullet(){
 		//stub
 	}
