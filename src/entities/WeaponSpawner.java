@@ -40,7 +40,7 @@ public class WeaponSpawner extends Entity<Sprite2D> implements QueryCallback{
 		if (f.getUserData() != null && f.getUserData() instanceof WeaponEntity)
 		{
 			WeaponEntity weapon = (WeaponEntity)f.getUserData();
-			if (weapon.getPlayer() != null){
+			if (weapon.getPlayer() == null){
 				isSpawnFull = true;
 				return false;
 			}		

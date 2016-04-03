@@ -2,6 +2,7 @@ package entities;
 
 import managers.EntityManager;
 import physics.PhysicsBody;
+import utils.FastMath;
 import utils.Vector2;
 import engine.BaseGame;
 import engine.Entity;
@@ -24,14 +25,16 @@ public abstract class WeaponEntity extends Entity<SpriteAnimation>{
 		}
 	}
 	
-	protected int numBullets = 6;
-	protected float oldDirection = 0.0f;
-	protected float shootCooldown = 2.0f;
-	protected float shootTimer = 0.0f;
-	protected boolean destroyWeaponFixtures = false;
-	protected boolean detachFromPlayer = false;
-	protected Vector2 positionOffset = new Vector2();
-	protected Vector2 muzzleOffset = new Vector2();
+	protected int numBullets = 6;						// Clip size
+	protected float oldDirection = 0.0f;				
+	protected float shootCooldown = 2.0f;				// Interval between shots
+	protected float shootTimer = 0.0f;					// Cooldown until next shot
+	protected float hoverProgress = 0.0f;
+	protected boolean destroyWeaponFixtures = false;	// Should weapon's fixtures be destroyed
+	protected boolean detachFromPlayer = false;			// Should weapon detach on next frame
+	protected boolean isAttached = false;				// Has weapon been attached to a player
+	protected Vector2 positionOffset = new Vector2();	// Offset from player's position, when attached
+	protected Vector2 muzzleOffset = new Vector2();		// Bullet offset from weapon's position when shooting
 	
 	protected AmmoEntity ammo = null;
 	protected BulletEntity bullet = null;
@@ -61,6 +64,7 @@ public abstract class WeaponEntity extends Entity<SpriteAnimation>{
 	public void attachToPlayer(PlayerEntity e){
 		player = e;
 		if (player != null){
+			isAttached = true;
 			destroyWeaponFixtures = true;
 			flip(e.getScale().x);
 		}
@@ -185,6 +189,14 @@ public abstract class WeaponEntity extends Entity<SpriteAnimation>{
 			if (shootTimer <= 0.0f && numBullets > 0){
 				sprite.setState(WeaponAnimation.IDLE.getIndex());
 			}
+		}
+		
+		if (!isAttached){
+			hoverProgress += deltaTime;
+			if (hoverProgress >= 6.28f){
+				hoverProgress = 0.0f;
+			}
+			setPosition(getPosition().add(0.0f, FastMath.sin(hoverProgress) * 0.00035f));			
 		}
 		
 		if (player != null && !player.isDestroyed()){
