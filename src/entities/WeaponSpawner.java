@@ -37,13 +37,19 @@ public class WeaponSpawner extends Entity<Sprite2D> implements QueryCallback{
 
 	@Override
 	public boolean reportFixture(Fixture f) {
-		if (f.getUserData() != null && f.getUserData() instanceof WeaponEntity)
+		if (f.getUserData() != null)
 		{
-			WeaponEntity weapon = (WeaponEntity)f.getUserData();
-			if (weapon.getPlayer() == null){
+			if (f.getUserData() instanceof WeaponEntity){
+				WeaponEntity weapon = (WeaponEntity)f.getUserData();
+				if (weapon.getPlayer() == null){
+					isSpawnFull = true;
+					return false;
+				}
+			}
+			else if (f.getUserData() instanceof PlayerEntity){
 				isSpawnFull = true;
 				return false;
-			}		
+			}
 		}
 		return true;
 	}
@@ -83,7 +89,7 @@ public class WeaponSpawner extends Entity<Sprite2D> implements QueryCallback{
 				weapon = weapon.clone();
 				weapon.getPhysicsBody().getBody().setActive(true);
 				weapon.setPosition(getPosition().copy().add(spawnOffset));
-				game.addEntity(weapon);
+				game.addEntity(weapon, ((OverloadGame)game).getMapManager().getPlayersLayer());
 			}
 		}
 	}

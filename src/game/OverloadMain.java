@@ -12,6 +12,7 @@ public class OverloadMain {
 		OverloadGame game = new OverloadGame();
 		engine.setGame(game);
 		engine.setDebugDraw(IS_DEBUG_BUILD);
+		engine.setFullscreen(false);
 		engine.setTitle(GAME + " " + VERSION);
 		engine.run();
 	}

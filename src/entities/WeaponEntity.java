@@ -6,6 +6,7 @@ import utils.FastMath;
 import utils.Vector2;
 import engine.BaseGame;
 import engine.Entity;
+import game.OverloadGame;
 import graphics.Sprite2D;
 import graphics.SpriteAnimation;
 
@@ -174,7 +175,7 @@ public abstract class WeaponEntity extends Entity<SpriteAnimation>{
 				e.getPhysicsBody().setCollisionFlags(player.getCategory(), PhysicsBody.EMaskType.EXCLUDE);
 				//e.getPhysicsBody().setCollisionCategory(player.getCategory(), PhysicsBody.EMaskType.SET);
 			}
-			game.addEntity(e);
+			game.addEntity(e, ((OverloadGame)game).getMapManager().getPlayersLayer());
 			return e;
 		}
 		return null;

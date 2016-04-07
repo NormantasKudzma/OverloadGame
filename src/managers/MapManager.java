@@ -1,10 +1,6 @@
 package managers;
 
-import java.util.ArrayList;
 import java.util.HashMap;
-
-import mapping.GameMap;
-import mapping.GameMap.Layer;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -19,36 +15,42 @@ import entities.PlayerEntity;
 import entities.WallEntity;
 import game.OverloadGame;
 import game.Paths;
+import graphics.Layer;
 import graphics.Sprite2D;
 
 public class MapManager extends EntityManager{
+	private String playerLayer = null;
+	
 	public MapManager(BaseGame game) {
 		super(game);
 	}
 
-	public GameMap loadMap(String path, ArrayList<Entity> entityList){
+	public String getPlayersLayer(){
+		return playerLayer;
+	}
+	
+	public void loadMap(BaseGame game, String path){
 		JSONObject json = ConfigManager.loadConfigAsJson(path);
-		GameMap map = new GameMap(path);
 		
 		HashMap<String, Sprite2D> spriteSheets = new HashMap<String, Sprite2D>();
 		HashMap<String, Entity> entities = new HashMap<String, Entity>();		
 
-		JSONArray mapSizeJson = json.getJSONArray("mapsize");
-		Vector2 mapSize = new Vector2((float)mapSizeJson.getDouble(0), (float)mapSizeJson.getDouble(1)).div(2.0f);
+		Vector2 mapSize = Vector2.fromJsonArray(json.getJSONArray("mapsize")).div(2.0f);
 		
 		loadSpriteSheets(json, spriteSheets);
 		loadEntities(json, spriteSheets, entities, mapSize);
-		loadLayer(json, GameMap.Layer.ZERO, entities, map, mapSize);
-		loadLayer(json, GameMap.Layer.BACKGROUND, entities, map, mapSize);
-		loadLayer(json, GameMap.Layer.MIDDLE, entities, map, mapSize);
-		loadLayer(json, GameMap.Layer.FOREGROUND, entities, map, mapSize);
-		loadColliders(json, map);
-		loadPlayerPositions(json, mapSize);
+		loadColliders(json, game);
 		
-		return map;
+		JSONArray layersJsonArray = json.getJSONArray("layers");
+		for (int i = 0; i < layersJsonArray.length(); ++i){
+			JSONObject layerJson = layersJsonArray.getJSONObject(i);
+			loadLayer(layerJson, game, entities, mapSize);
+		}
+		
+		loadPlayerPositions(json, mapSize);
 	}
 
-	private void loadColliders(JSONObject json, GameMap map) {
+	private void loadColliders(JSONObject json, BaseGame game) {
 		JSONArray colliderArrayJson = json.getJSONArray("colliders");
 		JSONArray mapSizeJson = json.getJSONArray("mapsize");
 		Vector2 mapSize = Vector2.fromJsonArray(mapSizeJson).div(2.0f);
@@ -68,7 +70,7 @@ public class MapManager extends EntityManager{
 		}
 		colliderEntity.setCollisionFlags(WALL_CATEGORY, WALL_COLLIDER);
 		
-		map.addEntity(Layer.MIDDLE, colliderEntity);
+		game.addEntity(colliderEntity);
 	}
 
 	private void loadEntities(JSONObject json, HashMap<String, Sprite2D> spriteSheets, HashMap<String, Entity> entities, Vector2 mapSize) {
@@ -98,12 +100,19 @@ public class MapManager extends EntityManager{
 		}
 	}
 	
-	private void loadLayer(JSONObject json, Layer layer, HashMap<String, Entity> mapEntities, GameMap map, Vector2 mapSize) {
-		JSONArray layerArrayJson = json.getJSONArray(layer.getLayerName());
+	private void loadLayer(JSONObject json, BaseGame game, HashMap<String, Entity> mapEntities, Vector2 mapSize) {
+		String layerName = json.getString("name");
+		int index = json.getInt("index");
+		Layer layer = new Layer(layerName, index);
 		
-		for (int i = 0; i < layerArrayJson.length(); ++i){
+		if (json.has("isPlayersLayer")){
+			playerLayer = layerName;
+		}
+		
+		JSONArray objectsArrayJson = json.getJSONArray("objects");
+		for (int i = 0; i < objectsArrayJson.length(); ++i){
 			try {
-				JSONObject entityJson = layerArrayJson.getJSONObject(i);
+				JSONObject entityJson = objectsArrayJson.getJSONObject(i);
 				JSONArray scaleJson = entityJson.getJSONArray("scale");
 				Vector2 tileScale = Vector2.fromJsonArray(scaleJson);
 				JSONArray positionJson = entityJson.getJSONArray("position");
@@ -113,12 +122,13 @@ public class MapManager extends EntityManager{
 				clone.setSprite(e.getSprite());
 				clone.setScale(e.getScale().copy().mul(tileScale));
 				clone.setPosition(Vector2.fromJsonArray(positionJson).div(mapSize));
-				map.addEntity(layer, clone);
+				layer.addEntity(clone);
 			}
 			catch (Exception e){
 				e.printStackTrace();
 			}
 		}
+		game.addLayer(layer);
 	}
 
 	private void loadPlayerPositions(JSONObject json, Vector2 mapSize) {
@@ -127,7 +137,9 @@ public class MapManager extends EntityManager{
 			JSONObject playerJson = playersArrayJson.getJSONObject(i);
 			Vector2 position = Vector2.fromJsonArray(playerJson.getJSONArray("position")).div(mapSize);
 			PlayerEntity player = ((OverloadGame)game).getPlayerManager().getPlayer(i);
-			player.setPosition(position);
+			if (player != null){
+				player.setPosition(position);
+			}
 		}
 	}
 	

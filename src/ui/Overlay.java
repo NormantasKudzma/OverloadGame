@@ -29,6 +29,7 @@ public class Overlay extends Component{
 	private Label scoreTexts[];
 	private int ammoValues[];
 	private int scoreValues[];
+	private SpriteComponent crossIcons[];
 	
 	private float textUpdateTimer = 0.0f;
 	
@@ -67,6 +68,15 @@ public class Overlay extends Component{
 
 		JSONArray ammoArrayJson = overlayJson.getJSONArray("ammo");
 		loadSpriteComponents(ammoArrayJson, sheet);
+		
+		JSONArray playerIconArrayJson = overlayJson.getJSONArray("icons");
+		loadSpriteComponents(playerIconArrayJson, sheet);
+		
+		JSONArray crossArrayJson = overlayJson.getJSONArray("crosses");
+		crossIcons = loadSpriteComponents(crossArrayJson, sheet);
+		for (int i = 0; i < crossIcons.length; ++i){
+			crossIcons[i].setVisible(false);
+		}
 
 		// Load score texts
 		overlayFont = SimpleFont.createFont(Paths.SPRITESHEETS + "spritesheet_overlay.png", Paths.FONTS + "overlay_font.json");
@@ -97,7 +107,8 @@ public class Overlay extends Component{
 		}
 	}
 	
-	private void loadSpriteComponents(JSONArray json, Sprite2D sheet){
+	private SpriteComponent[] loadSpriteComponents(JSONArray json, Sprite2D sheet){
+		SpriteComponent addedComponents[] = new SpriteComponent[json.length()];
 		for (int i = 0; i < json.length(); ++i){
 			JSONObject itemJson = json.getJSONObject(i);
 			JSONArray posJson = itemJson.getJSONArray("pos");
@@ -113,7 +124,16 @@ public class Overlay extends Component{
 			spriteComponent.setPosition(Vector2.fromJsonArray(posJson));
 			spriteComponent.setScale(Vector2.fromJsonArray(scaleJson));			
 			addChild(spriteComponent);
+			addedComponents[i] = spriteComponent;
 		}
+		return addedComponents;
+	}
+	
+	public void setPlayerDead(int index, boolean isDead){
+		if (index < 0 || index >= crossIcons.length){
+			return;
+		}
+		crossIcons[index].setVisible(isDead);
 	}
 	
 	@Override

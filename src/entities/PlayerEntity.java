@@ -14,6 +14,7 @@ import controls.AbstractController;
 import controls.ControllerEventListener;
 import engine.BaseGame;
 import engine.Entity;
+import game.OverloadGame;
 import game.OverloadMain;
 import graphics.SpriteAnimation;
 
@@ -123,6 +124,19 @@ public class PlayerEntity extends Entity<SpriteAnimation> {
 	
 	@Override
 	public void collisionStart(Fixture myFixture, Fixture otherFixture, ICollidable otherCollidable) {
+		if (myFixture == sensors.get(SensorType.FOOT)){
+			canJump = true;
+			jumpStarted = false;
+			jumpLength = 0;
+			sprite.setState(AnimationState.RUN.index());
+		}
+		else if (myFixture == sensors.get(SensorType.LEFT) && !otherFixture.isSensor()){
+			leftSensorTouching = true;
+		}
+		else if (myFixture == sensors.get(SensorType.RIGHT) && !otherFixture.isSensor()){
+			rightSensorTouching = true;
+		}
+		
 		if (otherCollidable instanceof WeaponEntity){
 			WeaponEntity weapon = (WeaponEntity)otherCollidable;
 			if (currentWeapon != null){
@@ -133,22 +147,6 @@ public class PlayerEntity extends Entity<SpriteAnimation> {
 			}
 			currentWeapon = weapon;
 			currentWeapon.attachToPlayer(this);
-			return;
-		}
-		
-		if (myFixture == sensors.get(SensorType.FOOT)){
-			canJump = true;
-			jumpStarted = false;
-			jumpLength = 0;
-			sprite.setState(AnimationState.RUN.index());
-		}
-		
-		if (myFixture == sensors.get(SensorType.LEFT)){
-			leftSensorTouching = true;
-		}
-		
-		if (myFixture == sensors.get(SensorType.RIGHT)){
-			rightSensorTouching = true;
 		}
 	}
 	
@@ -231,6 +229,15 @@ public class PlayerEntity extends Entity<SpriteAnimation> {
 		}
 	}
 
+	public void onDestroy(){
+		super.onDestroy();
+		if (currentWeapon != null){
+			currentWeapon.detachFromPlayer();
+			currentWeapon = null;
+		}
+		//((OverloadGame)game).getOverlay().setPlayerDead(index, true);
+	}
+	
 	public void setCategory(int category){
 		categoryMask = category;
 	}

@@ -3,12 +3,10 @@ package game;
 import managers.MapManager;
 import managers.PlayerManager;
 import managers.WeaponManager;
-import mapping.GameMap;
-import mapping.GameMap.Layer;
 import ui.Overlay;
 import utils.Vector2;
 import engine.BaseGame;
-import entities.WeaponEntity;
+import graphics.Layer;
 
 public class OverloadGame extends BaseGame {
 	public static Vector2 GRAVITY = new Vector2(0.0f, -4.0f);
@@ -17,8 +15,19 @@ public class OverloadGame extends BaseGame {
 	private PlayerManager playerManager = new PlayerManager(this);
 	private WeaponManager weaponManager = new WeaponManager(this);
 	
-	private GameMap map;
 	private Overlay overlay;
+	
+	public OverloadGame(){
+		
+	}
+	
+	public MapManager getMapManager(){
+		return mapManager;
+	}
+	
+	public Overlay getOverlay(){
+		return overlay;
+	}
 	
 	public PlayerManager getPlayerManager(){
 		return playerManager;
@@ -34,30 +43,17 @@ public class OverloadGame extends BaseGame {
 		physicsWorld.getWorld().setGravity(GRAVITY.toVec2());
 		playerManager.loadPlayers();
 		weaponManager.loadWeapons();
-		map = mapManager.loadMap(Paths.MAPS + "Map_02.json", entityList);
+		mapManager.loadMap(this, Paths.MAPS + "Map_02.json");	
 		
-		addEntity(playerManager.getPlayer(0));		
-		addEntity(playerManager.getPlayer(1));		
-		addEntity(playerManager.getPlayer(2));	
-		addEntity(playerManager.getPlayer(3));
+		String playersLayer = mapManager.getPlayersLayer();
+		addEntity(playerManager.getPlayer(0), playersLayer);		
+		addEntity(playerManager.getPlayer(1), playersLayer);		
+		addEntity(playerManager.getPlayer(2), playersLayer);	
+		addEntity(playerManager.getPlayer(3), playersLayer);
 		
+		Layer overlayLayer = new Layer("overlay", 1);
 		overlay = new Overlay(this);
-	}
-	
-	@Override
-	protected void renderGame() {
-		map.renderLayer(Layer.ZERO);
-		map.renderLayer(Layer.BACKGROUND);
-		map.renderLayer(Layer.MIDDLE);
-		super.renderGame();
-		map.renderLayer(Layer.FOREGROUND);
-		overlay.render();
-	}
-	
-	@Override
-	public void update(float deltaTime) {
-		super.update(deltaTime);
-		overlay.update(deltaTime);
-		map.update(deltaTime);
+		overlayLayer.addEntity(overlay);
+		addLayer(overlayLayer);
 	}
 }
