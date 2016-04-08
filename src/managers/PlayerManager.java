@@ -5,7 +5,6 @@ import org.json.JSONArray;
 import org.json.JSONObject;
 
 import physics.PhysicsBody;
-
 import utils.ConfigManager;
 import utils.Vector2;
 import controls.AbstractController;
@@ -16,6 +15,7 @@ import controls.EController;
 import engine.BaseGame;
 import entities.PlayerEntity;
 import entities.PlayerEntity.SensorType;
+import game.OverloadGame;
 import game.Paths;
 import graphics.Sprite2D;
 import graphics.SpriteAnimation;
@@ -151,5 +151,14 @@ public class PlayerManager extends EntityManager{
 		SpriteAnimation spriteAnim = new SpriteAnimation();
 		spriteAnim.setSpriteArray(spriteAnimations);
 		player.setSprite(spriteAnim);
+	}
+
+	public void playerDeath(PlayerEntity player){
+		for (int i = 0; i < NUM_PLAYERS; ++i){
+			if (player.equals(playerEntities[i])){
+				((OverloadGame)game).getOverlay().setPlayerDead(i, true);
+				break;
+			}
+		}
 	}
 }

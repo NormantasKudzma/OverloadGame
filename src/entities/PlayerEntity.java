@@ -153,6 +153,8 @@ public class PlayerEntity extends Entity<SpriteAnimation> {
 	@Override
 	public void destroy() {
 		super.destroy();
+		((OverloadGame)game).getPlayerManager().playerDeath(this);
+		
 		if (controller != null){
 			for (ControllerEventListener listener : controls){
 				controller.removeKeybind(listener);
