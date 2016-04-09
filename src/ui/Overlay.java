@@ -30,6 +30,7 @@ public class Overlay extends Component{
 	private int ammoValues[];
 	private int scoreValues[];
 	private SpriteComponent crossIcons[];
+	private SpriteComponent blurComponent;
 	
 	private float textUpdateTimer = 0.0f;
 	
@@ -37,29 +38,35 @@ public class Overlay extends Component{
 		super(game);
 	}
 
+	public void addPoint(int index){
+		if (index < 0 || index >= scoreValues.length){
+			return;
+		}
+		++scoreValues[index];
+		scoreTexts[index].setText("" + scoreValues[index]);
+	}
+	
+	public void clearPoints(){
+		for (int i = 0; i < scoreValues.length; ++i){
+			scoreValues[i] = 0;
+			scoreTexts[i].setText("0");
+		}
+	}
+	
 	protected void initialize() {
 		setPosition(new Vector2(0.0f, 1.92f));
 		
 		JSONObject overlayJson = ConfigManager.loadConfigAsJson(Paths.UI + "overlay.json");
 		Sprite2D sheet = new Sprite2D(Paths.SPRITESHEETS + overlayJson.getString("spritesheet"));
 		
-		int x, y, w, h;		
+		JSONArray blurJsonArray = overlayJson.getJSONArray("blur");
+		blurComponent = loadSpriteComponents(blurJsonArray, sheet)[0];
+		blurComponent.setVisible(false);
+		
 		JSONArray backgroundArrayJson = overlayJson.getJSONArray("background");
-		for (int i = 0; i < backgroundArrayJson.length(); ++i){
-			JSONObject bgJson = backgroundArrayJson.getJSONObject(i);
-			x = bgJson.getInt("x");
-			y = bgJson.getInt("y");
-			w = bgJson.getInt("w");
-			h = bgJson.getInt("h");
-			
-			Sprite2D bgSprite = Sprite2D.getSpriteFromSheet(x, y, w, h, sheet);
-			bgSprite.setInternalScale((int)(OverloadEngine.frameWidth * 0.25f), (int)(OverloadEngine.frameHeight * 0.08f));
-			
-			SpriteComponent bgComponent = new SpriteComponent(game);
-			bgComponent.setSprite(bgSprite);
-			JSONArray posJson = bgJson.getJSONArray("pos");
-			bgComponent.setPosition(Vector2.fromJsonArray(posJson));
-			addChild(bgComponent);
+		SpriteComponent bgComponents[] = loadSpriteComponents(backgroundArrayJson, sheet);
+		for (SpriteComponent i : bgComponents){
+			i.getSprite().setInternalScale((int)(OverloadEngine.frameWidth * 0.25f), (int)(OverloadEngine.frameHeight * 0.08f));
 		}
 		
 		// Load score indicator icons
@@ -89,7 +96,11 @@ public class Overlay extends Component{
 		loadLabels(scoreTextArrayJson, scoreTexts);
 		
 		JSONArray ammoTextArrayJson = overlayJson.getJSONArray("ammoTexts");
-		loadLabels(ammoTextArrayJson, ammoTexts);
+		loadLabels(ammoTextArrayJson, ammoTexts); 
+	}
+	
+	public boolean isUIBlurred(){
+		return blurComponent.isVisible();
 	}
 	
 	private void loadLabels(JSONArray json, Label array[]){
@@ -127,6 +138,10 @@ public class Overlay extends Component{
 			addedComponents[i] = spriteComponent;
 		}
 		return addedComponents;
+	}
+	
+	public void setBlurVisible(boolean isVisible){
+		blurComponent.setVisible(isVisible);
 	}
 	
 	public void setPlayerDead(int index, boolean isDead){

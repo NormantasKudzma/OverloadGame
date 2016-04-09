@@ -1,5 +1,6 @@
 package managers;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 
 import org.json.JSONArray;
@@ -20,16 +21,33 @@ import graphics.Sprite2D;
 
 public class MapManager extends EntityManager{
 	private String playerLayer = null;
+	private ArrayList<String> lastMapLayers = new ArrayList<String>();
 	
 	public MapManager(BaseGame game) {
 		super(game);
 	}
 
+	public void cleanUpLayers(){
+		Layer l = null;
+		for (String i : lastMapLayers){
+			if ((l = game.getLayer(i)) != null){
+				if (playerLayer == null || !l.getName().equals(playerLayer)){
+					l.destroy();
+				}
+				l.clear();
+			}
+		}
+		playerLayer = null;
+		lastMapLayers.clear();
+	}
+	
 	public String getPlayersLayer(){
 		return playerLayer;
 	}
 	
 	public void loadMap(BaseGame game, String path){
+		cleanUpLayers();
+		
 		JSONObject json = ConfigManager.loadConfigAsJson(path);
 		
 		HashMap<String, Sprite2D> spriteSheets = new HashMap<String, Sprite2D>();
@@ -129,6 +147,7 @@ public class MapManager extends EntityManager{
 			}
 		}
 		game.addLayer(layer);
+		lastMapLayers.add(layerName);
 	}
 
 	private void loadPlayerPositions(JSONObject json, Vector2 mapSize) {

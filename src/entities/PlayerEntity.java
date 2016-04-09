@@ -49,6 +49,8 @@ public class PlayerEntity extends Entity<SpriteAnimation> {
 	private float movementDirection = 0.0f;
 	private float jumpStrength = 36.0f;
 	private boolean canJump = false;
+	private boolean isDead = false;
+	private boolean deadFlagChanged = true;
 	private boolean jumpStarted = false;
 	private boolean leftSensorTouching = false;
 	private boolean rightSensorTouching = false;
@@ -153,7 +155,6 @@ public class PlayerEntity extends Entity<SpriteAnimation> {
 	@Override
 	public void destroy() {
 		super.destroy();
-		((OverloadGame)game).getPlayerManager().playerDeath(this);
 		
 		if (controller != null){
 			for (ControllerEventListener listener : controls){
@@ -183,6 +184,10 @@ public class PlayerEntity extends Entity<SpriteAnimation> {
 		super.initEntity(type);
 		body.getBody().setSleepingAllowed(false);
 		body.getBody().setBullet(true);
+	}
+	
+	public boolean isDead(){
+		return isDead;
 	}
 	
 	public final void moveLeft(){
@@ -237,11 +242,15 @@ public class PlayerEntity extends Entity<SpriteAnimation> {
 			currentWeapon.detachFromPlayer();
 			currentWeapon = null;
 		}
-		//((OverloadGame)game).getOverlay().setPlayerDead(index, true);
 	}
 	
 	public void setCategory(int category){
 		categoryMask = category;
+	}
+	
+	public void setDead(boolean isDead){
+		this.isDead = isDead;
+		deadFlagChanged = true;
 	}
 	
 	@Override
@@ -255,7 +264,27 @@ public class PlayerEntity extends Entity<SpriteAnimation> {
 	}
 	
 	@Override
-	public void update(float deltaTime) {
+	public void update(float deltaTime) {		
+		if (deadFlagChanged){
+			deadFlagChanged = false;
+			
+			setVisible(!isDead);
+			body.getBody().setActive(!isDead);
+			
+			if (currentWeapon != null){
+				currentWeapon.detachFromPlayer();
+				currentWeapon = null;
+			}
+			
+			if (isDead){
+				((OverloadGame)game).getPlayerManager().playerDeath(this);
+			}
+		}
+
+		if (isDead){
+			return;
+		}
+		
 		super.update(deltaTime);
 		
 		if (jumpStarted){

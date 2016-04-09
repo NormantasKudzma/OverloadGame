@@ -5,6 +5,7 @@ import org.json.JSONArray;
 import org.json.JSONObject;
 
 import physics.PhysicsBody;
+import ui.Overlay;
 import utils.ConfigManager;
 import utils.Vector2;
 import controls.AbstractController;
@@ -154,11 +155,26 @@ public class PlayerManager extends EntityManager{
 	}
 
 	public void playerDeath(PlayerEntity player){
+		int numAlive = 0;
+		int aliveIndex = -1;
+		
+		Overlay overlay = ((OverloadGame)game).getOverlay();
+		
 		for (int i = 0; i < NUM_PLAYERS; ++i){
 			if (player.equals(playerEntities[i])){
-				((OverloadGame)game).getOverlay().setPlayerDead(i, true);
-				break;
+				overlay.setPlayerDead(i, true);
 			}
+			
+			if (!playerEntities[i].isDead()){
+				++numAlive;
+				aliveIndex = i;
+			}
+		}
+		
+		if (numAlive == 1 && aliveIndex != -1){
+			overlay.setBlurVisible(true);
+			overlay.addPoint(aliveIndex);
+			playerEntities[aliveIndex].setDead(true);
 		}
 	}
 }

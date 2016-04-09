@@ -30,7 +30,7 @@ public class BulletEntity extends Entity<Sprite2D>{
 		if (otherCollidable instanceof Entity){
 			if (otherCollidable instanceof PlayerEntity){
 				PlayerEntity player = (PlayerEntity)otherCollidable;
-				player.markForDestruction();
+				player.setDead(true);
 			}
 			
 			Filter f1 = myFixture.getFilterData();

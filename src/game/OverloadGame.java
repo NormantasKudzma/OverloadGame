@@ -3,6 +3,7 @@ package game;
 import managers.MapManager;
 import managers.PlayerManager;
 import managers.WeaponManager;
+import ui.GameStartDialog;
 import ui.Overlay;
 import utils.Vector2;
 import engine.BaseGame;
@@ -43,17 +44,28 @@ public class OverloadGame extends BaseGame {
 		physicsWorld.getWorld().setGravity(GRAVITY.toVec2());
 		playerManager.loadPlayers();
 		weaponManager.loadWeapons();
-		mapManager.loadMap(this, Paths.MAPS + "Map_02.json");	
-		
-		String playersLayer = mapManager.getPlayersLayer();
-		addEntity(playerManager.getPlayer(0), playersLayer);		
-		addEntity(playerManager.getPlayer(1), playersLayer);		
-		addEntity(playerManager.getPlayer(2), playersLayer);	
-		addEntity(playerManager.getPlayer(3), playersLayer);
 		
 		Layer overlayLayer = new Layer("overlay", 1);
 		overlay = new Overlay(this);
 		overlayLayer.addEntity(overlay);
 		addLayer(overlayLayer);
+		
+		GameStartDialog startDialog = new GameStartDialog(this, "StartDialog");
+		startDialog.setPosition(Vector2.one);
+		startDialog.setVisible(true);
+		addDialog(startDialog);
+	}
+	
+	public void startMatch(){
+		
+		
+		mapManager.loadMap(this, Paths.MAPS + "Map_02.json");	
+		
+		String playersLayer = mapManager.getPlayersLayer();
+		
+		addEntity(playerManager.getPlayer(0), playersLayer);		
+		addEntity(playerManager.getPlayer(1), playersLayer);		
+		addEntity(playerManager.getPlayer(2), playersLayer);	
+		addEntity(playerManager.getPlayer(3), playersLayer);
 	}
 }
