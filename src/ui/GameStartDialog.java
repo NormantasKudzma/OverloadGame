@@ -42,7 +42,8 @@ public class GameStartDialog extends BaseDialog{
 		Button play = new Button(game, null, null, "PLAY"){
 			public void clickFunction() {
 				OverloadGame overload = (OverloadGame)game;
-				overload.startMatch();
+				overload.loadMap();
+				overload.getOverlay().gameStarting();
 				GameStartDialog.this.setVisible(false);
 			};
 		};

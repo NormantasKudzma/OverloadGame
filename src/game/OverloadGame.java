@@ -56,13 +56,12 @@ public class OverloadGame extends BaseGame {
 		addDialog(startDialog);
 	}
 	
+	public void loadMap(){
+		mapManager.loadMap(this, Paths.MAPS + "Map_02.json");			
+	}
+	
 	public void startMatch(){
-		
-		
-		mapManager.loadMap(this, Paths.MAPS + "Map_02.json");	
-		
-		String playersLayer = mapManager.getPlayersLayer();
-		
+		String playersLayer = mapManager.getPlayersLayer();		
 		addEntity(playerManager.getPlayer(0), playersLayer);		
 		addEntity(playerManager.getPlayer(1), playersLayer);		
 		addEntity(playerManager.getPlayer(2), playersLayer);	

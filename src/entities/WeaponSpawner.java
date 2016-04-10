@@ -21,7 +21,7 @@ import graphics.Sprite2D;
 public class WeaponSpawner extends Entity<Sprite2D> implements QueryCallback{	
 	protected boolean isSpawnFull = false;
 	protected float cooldown = 10.0f;
-	protected float cooldownTimer = 0.0f;
+	protected float cooldownTimer = 5.1f;
 	protected String spawnPool[];
 	protected Vector2 spawnOffset = Vector2.zero;
 	protected AABB spawnAABB;

@@ -1,12 +1,6 @@
 package ui;
 
-import game.OverloadGame;
-import game.Paths;
-import graphics.SimpleFont;
-import graphics.Sprite2D;
-import graphics.Symbol;
-
-import java.util.HashMap;
+import java.awt.Font;
 
 import managers.PlayerManager;
 
@@ -22,15 +16,23 @@ import engine.BaseGame;
 import engine.OverloadEngine;
 import entities.PlayerEntity;
 import entities.WeaponEntity;
+import game.OverloadGame;
+import game.Paths;
+import graphics.SimpleFont;
+import graphics.Sprite2D;
 
 public class Overlay extends Component{
-	private HashMap<Character, Symbol> overlayFont;
+	private Font overlayFont;
 	private Label ammoTexts[];
 	private Label scoreTexts[];
 	private int ammoValues[];
 	private int scoreValues[];
 	private SpriteComponent crossIcons[];
 	private SpriteComponent blurComponent;
+	
+	private boolean isGameStarting = false;
+	private float gameStartTimer = 3.0f;
+	private Label gameStartLabel;
 	
 	private float textUpdateTimer = 0.0f;
 	
@@ -51,6 +53,14 @@ public class Overlay extends Component{
 			scoreValues[i] = 0;
 			scoreTexts[i].setText("0");
 		}
+	}
+	
+	public void gameStarting(){
+		isGameStarting = true;
+		gameStartTimer = 5.0f;
+		gameStartLabel.setText("" + (int)gameStartTimer);
+		gameStartLabel.setVisible(true);
+		setBlurVisible(true);
 	}
 	
 	protected void initialize() {
@@ -86,7 +96,9 @@ public class Overlay extends Component{
 		}
 
 		// Load score texts
-		overlayFont = SimpleFont.createFont(Paths.SPRITESHEETS + "spritesheet_overlay.png", Paths.FONTS + "overlay_font.json");
+		String fontPath = Paths.FONTS + overlayJson.getString("font");
+		
+		overlayFont = ConfigManager.loadFont(fontPath, 16);
 		scoreTexts = new Label[PlayerManager.NUM_PLAYERS];
 		ammoTexts = new Label[PlayerManager.NUM_PLAYERS];
 		ammoValues = new int[PlayerManager.NUM_PLAYERS];
@@ -97,6 +109,12 @@ public class Overlay extends Component{
 		
 		JSONArray ammoTextArrayJson = overlayJson.getJSONArray("ammoTexts");
 		loadLabels(ammoTextArrayJson, ammoTexts); 
+		
+		gameStartLabel = new Label(game, new SimpleFont("0", overlayFont.deriveFont(48.0f)));
+		gameStartLabel.setPosition(Vector2.one);
+		gameStartLabel.setScale(new Vector2(2.0f, 2.0f));
+		gameStartLabel.setVisible(false);
+		game.addEntity(gameStartLabel);
 	}
 	
 	public boolean isUIBlurred(){
@@ -107,12 +125,11 @@ public class Overlay extends Component{
 		for (int i = 0; i < json.length(); ++i){
 			JSONObject textJson = json.getJSONObject(i);
 			JSONArray posJson = textJson.getJSONArray("pos");
-			JSONArray scaleJson = textJson.getJSONArray("scale");
+			float fontSize = (float)textJson.getDouble("size");
 			
-			SimpleFont textFont = new SimpleFont("0", overlayFont);
+			SimpleFont textFont = new SimpleFont("0", overlayFont.deriveFont(fontSize));
 			Label textLabel = new Label(game, textFont);
 			textLabel.setPosition(Vector2.fromJsonArray(posJson));
-			textLabel.setScale(Vector2.fromJsonArray(scaleJson));
 			addChild(textLabel);
 			array[i] = textLabel;
 		}
@@ -159,6 +176,19 @@ public class Overlay extends Component{
 		if (textUpdateTimer <= 0.0f){
 			textUpdateTimer = 0.25f;
 			updateTexts();
+		}
+		
+		if (isGameStarting){
+			gameStartTimer -= deltaTime;
+			
+			gameStartLabel.setText("" + (int)gameStartTimer);
+			
+			if (gameStartTimer <= 0.0f){
+				isGameStarting = false;
+				gameStartLabel.setVisible(false);
+				setBlurVisible(false);
+				((OverloadGame)game).startMatch();
+			}
 		}
 	}
 	
