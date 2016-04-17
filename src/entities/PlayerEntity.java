@@ -9,6 +9,7 @@ import org.jbox2d.dynamics.Fixture;
 
 import physics.ICollidable;
 import physics.PhysicsBody;
+import ui.Overlay;
 import utils.Vector2;
 import controls.AbstractController;
 import controls.ControllerEventListener;
@@ -43,6 +44,7 @@ public class PlayerEntity extends Entity<SpriteAnimation> {
 	
 	private static final int MAX_JUMP_LENGTH = 7;
 	private static final float MAX_MOVE_SPEED = 14.0f;
+	private int index;
 	private int jumpLength = 0;
 	private int categoryMask = 0;
 	private float acceleration = 1.0f;
@@ -62,8 +64,13 @@ public class PlayerEntity extends Entity<SpriteAnimation> {
 	private AbstractController controller = null;
 	private ArrayList<ControllerEventListener> controls = new ArrayList<ControllerEventListener>();
 	
+	private OverloadGame overloadGame;
+	private Overlay overlay;
+	
 	public PlayerEntity(BaseGame game) {
 		super(game);
+		overloadGame = (OverloadGame)game;
+		overlay = overloadGame.getOverlay();
 	}
 	
 	public final ControllerEventListener getEventListenerForMethod(AbstractController controller, final String methodName) {
@@ -112,7 +119,6 @@ public class PlayerEntity extends Entity<SpriteAnimation> {
 	@Override
 	public void collisionEnd(Fixture myFixture, Fixture otherFixture, ICollidable otherCollidable) {
 		if (myFixture == sensors.get(SensorType.FOOT)){
-			System.out.println("Can jump = false");
 			canJump = false;
 		}
 		
@@ -128,7 +134,6 @@ public class PlayerEntity extends Entity<SpriteAnimation> {
 	@Override
 	public void collisionStart(Fixture myFixture, Fixture otherFixture, ICollidable otherCollidable) {
 		if (myFixture == sensors.get(SensorType.FOOT)){
-			System.out.println("Jump ++ ");
 			canJump = true;
 			jumpStarted = false;
 			jumpLength = 0;
@@ -148,9 +153,13 @@ public class PlayerEntity extends Entity<SpriteAnimation> {
 					return;
 				}
 				currentWeapon.detachFromPlayer();
+				currentWeapon = null;
 			}
-			currentWeapon = weapon;
-			currentWeapon.attachToPlayer(this);
+			
+			if (weapon.attachToPlayer(this)){
+				currentWeapon = weapon;
+				overlay.updateNumBullets(index, currentWeapon.getNumBullets());
+			}
 		}
 	}
 	
@@ -255,6 +264,10 @@ public class PlayerEntity extends Entity<SpriteAnimation> {
 		deadFlagChanged = true;
 	}
 	
+	public void setIndex(int i){
+		index = i;
+	}
+	
 	@Override
 	public void setScale(Vector2 scale) {
 		super.setScale(scale);
@@ -266,7 +279,7 @@ public class PlayerEntity extends Entity<SpriteAnimation> {
 	}
 	
 	@Override
-	public void update(float deltaTime) {		
+	public void update(float deltaTime) {
 		if (deadFlagChanged){
 			deadFlagChanged = false;
 			
@@ -279,7 +292,7 @@ public class PlayerEntity extends Entity<SpriteAnimation> {
 			}
 			
 			if (isDead){
-				((OverloadGame)game).getPlayerManager().playerDeath(this);
+				overloadGame.getPlayerManager().playerDeath(this);
 			}
 		}
 
@@ -321,11 +334,13 @@ public class PlayerEntity extends Entity<SpriteAnimation> {
 			tryShoot = false;
 			if (currentWeapon != null){
 				currentWeapon.tryShoot();
+				overlay.updateNumBullets(index, currentWeapon.getNumBullets());
 			}
 		}
 	}
 	
 	public void weaponDetached(){
 		currentWeapon = null;
+		overlay.updateNumBullets(index, 0);
 	}
 }

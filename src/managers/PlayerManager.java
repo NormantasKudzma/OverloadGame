@@ -53,7 +53,8 @@ public class PlayerManager extends EntityManager{
 		for (int i = 0; i < playerArrayJson.length(); ++i){
 			JSONObject playerJson = playerArrayJson.getJSONObject(i);
 			PlayerEntity player = new PlayerEntity(game);
-			player.initEntity(PhysicsBody.EBodyType.INTERACTIVE);	
+			player.initEntity(PhysicsBody.EBodyType.INTERACTIVE);
+			player.setIndex(i);
 			
 			loadAnimations(playerJson, player, spriteSheet);
 			loadControls(playerJson, player);

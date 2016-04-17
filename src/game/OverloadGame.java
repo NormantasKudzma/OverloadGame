@@ -42,13 +42,14 @@ public class OverloadGame extends BaseGame {
 	public void init() {
 		super.init();
 		physicsWorld.getWorld().setGravity(GRAVITY.toVec2());
-		playerManager.loadPlayers();
-		weaponManager.loadWeapons();
 		
 		Layer overlayLayer = new Layer("overlay", 1);
 		overlay = new Overlay(this);
 		overlayLayer.addEntity(overlay);
 		addLayer(overlayLayer);
+		
+		playerManager.loadPlayers();
+		weaponManager.loadWeapons();
 		
 		GameStartDialog startDialog = new GameStartDialog(this, "StartDialog");
 		startDialog.setPosition(Vector2.one);

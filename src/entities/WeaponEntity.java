@@ -62,13 +62,18 @@ public abstract class WeaponEntity extends Entity<SpriteAnimation>{
 		bullet = e;
 	}
 	
-	public void attachToPlayer(PlayerEntity e){
+	public boolean attachToPlayer(PlayerEntity e){
+		if (detachFromPlayer){
+			return false;
+		}
+		
 		player = e;
 		if (player != null){
 			isAttached = true;
 			destroyWeaponFixtures = true;
 			flip(e.getScale().x);
 		}
+		return true;
 	}
 	
 	@Override
@@ -168,13 +173,12 @@ public abstract class WeaponEntity extends Entity<SpriteAnimation>{
 	protected BulletEntity spawnBullet(Vector2 pos, Vector2 dir, float speed){
 		if (bullet != null){
 			BulletEntity e = (BulletEntity)bullet.clone();
-			e.setPosition(pos);
 			e.setDirection(dir);
 			e.setMovementSpeed(speed);
 			if (player != null){
 				e.getPhysicsBody().setCollisionFlags(player.getCategory(), PhysicsBody.EMaskType.EXCLUDE);
-				//e.getPhysicsBody().setCollisionCategory(player.getCategory(), PhysicsBody.EMaskType.SET);
 			}
+			e.setPosition(pos);
 			game.addEntity(e, ((OverloadGame)game).getMapManager().getPlayersLayer());
 			return e;
 		}

@@ -175,12 +175,6 @@ public class Overlay extends Component{
 	public void update(float deltaTime) {
 		super.update(deltaTime);
 		
-		textUpdateTimer -= deltaTime;
-		if (textUpdateTimer <= 0.0f){
-			textUpdateTimer = 0.25f;
-			updateTexts();
-		}
-		
 		if (isGameStarting){
 			gameStartTimer -= deltaTime;
 			
@@ -195,24 +189,8 @@ public class Overlay extends Component{
 		}
 	}
 	
-	public void updateTexts(){
-		PlayerEntity player = null;
-		PlayerManager manager = ((OverloadGame)game).getPlayerManager();
-		WeaponEntity weapon = null;
-		int numBullets = -1;
-		
-		for (int i = 0; i < PlayerManager.NUM_PLAYERS; ++i){
-			player = manager.getPlayer(i);
-			if (player != null){
-				weapon = player.getWeapon();
-				if (weapon != null){
-					numBullets = weapon.getNumBullets();
-					if (numBullets != ammoValues[i]){
-						ammoValues[i] = numBullets;
-						ammoTexts[i].setText("" + numBullets);
-					}
-				}
-			}
-		}
+	public void updateNumBullets(int index, int num){
+		ammoValues[index] = num;
+		ammoTexts[index].setText("" + num);
 	}
 }
