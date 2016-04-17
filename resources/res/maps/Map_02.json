@@ -256,14 +256,14 @@
 		{
 			"name":"playersLayer",
 			"isPlayersLayer":"true",
-			"index":9,
+			"index":8,
 			"objects":[
 			
 			]
 		},
 		{
 			"name":"middleLayer",
-			"index":8,
+			"index":9,
 			"objects":[
 				{"position":[32,25],"scale":[1,1],"entity":"box"},
 				{"position":[32,23],"scale":[1,1],"entity":"box"},

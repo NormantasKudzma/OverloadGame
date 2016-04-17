@@ -7,11 +7,13 @@ import org.json.JSONArray;
 import org.json.JSONObject;
 
 import physics.PhysicsBody;
+import physics.PhysicsBody.EBodyType;
 import utils.ConfigManager;
 import utils.Vector2;
 import engine.BaseGame;
 import engine.Entity;
 import engine.OverloadEngine;
+import entities.MapBoundsEntity;
 import entities.PlayerEntity;
 import entities.WallEntity;
 import game.OverloadGame;
@@ -66,6 +68,11 @@ public class MapManager extends EntityManager{
 		}
 		
 		loadPlayerPositions(json, mapSize);
+		
+		MapBoundsEntity boundEntity = new MapBoundsEntity(game);
+		boundEntity.initEntity(EBodyType.INTERACTIVE);
+		boundEntity.setCollisionFlags(WALL_CATEGORY, WALL_COLLIDER);
+		game.addEntity(boundEntity, Layer.DEFAULT_NAME);
 	}
 
 	private void loadColliders(JSONObject json, BaseGame game) {

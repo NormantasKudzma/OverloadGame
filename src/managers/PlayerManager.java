@@ -174,7 +174,7 @@ public class PlayerManager extends EntityManager{
 		if (numAlive == 1 && aliveIndex != -1){
 			overlay.setBlurVisible(true);
 			overlay.addPoint(aliveIndex);
-			playerEntities[aliveIndex].setDead(true);
+			//playerEntities[aliveIndex].setDead(true);
 		}
 	}
 }

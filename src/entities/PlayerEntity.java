@@ -112,6 +112,7 @@ public class PlayerEntity extends Entity<SpriteAnimation> {
 	@Override
 	public void collisionEnd(Fixture myFixture, Fixture otherFixture, ICollidable otherCollidable) {
 		if (myFixture == sensors.get(SensorType.FOOT)){
+			System.out.println("Can jump = false");
 			canJump = false;
 		}
 		
@@ -127,6 +128,7 @@ public class PlayerEntity extends Entity<SpriteAnimation> {
 	@Override
 	public void collisionStart(Fixture myFixture, Fixture otherFixture, ICollidable otherCollidable) {
 		if (myFixture == sensors.get(SensorType.FOOT)){
+			System.out.println("Jump ++ ");
 			canJump = true;
 			jumpStarted = false;
 			jumpLength = 0;

@@ -55,6 +55,10 @@ public class Overlay extends Component{
 		}
 	}
 	
+	public Font getFont(){
+		return overlayFont;
+	}
+	
 	public void gameStarting(){
 		isGameStarting = true;
 		gameStartTimer = 5.0f;
@@ -110,9 +114,8 @@ public class Overlay extends Component{
 		JSONArray ammoTextArrayJson = overlayJson.getJSONArray("ammoTexts");
 		loadLabels(ammoTextArrayJson, ammoTexts); 
 		
-		gameStartLabel = new Label(game, new SimpleFont("0", overlayFont.deriveFont(48.0f)));
+		gameStartLabel = new Label(game, new SimpleFont("0", overlayFont.deriveFont(110.0f)));
 		gameStartLabel.setPosition(Vector2.one);
-		gameStartLabel.setScale(new Vector2(2.0f, 2.0f));
 		gameStartLabel.setVisible(false);
 		game.addEntity(gameStartLabel);
 	}

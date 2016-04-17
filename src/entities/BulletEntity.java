@@ -12,7 +12,7 @@ import graphics.Sprite2D;
 
 public class BulletEntity extends Entity<Sprite2D>{
 	protected float movementSpeed = 1.25f;
-	protected float totalLifetime = 1.0f;
+	protected float totalLifetime = 0.5f;
 	protected Vector2 direction = new Vector2();
 	protected WeaponEntity parent = null;
 	

@@ -18,7 +18,7 @@ public class GameStartDialog extends BaseDialog{
 	protected void initialize() {
 		super.initialize();
 		
-		AnimatedLabel title = new AnimatedLabel(OverloadMain.GAME + " " + OverloadMain.VERSION){
+		AnimatedLabel title = new AnimatedLabel(OverloadMain.GAME){
 			float progress = 0.0f;
 			float offset = 0.0f;
 			
@@ -28,14 +28,14 @@ public class GameStartDialog extends BaseDialog{
 				if (progress >= 6.28f){
 					progress = 0.0f;
 				}
-				offset = FastMath.sin(progress) * 0.0005f;
+				offset = FastMath.sin(progress) * 0.00025f;
 				setPosition(getPosition().add(0.0f, offset));
 				offset *= 2;
 				setScale(getScale().add(offset, offset));
 			}
 		};
+		title.setFont(((OverloadGame)game).getOverlay().getFont().deriveFont(110.0f));
 		title.setInfinite(true);
-		title.setScale(new Vector2(4.0f, 4.0f));
 		title.setPosition(new Vector2(0.0f, 0.8f));
 		addChild(title);
 		
