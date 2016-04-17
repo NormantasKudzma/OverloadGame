@@ -12,7 +12,7 @@ import graphics.Sprite2D;
 
 public class BulletEntity extends Entity<Sprite2D>{
 	protected float movementSpeed = 1.25f;
-	protected float totalLifetime = 0.5f;
+	protected float totalLifetime = 1.0f;
 	protected Vector2 direction = new Vector2();
 	protected WeaponEntity parent = null;
 	
@@ -32,14 +32,6 @@ public class BulletEntity extends Entity<Sprite2D>{
 				PlayerEntity player = (PlayerEntity)otherCollidable;
 				player.setDead(true);
 			}
-			
-			Filter f1 = myFixture.getFilterData();
-			Filter f2 = otherFixture.getFilterData();
-			System.out.printf("My category[%s], mask[%s], other category[%s], mask[%s]\n", 
-												Integer.toBinaryString(f1.categoryBits), 
-												Integer.toBinaryString(f1.maskBits), 
-												Integer.toBinaryString(f2.categoryBits), 
-												Integer.toBinaryString(f2.maskBits));
 		}
 	}
 	

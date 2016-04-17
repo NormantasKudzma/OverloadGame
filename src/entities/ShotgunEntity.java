@@ -25,11 +25,12 @@ public class ShotgunEntity extends WeaponEntity{
 			
 			BulletEntity e = spawnBullet(spawnPos, direction);
 			e.setRotation(-angle);
-			e.getPhysicsBody().getBody().setGravityScale(1.0f);
+			e.getPhysicsBody().getBody().setGravityScale(1.15f);
 			
-			speed = (OverloadRandom.nextRandom((int)(2.0f * maxSpeedDeviation)) - maxSpeedDeviation);
+			speed = (OverloadRandom.nextRandom((int)(2.0f * maxSpeedDeviation)) - maxSpeedDeviation) + 1.0f;
 			speed = e.getSpeed() * (0.85f + 0.01f * speed);
 			e.setMovementSpeed(speed);
+			e.setLifetime(e.getLifetime() * 0.4f);
 		}
 	}
 }

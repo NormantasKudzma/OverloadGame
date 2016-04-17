@@ -296,7 +296,7 @@ public class PlayerEntity extends Entity<SpriteAnimation> {
 			}
 		}
 
-		if (isDead){
+		if (isDead || overlay.isUIBlurred()){
 			return;
 		}
 		

@@ -6,11 +6,11 @@ import org.json.JSONArray;
 import org.json.JSONObject;
 
 import physics.PhysicsBody;
-
 import utils.ConfigManager;
 import utils.Vector2;
 import engine.BaseGame;
 import engine.Entity;
+import entities.BulletEntity;
 import entities.WeaponEntity;
 import game.Paths;
 import graphics.Sprite2D;
@@ -39,6 +39,15 @@ public class WeaponManager extends EntityManager {
 			}
 			
 			e.getPhysicsBody().attachPolygonCollider(verts, true);
+		}
+	}
+	
+	private void checkAdditional(JSONObject json, Entity e){
+		if (json.has("parent")){
+			WeaponEntity parent = weaponMap.get(json.getString("parent"));
+			if (parent != null){
+				parent.addChild(e);
+			}
 		}
 	}
 	
@@ -86,10 +95,7 @@ public class WeaponManager extends EntityManager {
 				attachCollider(childJson, e);
 				e.setCollisionFlags(category, mask);
 				
-				WeaponEntity parent = weaponMap.get(childJson.getString("parent"));
-				if (parent != null){
-					parent.addChild(e);
-				}
+				checkAdditional(childJson, e);
 			}
 			catch (Exception e){
 				e.printStackTrace();

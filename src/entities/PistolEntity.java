@@ -25,5 +25,6 @@ public class PistolEntity extends WeaponEntity{
 		angle = OverloadRandom.nextRandom((int)(2.0f * maxAngle)) - maxAngle;	
 		BulletEntity e = spawnBullet(spawnPos, weaponDir.copy().rotate(angle));		
 		e.setRotation(-angle);
+		e.getPhysicsBody().getBody().setGravityScale(0.05f);
 	}
 }
