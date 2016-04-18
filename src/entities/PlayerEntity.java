@@ -52,6 +52,7 @@ public class PlayerEntity extends Entity<SpriteAnimation> {
 	private float movementDirection = 0.0f;
 	private float jumpStrength = 36.0f;
 	private boolean canJump = false;
+	private boolean canMove = true;
 	private boolean isDead = false;
 	private boolean deadFlagChanged = true;
 	private boolean jumpStarted = false;
@@ -115,6 +116,10 @@ public class PlayerEntity extends Entity<SpriteAnimation> {
 		else {
 			System.out.println("Fixture is not a sensor!");
 		}
+	}
+	
+	public void canMove(boolean canMove){
+		this.canMove = canMove;
 	}
 	
 	@Override
@@ -304,32 +309,34 @@ public class PlayerEntity extends Entity<SpriteAnimation> {
 		
 		super.update(deltaTime);
 		
-		if (jumpStarted){
-			jumpLength++;
-		}
-		
-		if (movementDirection != 0.0f){
-			if (Math.abs(movementVector.x) > MAX_MOVE_SPEED){
-				movementVector.x = MAX_MOVE_SPEED * movementDirection;
+		if (canMove){
+			if (jumpStarted){
+				jumpLength++;
+			}
+			
+			if (movementDirection != 0.0f){
+				if (Math.abs(movementVector.x) > MAX_MOVE_SPEED){
+					movementVector.x = MAX_MOVE_SPEED * movementDirection;
+				}
+				else {
+					movementVector.x += acceleration * movementDirection;
+				}
+				setHorizontalVelocity(movementVector.x);
+				movementDirection = 0.0f;
+				sprite.setPaused(false);
 			}
 			else {
-				movementVector.x += acceleration * movementDirection;
+				sprite.setPaused(true);
+				if (Math.abs(movementVector.x) > 0.0f){
+					setHorizontalVelocity(movementVector.x * 0.5f);
+					movementVector.x = 0.0f;
+				}
 			}
-			setHorizontalVelocity(movementVector.x);
-			movementDirection = 0.0f;
-			sprite.setPaused(false);
-		}
-		else {
-			sprite.setPaused(true);
-			if (Math.abs(movementVector.x) > 0.0f){
-				setHorizontalVelocity(movementVector.x * 0.5f);
-				movementVector.x = 0.0f;
+			
+			if (movementVector.y != 0.0f){
+				setVerticalVelocity(movementVector.y);
+				movementVector.y = 0.0f;
 			}
-		}
-		
-		if (movementVector.y != 0.0f){
-			setVerticalVelocity(movementVector.y);
-			movementVector.y = 0.0f;
 		}
 		
 		if (tryShoot){

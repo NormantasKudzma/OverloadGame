@@ -73,8 +73,8 @@ public class PlayerManager extends EntityManager{
 			player.setCollisionFlags(PLAYER_COLLIDERS[i], PLAYER_COLLIDER);
 
 			player.getPhysicsBody().getBody().getFixtureList().setRestitution(0.0f);
-			player.getPhysicsBody().getBody().getFixtureList().setFriction(1.7f);
-			player.getPhysicsBody().getBody().getFixtureList().setDensity(2.0f);
+			player.getPhysicsBody().getBody().getFixtureList().setFriction(100.0f);
+			player.getPhysicsBody().getBody().getFixtureList().setDensity(1.25f);
 
 			playerEntities[i] = player;
 		}

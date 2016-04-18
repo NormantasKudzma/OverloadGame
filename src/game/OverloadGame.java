@@ -10,7 +10,7 @@ import engine.BaseGame;
 import graphics.Layer;
 
 public class OverloadGame extends BaseGame {
-	public static Vector2 GRAVITY = new Vector2(0.0f, -4.0f);
+	public static Vector2 GRAVITY = new Vector2(0.0f, -4.8f);
 	
 	private MapManager mapManager = new MapManager(this);
 	private PlayerManager playerManager = new PlayerManager(this);

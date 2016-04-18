@@ -67,8 +67,6 @@ public abstract class WeaponEntity extends Entity<SpriteAnimation>{
 		if (detachFromPlayer || isLifetimeFinite){
 			return false;
 		}
-
-		System.out.println("Weapon: attach OK " + this.hashCode());
 		
 		player = e;
 		if (player != null){
@@ -137,6 +135,10 @@ public abstract class WeaponEntity extends Entity<SpriteAnimation>{
 	public void initEntity(PhysicsBody.EBodyType type) {
 		super.initEntity(type);
 		body.getBody().setGravityScale(0.0f);
+	}
+	
+	protected void onShotReady(){
+		sprite.setState(WeaponAnimation.IDLE.getIndex());
 	}
 	
 	public void setMuzzleOffset(Vector2 offset){
@@ -214,7 +216,7 @@ public abstract class WeaponEntity extends Entity<SpriteAnimation>{
 		if (shootTimer > 0.0f){
 			shootTimer -= deltaTime;
 			if (shootTimer <= 0.0f && numBullets > 0){
-				sprite.setState(WeaponAnimation.IDLE.getIndex());
+				onShotReady();
 			}
 		}
 		
