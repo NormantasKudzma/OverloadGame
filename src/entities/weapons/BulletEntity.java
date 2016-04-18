@@ -1,4 +1,4 @@
-package entities;
+package entities.weapons;
 
 import org.jbox2d.dynamics.Filter;
 import org.jbox2d.dynamics.Fixture;
@@ -8,6 +8,7 @@ import physics.PhysicsBody;
 import utils.Vector2;
 import engine.BaseGame;
 import engine.Entity;
+import entities.PlayerEntity;
 import graphics.Sprite2D;
 
 public class BulletEntity extends Entity<Sprite2D>{

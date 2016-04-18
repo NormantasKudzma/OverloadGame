@@ -1,4 +1,4 @@
-package entities;
+package entities.weapons;
 
 import utils.OverloadRandom;
 import utils.Vector2;
@@ -14,17 +14,12 @@ public class PistolEntity extends WeaponEntity{
 	}
 	
 	@Override
-	public void initBullet() {
-		super.initBullet();
-		bullet.setMovementSpeed(bullet.getSpeed() * 0.75f);
-	}
-	
-	@Override
 	public void shoot(Vector2 spawnPos, Vector2 weaponDir) {
 		float angle = 0.0f;		
 		angle = OverloadRandom.nextRandom((int)(2.0f * maxAngle)) - maxAngle;	
 		BulletEntity e = spawnBullet(spawnPos, weaponDir.copy().rotate(angle));		
 		e.setRotation(-angle);
-		e.getPhysicsBody().getBody().setGravityScale(0.05f);
+		e.getPhysicsBody().getBody().setGravityScale(0.035f);
+		e.setMovementSpeed(e.getSpeed() * 0.75f);
 	}
 }

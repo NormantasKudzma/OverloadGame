@@ -37,6 +37,7 @@ public class GameStartDialog extends BaseDialog{
 		title.setFont(((OverloadGame)game).getOverlay().getFont().deriveFont(110.0f));
 		title.setInfinite(true);
 		title.setPosition(new Vector2(0.0f, 0.8f));
+		title.setScale(new Vector2(0.95f, 0.95f));
 		addChild(title);
 		
 		Button play = new Button(game, null, null, "PLAY"){

@@ -11,7 +11,7 @@
 			"collider":[-18, -13, 18, 2],
 			"positionOffset":[30, 8],
 			"muzzleOffset":[22, 4],
-			"type":"entities.PistolEntity"
+			"type":"entities.weapons.PistolEntity"
 		},
 		{
 			"name":"shotgun",
@@ -23,8 +23,19 @@
 			"collider":[-18, -13, 18, 8],
 			"positionOffset":[4, 16],
 			"muzzleOffset":[62, 0],
-			"type":"entities.ShotgunEntity"
-		}		
+			"type":"entities.weapons.ShotgunEntity"
+		},
+		{
+			"name":"scimitar",
+			"animations":[
+				[{"x":0, "y":80, "w":64, "h":64}],
+				[{"x":0, "y":80, "w":64, "h":64}]
+			],
+			"scale":0.8,
+			"collider":[-22, -28, 22, 28],
+			"positionOffset":[33, 8],
+			"type":"entities.weapons.ScimitarEntity"
+		}
 	],
 	"bullets":[
 		{
@@ -36,7 +47,7 @@
 			"scale":1.5,
 			"parent":"pistol",
 			"collider":[-4, -4, 4, 4],
-			"type":"entities.BulletEntity"
+			"type":"entities.weapons.BulletEntity"
 		},
 		{
 			"name":"shotgun_bullet",
@@ -47,7 +58,7 @@
 			"scale":3.5,
 			"parent":"shotgun",
 			"collider":[-6, -4, 6, 4],
-			"type":"entities.BulletEntity"
+			"type":"entities.weapons.BulletEntity"
 		}
 	],
 	"ammo":[

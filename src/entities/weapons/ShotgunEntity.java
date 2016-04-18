@@ -1,4 +1,4 @@
-package entities;
+package entities.weapons;
 
 import utils.OverloadRandom;
 import utils.Vector2;

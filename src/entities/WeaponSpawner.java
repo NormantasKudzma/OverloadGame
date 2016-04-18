@@ -15,6 +15,7 @@ import utils.OverloadRandom;
 import utils.Vector2;
 import engine.BaseGame;
 import engine.Entity;
+import entities.weapons.WeaponEntity;
 import game.OverloadGame;
 import graphics.Sprite2D;
 

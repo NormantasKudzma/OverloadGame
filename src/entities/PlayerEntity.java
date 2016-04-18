@@ -15,6 +15,7 @@ import controls.AbstractController;
 import controls.ControllerEventListener;
 import engine.BaseGame;
 import engine.Entity;
+import entities.weapons.WeaponEntity;
 import game.OverloadGame;
 import game.OverloadMain;
 import graphics.SpriteAnimation;
@@ -133,30 +134,31 @@ public class PlayerEntity extends Entity<SpriteAnimation> {
 	
 	@Override
 	public void collisionStart(Fixture myFixture, Fixture otherFixture, ICollidable otherCollidable) {
-		if (myFixture == sensors.get(SensorType.FOOT)){
-			canJump = true;
-			jumpStarted = false;
-			jumpLength = 0;
-			sprite.setState(AnimationState.RUN.index());
-		}
-		else if (myFixture == sensors.get(SensorType.LEFT) && !otherFixture.isSensor()){
-			leftSensorTouching = true;
-		}
-		else if (myFixture == sensors.get(SensorType.RIGHT) && !otherFixture.isSensor()){
-			rightSensorTouching = true;
+		if (!otherFixture.isSensor()){
+			if (myFixture == sensors.get(SensorType.FOOT)){
+				canJump = true;
+				jumpStarted = false;
+				jumpLength = 0;
+				sprite.setState(AnimationState.RUN.index());
+			}
+			else if (myFixture == sensors.get(SensorType.LEFT)){
+				leftSensorTouching = true;
+			}
+			else if (myFixture == sensors.get(SensorType.RIGHT)){
+				rightSensorTouching = true;
+			}
 		}
 		
 		if (otherCollidable instanceof WeaponEntity){
 			WeaponEntity weapon = (WeaponEntity)otherCollidable;
-			if (currentWeapon != null){
-				if (currentWeapon.equals(weapon)){
-					return;
-				}
-				currentWeapon.detachFromPlayer();
-				currentWeapon = null;
+			if (currentWeapon != null && currentWeapon.equals(weapon)){
+				return;
 			}
 			
 			if (weapon.attachToPlayer(this)){
+				if (currentWeapon != null){
+					currentWeapon.detachFromPlayer();
+				}
 				currentWeapon = weapon;
 				overlay.updateNumBullets(index, currentWeapon.getNumBullets());
 			}
@@ -333,8 +335,8 @@ public class PlayerEntity extends Entity<SpriteAnimation> {
 		if (tryShoot){
 			tryShoot = false;
 			if (currentWeapon != null){
-				currentWeapon.tryShoot();
-				overlay.updateNumBullets(index, currentWeapon.getNumBullets());
+				int numBullets = currentWeapon.tryShoot();
+				overlay.updateNumBullets(index, numBullets);
 			}
 		}
 	}

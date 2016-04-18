@@ -1,4 +1,4 @@
-package entities;
+package entities.weapons;
 
 import engine.BaseGame;
 import engine.Entity;

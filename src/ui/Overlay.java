@@ -15,7 +15,7 @@ import dialogs.SpriteComponent;
 import engine.BaseGame;
 import engine.OverloadEngine;
 import entities.PlayerEntity;
-import entities.WeaponEntity;
+import entities.weapons.WeaponEntity;
 import game.OverloadGame;
 import game.Paths;
 import graphics.SimpleFont;
