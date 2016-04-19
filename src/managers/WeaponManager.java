@@ -10,7 +10,7 @@ import utils.ConfigManager;
 import utils.Vector2;
 import engine.BaseGame;
 import engine.Entity;
-import entities.weapons.BulletEntity;
+import entities.bullets.BulletEntity;
 import entities.weapons.WeaponEntity;
 import game.Paths;
 import graphics.Sprite2D;
@@ -26,19 +26,27 @@ public class WeaponManager extends EntityManager {
 	private void attachCollider(JSONObject childJson, Entity e) {
 		if (childJson.has("collider")){
 			JSONArray collJson = childJson.getJSONArray("collider");
-			Vector2 verts[] = new Vector2[4];
-			verts[0] = new Vector2(collJson.getInt(0), collJson.getInt(1));
-			verts[1] = new Vector2(collJson.getInt(2), collJson.getInt(1));
-			verts[2] = new Vector2(collJson.getInt(2), collJson.getInt(3));
-			verts[3] = new Vector2(collJson.getInt(0), collJson.getInt(3));
-			
-			Vector2 scale = e.getScale();
-			for (int i = 0; i < verts.length; ++i){
-				Vector2.pixelCoordsToNormal(verts[i]);
-				verts[i].mul(scale);
+			if (collJson.length() == 4){
+				Vector2 verts[] = new Vector2[4];
+				verts[0] = new Vector2(collJson.getInt(0), collJson.getInt(1));
+				verts[1] = new Vector2(collJson.getInt(2), collJson.getInt(1));
+				verts[2] = new Vector2(collJson.getInt(2), collJson.getInt(3));
+				verts[3] = new Vector2(collJson.getInt(0), collJson.getInt(3));
+				
+				Vector2 scale = e.getScale();
+				for (int i = 0; i < verts.length; ++i){
+					Vector2.pixelCoordsToNormal(verts[i]);
+					verts[i].mul(scale);
+				}
+				
+				e.getPhysicsBody().attachPolygonCollider(verts, true);
 			}
-			
-			e.getPhysicsBody().attachPolygonCollider(verts, true);
+			else {
+				Vector2 pos = new Vector2(collJson.getInt(0), collJson.getInt(1));
+				Vector2 r = new Vector2(collJson.getInt(2), 0);
+				r = Vector2.pixelCoordsToNormal(r);
+				e.getPhysicsBody().attachCircleCollider(pos, r.x, true);
+			}
 		}
 	}
 	

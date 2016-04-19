@@ -91,9 +91,7 @@ public class PlayerEntity extends Entity<SpriteAnimation> {
 						method.invoke(object);
 					}
 					catch (IllegalAccessException | IllegalArgumentException | InvocationTargetException e) {
-						if (OverloadMain.IS_DEBUG_BUILD){
-							e.printStackTrace();
-						}
+						
 					}
 				}
 			};
@@ -102,9 +100,6 @@ public class PlayerEntity extends Entity<SpriteAnimation> {
 			return listener;
 		}
 		catch (NoSuchMethodException e) {
-			if (OverloadMain.IS_DEBUG_BUILD){
-				e.printStackTrace();
-			}
 			return null;
 		}
 	}

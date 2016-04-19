@@ -7,6 +7,8 @@ import utils.Vector2;
 import engine.BaseGame;
 import engine.Entity;
 import entities.PlayerEntity;
+import entities.bullets.AmmoEntity;
+import entities.bullets.BulletEntity;
 import game.OverloadGame;
 import graphics.Sprite2D;
 import graphics.SpriteAnimation;
@@ -173,6 +175,16 @@ public abstract class WeaponEntity extends Entity<SpriteAnimation>{
 	// spawnPos - spawn position for the bullet
 	// weaponDir - normalized weapon direction (left/right)
 	public abstract void shoot(Vector2 spawnPos, Vector2 weaponDir);
+	
+	protected AmmoEntity spawnAmmo(Vector2 pos){
+		if (ammo != null){
+			AmmoEntity e = (AmmoEntity)ammo.clone();
+			e.setPosition(pos);
+			game.addEntity(e, ((OverloadGame)game).getMapManager().getPlayersLayer());
+			return e;
+		}
+		return null;
+	}
 	
 	protected BulletEntity spawnBullet(Vector2 pos, Vector2 dir){
 		if (bullet != null){

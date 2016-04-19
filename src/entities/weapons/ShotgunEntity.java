@@ -3,6 +3,7 @@ package entities.weapons;
 import utils.OverloadRandom;
 import utils.Vector2;
 import engine.BaseGame;
+import entities.bullets.BulletEntity;
 
 public class ShotgunEntity extends WeaponEntity{
 	protected int shellsPerShot = 4;

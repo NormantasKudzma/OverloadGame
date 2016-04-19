@@ -14,8 +14,6 @@ import dialogs.Label;
 import dialogs.SpriteComponent;
 import engine.BaseGame;
 import engine.OverloadEngine;
-import entities.PlayerEntity;
-import entities.weapons.WeaponEntity;
 import game.OverloadGame;
 import game.Paths;
 import graphics.SimpleFont;
@@ -28,13 +26,12 @@ public class Overlay extends Component{
 	private int ammoValues[];
 	private int scoreValues[];
 	private SpriteComponent crossIcons[];
+	private SpriteComponent playerIcons[];
 	private SpriteComponent blurComponent;
 	
 	private boolean isGameStarting = false;
 	private float gameStartTimer = 3.0f;
 	private Label gameStartLabel;
-	
-	private float textUpdateTimer = 0.0f;
 	
 	public Overlay(BaseGame game) {
 		super(game);
@@ -57,6 +54,10 @@ public class Overlay extends Component{
 	
 	public Font getFont(){
 		return overlayFont;
+	}
+
+	public SpriteComponent[] getPlayerIcons(){
+		return playerIcons;
 	}
 	
 	public void gameStarting(){
@@ -91,7 +92,7 @@ public class Overlay extends Component{
 		loadSpriteComponents(ammoArrayJson, sheet);
 		
 		JSONArray playerIconArrayJson = overlayJson.getJSONArray("icons");
-		loadSpriteComponents(playerIconArrayJson, sheet);
+		playerIcons = loadSpriteComponents(playerIconArrayJson, sheet);
 		
 		JSONArray crossArrayJson = overlayJson.getJSONArray("crosses");
 		crossIcons = loadSpriteComponents(crossArrayJson, sheet);

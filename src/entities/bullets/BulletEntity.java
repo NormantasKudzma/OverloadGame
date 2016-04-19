@@ -1,6 +1,5 @@
-package entities.weapons;
+package entities.bullets;
 
-import org.jbox2d.dynamics.Filter;
 import org.jbox2d.dynamics.Fixture;
 
 import physics.ICollidable;
@@ -9,6 +8,7 @@ import utils.Vector2;
 import engine.BaseGame;
 import engine.Entity;
 import entities.PlayerEntity;
+import entities.weapons.WeaponEntity;
 import graphics.Sprite2D;
 
 public class BulletEntity extends Entity<Sprite2D>{
@@ -28,11 +28,9 @@ public class BulletEntity extends Entity<Sprite2D>{
 		}
 		markForDestruction();
 		
-		if (otherCollidable instanceof Entity){
-			if (otherCollidable instanceof PlayerEntity){
-				PlayerEntity player = (PlayerEntity)otherCollidable;
-				player.setDead(true);
-			}
+		if (otherCollidable instanceof PlayerEntity){
+			PlayerEntity player = (PlayerEntity)otherCollidable;
+			player.setDead(true);
 		}
 	}
 	
@@ -50,7 +48,7 @@ public class BulletEntity extends Entity<Sprite2D>{
 	}
 	
 	public void setDirection(Vector2 dir){
-		direction = dir.normalized();
+		direction = dir.copy().normalized();
 		setScale(getScale().mul(Math.signum(dir.x), 1.0f));
 		setMovementSpeed(movementSpeed);
 	}

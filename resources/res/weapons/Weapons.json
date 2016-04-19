@@ -2,49 +2,14 @@
 	"spritesheet":"spritesheet_weapons.png",
 	"weapons":[
 		{
-			"name":"pistol",
-			"animations":[
-				[{"x":0, "y":0, "w":48, "h":32}],
-				[{"x":48, "y":0, "w":48, "h":32}]
-			],
-			"scale":1.25,
-			"collider":[-18, -13, 18, 2],
-			"positionOffset":[30, 8],
-			"muzzleOffset":[22, 4],
-			"type":"entities.weapons.PistolEntity"
-		},
-		{
-			"name":"shotgun",
-			"animations":[
-				[{"x":0, "y":48, "w":48, "h":16}],
-				[{"x":48, "y":48, "w":48, "h":16}]
-			],
-			"scale":1.75,
-			"collider":[-18, -13, 18, 8],
-			"positionOffset":[4, 16],
-			"muzzleOffset":[62, 0],
-			"type":"entities.weapons.ShotgunEntity"
-		},
-		{
-			"name":"scimitar",
-			"animations":[
-				[{"x":0, "y":80, "w":64, "h":64}],
-				[{"x":0, "y":80, "w":64, "h":64}]
-			],
-			"scale":0.8,
-			"collider":[-22, -28, 22, 28],
-			"positionOffset":[33, 8],
-			"type":"entities.weapons.ScimitarEntity"
-		},
-		{
 			"name":"grenade",
 			"animations":[
 				[{"x":96, "y":0, "w":32, "h":48}]
 			],
-			"scale":1.0,
+			"scale":0.85,
 			"collider":[-16, -20, 16, 20],
-			"positionOffset":[52, -18],
-			"muzzleOffset":[62, -10],
+			"positionOffset":[29, -3],
+			"muzzleOffset":[60, -3],
 			"type":"entities.weapons.GrenadeEntity"
 		}
 	],
@@ -58,7 +23,7 @@
 			"scale":1.5,
 			"parent":"pistol",
 			"collider":[-4, -4, 4, 4],
-			"type":"entities.weapons.BulletEntity"
+			"type":"entities.bullets.BulletEntity"
 		},
 		{
 			"name":"shotgun_bullet",
@@ -69,21 +34,31 @@
 			"scale":3.5,
 			"parent":"shotgun",
 			"collider":[-6, -4, 6, 4],
-			"type":"entities.weapons.BulletEntity"
+			"type":"entities.bullets.BulletEntity"
 		},
 		{
 			"name":"grenade_bullet",
-			"x":0,
-			"y":64,
-			"w":16,
-			"h":16,
-			"scale":1.0,
+			"x":128,
+			"y":0,
+			"w":32,
+			"h":48,
+			"scale":0.85,
 			"parent":"grenade",
-			"collider":[-16, -20, 16, 20],
-			"type":"entities.weapons.GrenadeBullet"
+			"collider":[0, 0, 11],
+			"type":"entities.bullets.GrenadeBullet"
 		},
 	],
 	"ammo":[
-	
+		{
+			"name":"grenade_ammo",
+			"x":96,
+			"y":48,
+			"w":32,
+			"h":32,
+			"scale":0.85,
+			"parent":"grenade",
+			"collider":[0, 0, 11],
+			"type":"entities.bullets.AmmoEntity"
+		}
 	]
 }
