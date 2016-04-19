@@ -10,8 +10,8 @@ public class OverloadMain {
 		OverloadEngine engine = new OverloadEngine();
 		OverloadGame game = new OverloadGame();
 		engine.setGame(game);
-		engine.setDebugDraw(true);
-		engine.setFullscreen(false);
+		engine.setDebugDraw(false);
+		engine.setFullscreen(true);
 		engine.setTitle(GAME + " " + VERSION);
 		engine.run();
 	}

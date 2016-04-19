@@ -94,6 +94,8 @@ public class Overlay extends Component{
 		setBlurVisible(true);
 		
 		PlayerManager playerManager = ((OverloadGame)game).getPlayerManager();
+		playerManager.reset();
+		
 		for (int i = 0; i < scoreTexts.length; ++i){
 			boolean enabled = playerManager.isPlayerEnabled(i);
 			ammoTexts[i].setVisible(enabled);
@@ -234,6 +236,8 @@ public class Overlay extends Component{
 				GameEndDialog endDialog = new GameEndDialog(game, "end");
 				endDialog.setVisible(true);
 				game.addDialog(endDialog);
+				((OverloadGame)game).getPlayerManager().getPlayer(1).setPosition(Vector2.one);
+				((OverloadGame)game).getMapManager().cleanUpLayers();
 			}
 			else {
 				blurColor.rgba[3] += deltaTime * 0.5f;

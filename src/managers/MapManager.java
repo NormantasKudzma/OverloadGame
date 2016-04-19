@@ -10,6 +10,7 @@ import org.json.JSONObject;
 import physics.PhysicsBody;
 import physics.PhysicsBody.EBodyType;
 import utils.ConfigManager;
+import utils.ICloneable;
 import utils.Vector2;
 import engine.BaseGame;
 import engine.Entity;
@@ -19,11 +20,14 @@ import entities.PlayerEntity;
 import entities.WallEntity;
 import game.OverloadGame;
 import game.Paths;
+import graphics.IRenderable;
 import graphics.Layer;
 import graphics.Sprite2D;
 
 public class MapManager extends EntityManager{
-	private String playerLayer = null;
+	private String backgroundLayer = null;
+	private String playersLayer = null;
+	private String weaponsLayer = null;
 	private ArrayList<String> lastMapLayers = new ArrayList<String>();
 	private ArrayList<String> mapList = new ArrayList<String>();
 	private ArrayList<String> mapPool = new ArrayList<String>();
@@ -37,18 +41,28 @@ public class MapManager extends EntityManager{
 		Layer l = null;
 		for (String i : lastMapLayers){
 			if ((l = game.getLayer(i)) != null){
-				if (playerLayer == null || !l.getName().equals(playerLayer)){
+				if (playersLayer == null || !l.getName().equals(playersLayer)){
 					l.destroy();
 				}
 				l.clear();
 			}
 		}
-		playerLayer = null;
 		lastMapLayers.clear();
+		
+		if (playersLayer != null){
+			game.getLayer(playersLayer).clear();
+			playersLayer = null;
+		}
+		backgroundLayer = null;
+		weaponsLayer = null;
 	}
 	
 	public String getPlayersLayer(){
-		return playerLayer;
+		return playersLayer;
+	}
+	
+	public String getWeaponsLayer(){
+		return weaponsLayer;
 	}
 	
 	private void loadColliders(JSONObject json, BaseGame game) {
@@ -71,7 +85,7 @@ public class MapManager extends EntityManager{
 		}
 		colliderEntity.setCollisionFlags(WALL_CATEGORY, WALL_COLLIDER);
 		
-		game.addEntity(colliderEntity);
+		game.addEntity(colliderEntity, backgroundLayer);
 	}
 
 	private void loadEntities(JSONObject json, HashMap<String, Sprite2D> spriteSheets, HashMap<String, Entity> entities, Vector2 mapSize) {
@@ -106,10 +120,6 @@ public class MapManager extends EntityManager{
 		int index = json.getInt("index");
 		Layer layer = new Layer(layerName, index);
 		
-		if (json.has("isPlayersLayer")){
-			playerLayer = layerName;
-		}
-		
 		JSONArray objectsArrayJson = json.getJSONArray("objects");
 		for (int i = 0; i < objectsArrayJson.length(); ++i){
 			try {
@@ -118,9 +128,7 @@ public class MapManager extends EntityManager{
 				Vector2 tileScale = Vector2.fromJsonArray(scaleJson);
 				JSONArray positionJson = entityJson.getJSONArray("position");
 				Entity e = mapEntities.get(entityJson.getString("entity"));
-				Entity clone = (Entity)e.getClass().getDeclaredConstructor(BaseGame.class).newInstance(game);
-				clone.initEntity(PhysicsBody.EBodyType.NON_INTERACTIVE);
-				clone.setSprite(e.getSprite());
+				Entity clone = (Entity)e.clone();
 				clone.setScale(e.getScale().copy().mul(tileScale));
 				clone.setPosition(Vector2.fromJsonArray(positionJson).div(mapSize));
 				layer.addEntity(clone);
@@ -130,7 +138,21 @@ public class MapManager extends EntityManager{
 			}
 		}
 		game.addLayer(layer);
-		lastMapLayers.add(layerName);
+		
+		if (json.has("isBackgroundLayer")){
+			backgroundLayer = layerName;
+		}
+		
+		if (json.has("isWeaponsLayer")){
+			weaponsLayer = layerName;
+		}
+		
+		if (json.has("isPlayersLayer")){
+			playersLayer = layerName;
+		}
+		else {
+			lastMapLayers.add(layerName);
+		}
 	}
 	
 	public void loadMap(String path){
@@ -145,7 +167,6 @@ public class MapManager extends EntityManager{
 		
 		loadSpriteSheets(json, spriteSheets);
 		loadEntities(json, spriteSheets, entities, mapSize);
-		loadColliders(json, game);
 		
 		JSONArray layersJsonArray = json.getJSONArray("layers");
 		for (int i = 0; i < layersJsonArray.length(); ++i){
@@ -154,11 +175,12 @@ public class MapManager extends EntityManager{
 		}
 		
 		loadPlayerPositions(json, mapSize);
+		loadColliders(json, game);
 		
-		MapBoundsEntity boundEntity = new MapBoundsEntity(game);
-		boundEntity.initEntity(EBodyType.INTERACTIVE);
-		boundEntity.setCollisionFlags(WALL_CATEGORY, WALL_COLLIDER);
-		game.addEntity(boundEntity, Layer.DEFAULT_NAME);
+		MapBoundsEntity mapBoundsEntity = new MapBoundsEntity(game);
+		mapBoundsEntity.initEntity(EBodyType.INTERACTIVE);
+		mapBoundsEntity.setCollisionFlags(WALL_CATEGORY, WALL_COLLIDER);
+		game.addEntity(mapBoundsEntity, backgroundLayer);
 	}
 
 	private void loadMapPool(){
@@ -195,7 +217,7 @@ public class MapManager extends EntityManager{
 			}
 			
 			if (playerManager.isPlayerEnabled(i)){
-				game.addEntity(playerManager.getPlayer(i), playerLayer);
+				game.addEntity(playerManager.getPlayer(i), playersLayer);
 			}
 		}
 	}

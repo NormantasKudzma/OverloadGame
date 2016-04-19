@@ -223,6 +223,7 @@
 		{
 			"name":"background",
 			"index":1000,
+			"isBackgroundLayer":"true",
 			"objects":[
 				{"position":[32,18],"scale":[32,32],"entity":"BG"},
 			]
@@ -390,6 +391,13 @@
 				{"position":[57,1],"scale":[1,1],"entity":"Black"},
 				{"position":[59,1],"scale":[1,1],"entity":"Black"},
 				{"position":[61,1],"scale":[1,1],"entity":"Black"},
+			]
+		},
+		{
+			"name":"weapons",
+			"index":7,
+			"isWeaponsLayer":"true",
+			"objects":[
 			]
 		}
 	],

@@ -183,6 +183,12 @@ public class PlayerManager extends EntityManager{
 		}
 	}
 
+	public void reset(){
+		for (int i = 0; i < playerEntities.length; ++i){
+			playerEntities[i].setDead(false);
+		}
+	}
+	
 	public void setPlayerEnabled(int index, boolean enabled){
 		playerEnabled[index] = enabled;
 	}

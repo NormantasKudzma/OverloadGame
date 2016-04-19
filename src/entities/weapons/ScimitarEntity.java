@@ -38,7 +38,6 @@ public class ScimitarEntity extends MeleeWeapon {
 		super.update(deltaTime);
 		
 		if (shootTimer > 0.35f && player != null){
-			System.out.println("Impulse " + currentImpulse);
 			player.setHorizontalVelocity(currentImpulse.x);
 			player.setVerticalVelocity(currentImpulse.y);
 			currentImpulse.mul(0.85f);

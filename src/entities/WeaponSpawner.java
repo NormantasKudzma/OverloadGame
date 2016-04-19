@@ -90,7 +90,7 @@ public class WeaponSpawner extends Entity<Sprite2D> implements QueryCallback{
 				weapon = weapon.clone();
 				weapon.getPhysicsBody().getBody().setActive(true);
 				weapon.setPosition(getPosition().copy().add(spawnOffset));
-				game.addEntity(weapon, ((OverloadGame)game).getMapManager().getPlayersLayer());
+				game.addEntity(weapon, ((OverloadGame)game).getMapManager().getWeaponsLayer());
 			}
 		}
 	}

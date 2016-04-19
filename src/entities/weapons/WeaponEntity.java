@@ -180,7 +180,7 @@ public abstract class WeaponEntity extends Entity<SpriteAnimation>{
 		if (ammo != null){
 			AmmoEntity e = (AmmoEntity)ammo.clone();
 			e.setPosition(pos);
-			game.addEntity(e, ((OverloadGame)game).getMapManager().getPlayersLayer());
+			game.addEntity(e, ((OverloadGame)game).getMapManager().getWeaponsLayer());
 			return e;
 		}
 		return null;
@@ -202,7 +202,7 @@ public abstract class WeaponEntity extends Entity<SpriteAnimation>{
 				e.getPhysicsBody().setCollisionFlags(player.getCategory(), PhysicsBody.EMaskType.EXCLUDE);
 			}
 			e.setPosition(pos);
-			game.addEntity(e, ((OverloadGame)game).getMapManager().getPlayersLayer());
+			game.addEntity(e, ((OverloadGame)game).getMapManager().getWeaponsLayer());
 			return e;
 		}
 		return null;
