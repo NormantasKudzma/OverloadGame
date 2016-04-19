@@ -11,6 +11,7 @@ import graphics.Layer;
 
 public class OverloadGame extends BaseGame {
 	public static Vector2 GRAVITY = new Vector2(0.0f, -4.8f);
+	public static final int MAX_POINTS = 3;
 	
 	private MapManager mapManager = new MapManager(this);
 	private PlayerManager playerManager = new PlayerManager(this);
@@ -51,22 +52,14 @@ public class OverloadGame extends BaseGame {
 		playerManager.loadPlayers();
 		weaponManager.loadWeapons();
 		
-		GameStartDialog startDialog = new GameStartDialog(this, "StartDialog");
+		GameStartDialog startDialog = new GameStartDialog(this, "start");
 		startDialog.setPosition(Vector2.one);
 		startDialog.setVisible(true);
 		addDialog(startDialog);
 	}
 	
 	public void loadMap(){
-		mapManager.loadMap(this, Paths.MAPS + "Map_02.json");	
-
-		String playersLayer = mapManager.getPlayersLayer();		
-		addEntity(playerManager.getPlayer(0), playersLayer);		
-		addEntity(playerManager.getPlayer(1), playersLayer);		
-		addEntity(playerManager.getPlayer(2), playersLayer);	
-		addEntity(playerManager.getPlayer(3), playersLayer);
-	}
-	
-	public void startMatch(){
+		mapManager.loadNextMap();
+		overlay.gameStarting();
 	}
 }

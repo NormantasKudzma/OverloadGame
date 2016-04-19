@@ -1,6 +1,7 @@
 package managers;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
 
 import org.json.JSONArray;
@@ -24,9 +25,12 @@ import graphics.Sprite2D;
 public class MapManager extends EntityManager{
 	private String playerLayer = null;
 	private ArrayList<String> lastMapLayers = new ArrayList<String>();
+	private ArrayList<String> mapList = new ArrayList<String>();
+	private ArrayList<String> mapPool = new ArrayList<String>();
 	
 	public MapManager(BaseGame game) {
 		super(game);
+		loadMapPool();
 	}
 
 	public void cleanUpLayers(){
@@ -47,34 +51,6 @@ public class MapManager extends EntityManager{
 		return playerLayer;
 	}
 	
-	public void loadMap(BaseGame game, String path){
-		cleanUpLayers();
-		
-		JSONObject json = ConfigManager.loadConfigAsJson(path);
-		
-		HashMap<String, Sprite2D> spriteSheets = new HashMap<String, Sprite2D>();
-		HashMap<String, Entity> entities = new HashMap<String, Entity>();		
-
-		Vector2 mapSize = Vector2.fromJsonArray(json.getJSONArray("mapsize")).div(2.0f);
-		
-		loadSpriteSheets(json, spriteSheets);
-		loadEntities(json, spriteSheets, entities, mapSize);
-		loadColliders(json, game);
-		
-		JSONArray layersJsonArray = json.getJSONArray("layers");
-		for (int i = 0; i < layersJsonArray.length(); ++i){
-			JSONObject layerJson = layersJsonArray.getJSONObject(i);
-			loadLayer(layerJson, game, entities, mapSize);
-		}
-		
-		loadPlayerPositions(json, mapSize);
-		
-		MapBoundsEntity boundEntity = new MapBoundsEntity(game);
-		boundEntity.initEntity(EBodyType.INTERACTIVE);
-		boundEntity.setCollisionFlags(WALL_CATEGORY, WALL_COLLIDER);
-		game.addEntity(boundEntity, Layer.DEFAULT_NAME);
-	}
-
 	private void loadColliders(JSONObject json, BaseGame game) {
 		JSONArray colliderArrayJson = json.getJSONArray("colliders");
 		JSONArray mapSizeJson = json.getJSONArray("mapsize");
@@ -156,8 +132,59 @@ public class MapManager extends EntityManager{
 		game.addLayer(layer);
 		lastMapLayers.add(layerName);
 	}
+	
+	public void loadMap(String path){
+		cleanUpLayers();
+		
+		JSONObject json = ConfigManager.loadConfigAsJson(path);
+		
+		HashMap<String, Sprite2D> spriteSheets = new HashMap<String, Sprite2D>();
+		HashMap<String, Entity> entities = new HashMap<String, Entity>();		
+
+		Vector2 mapSize = Vector2.fromJsonArray(json.getJSONArray("mapsize")).div(2.0f);
+		
+		loadSpriteSheets(json, spriteSheets);
+		loadEntities(json, spriteSheets, entities, mapSize);
+		loadColliders(json, game);
+		
+		JSONArray layersJsonArray = json.getJSONArray("layers");
+		for (int i = 0; i < layersJsonArray.length(); ++i){
+			JSONObject layerJson = layersJsonArray.getJSONObject(i);
+			loadLayer(layerJson, game, entities, mapSize);
+		}
+		
+		loadPlayerPositions(json, mapSize);
+		
+		MapBoundsEntity boundEntity = new MapBoundsEntity(game);
+		boundEntity.initEntity(EBodyType.INTERACTIVE);
+		boundEntity.setCollisionFlags(WALL_CATEGORY, WALL_COLLIDER);
+		game.addEntity(boundEntity, Layer.DEFAULT_NAME);
+	}
+
+	private void loadMapPool(){
+		JSONObject json = ConfigManager.loadConfigAsJson(Paths.MAPS + "MapPool.json");
+		JSONArray mapsJsonArray = json.getJSONArray("maps");
+		
+		for (int i = 0; i < mapsJsonArray.length(); ++i){
+			mapPool.add(mapsJsonArray.getString(i));
+		}
+	}
+	
+	public void loadNextMap(){
+		if (mapList.isEmpty()){
+			mapList.addAll(mapPool);
+			Collections.shuffle(mapList);
+		}
+		
+		String mapName = mapList.get(0);
+		mapList.remove(0);
+		
+		loadMap(Paths.MAPS + mapName);
+	}
 
 	private void loadPlayerPositions(JSONObject json, Vector2 mapSize) {
+		PlayerManager playerManager = ((OverloadGame)game).getPlayerManager();
+		
 		JSONArray playersArrayJson = json.getJSONArray("players");
 		for (int i = 0; i < playersArrayJson.length(); ++i){
 			JSONObject playerJson = playersArrayJson.getJSONObject(i);
@@ -165,6 +192,10 @@ public class MapManager extends EntityManager{
 			PlayerEntity player = ((OverloadGame)game).getPlayerManager().getPlayer(i);
 			if (player != null){
 				player.setPosition(position);
+			}
+			
+			if (playerManager.isPlayerEnabled(i)){
+				game.addEntity(playerManager.getPlayer(i), playerLayer);
 			}
 		}
 	}

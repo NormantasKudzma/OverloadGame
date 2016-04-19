@@ -1,3 +1,5 @@
-[
-	Map_02.json,
-]
+{
+	"maps":[
+		Map_02.json,
+	]
+}

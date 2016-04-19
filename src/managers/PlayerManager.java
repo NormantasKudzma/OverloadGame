@@ -27,7 +27,8 @@ public class PlayerManager extends EntityManager{
 												EntityManager.PLAYER3_CATEGORY, 
 												EntityManager.PLAYER4_CATEGORY};
 	public static final int NUM_PLAYERS = 4;
-	private PlayerEntity[] playerEntities = new PlayerEntity[NUM_PLAYERS];
+	private boolean playerEnabled[] = new boolean[]{true, true, true, true};
+	private PlayerEntity playerEntities[] = new PlayerEntity[NUM_PLAYERS];
 
 	public PlayerManager(BaseGame game) {
 		super(game);
@@ -38,6 +39,10 @@ public class PlayerManager extends EntityManager{
 			return null;
 		}
 		return playerEntities[index];
+	}
+	
+	public boolean isPlayerEnabled(int index){
+		return playerEnabled[index];
 	}
 	
 	public void loadPlayers(){
@@ -166,16 +171,19 @@ public class PlayerManager extends EntityManager{
 				overlay.setPlayerDead(i, true);
 			}
 			
-			if (!playerEntities[i].isDead()){
+			if (!playerEntities[i].isDead() && playerEnabled[i]){
 				++numAlive;
 				aliveIndex = i;
 			}
 		}
 		
 		if (numAlive == 1 && aliveIndex != -1){
-			overlay.setBlurVisible(true);
+			overlay.gameEnding();
 			overlay.addPoint(aliveIndex);
-			//playerEntities[aliveIndex].setDead(true);
 		}
+	}
+
+	public void setPlayerEnabled(int index, boolean enabled){
+		playerEnabled[index] = enabled;
 	}
 }

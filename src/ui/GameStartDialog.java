@@ -1,5 +1,6 @@
 package ui;
 
+import managers.PlayerManager;
 import utils.FastMath;
 import utils.Vector2;
 import dialogs.AnimatedLabel;
@@ -12,10 +13,13 @@ import engine.BaseGame;
 import game.OverloadGame;
 import game.OverloadMain;
 import game.Paths;
+import graphics.Color;
 import graphics.SimpleFont;
 import graphics.Sprite2D;
 
 public class GameStartDialog extends BaseDialog{
+	private CheckBox readyBox[];
+	
 	public GameStartDialog(BaseGame game, String name) {
 		super(game, name);
 	}
@@ -48,9 +52,27 @@ public class GameStartDialog extends BaseDialog{
 		
 		Button play = new Button(game, null, null, "PLAY"){
 			public void clickFunction() {
+				int numPlayers = 0;
+				
 				OverloadGame overload = (OverloadGame)game;
+				PlayerManager playerManager = overload.getPlayerManager();
+				
+				for (int i = 0; i < readyBox.length; ++i){
+					playerManager.setPlayerEnabled(i, readyBox[i].isChecked());
+					numPlayers += readyBox[i].isChecked() ? 1 : 0;
+				}
+				
+				if (numPlayers < 2){
+					SimpleFont text = new SimpleFont("You must select at least two players");
+					text.setFont(overload.getOverlay().getFont().deriveFont(48.0f));
+					Label error = new Label(game, text);
+					error.setLifetime(2.0f);
+					error.setColor(new Color(0.8f, 0.1f, 0.1f));
+					GameStartDialog.this.addChild(error);
+					return;
+				}
+				
 				overload.loadMap();
-				overload.getOverlay().gameStarting();
 				GameStartDialog.this.setVisible(false);
 			};
 		};
@@ -67,6 +89,7 @@ public class GameStartDialog extends BaseDialog{
 												new Vector2(-0.4f, -0.25f), new Vector2(0.4f, -0.25f)};
 		SpriteComponent[] playerIcons = overlay.getPlayerIcons();
 		
+		readyBox = new CheckBox[4];
 		for (int i = 0; i < infoPosition.length; ++i){
 			Vector2 center = infoPosition[i];
 			
@@ -82,11 +105,11 @@ public class GameStartDialog extends BaseDialog{
 			addChild(controls);
 			
 			SimpleFont text = new SimpleFont("Player " + (i + 1) + " ready?", overlay.getFont().deriveFont(22.0f));		
-			CheckBox readyBox = new CheckBox(game);
-			readyBox.setPosition(center.copy().add(-0.16f, -0.12f));
-			readyBox.setText(text);
-			readyBox.setChecked(true);
-			addChild(readyBox);
+			readyBox[i] = new CheckBox(game);
+			readyBox[i].setPosition(center.copy().add(-0.16f, -0.12f));
+			readyBox[i].setText(text);
+			readyBox[i].setChecked(true);
+			addChild(readyBox[i]);
 		}
 	}
 }

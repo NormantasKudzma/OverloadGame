@@ -16,6 +16,7 @@ import engine.BaseGame;
 import engine.OverloadEngine;
 import game.OverloadGame;
 import game.Paths;
+import graphics.Color;
 import graphics.SimpleFont;
 import graphics.Sprite2D;
 
@@ -25,13 +26,19 @@ public class Overlay extends Component{
 	private Label scoreTexts[];
 	private int ammoValues[];
 	private int scoreValues[];
+	private SpriteComponent ammoIcons[];
 	private SpriteComponent crossIcons[];
 	private SpriteComponent playerIcons[];
+	private SpriteComponent scoreIcons[];
 	private SpriteComponent blurComponent;
 	
 	private boolean isGameStarting = false;
-	private float gameStartTimer = 3.0f;
+	private float gameStartTimer = 0.0f;
 	private Label gameStartLabel;
+	
+	private boolean isGameEnding = false;
+	private float gameEndTimer = 0.0f;
+	private Color blurColor = new Color(1.0f, 1.0f, 1.0f, 0.0f);
 	
 	public Overlay(BaseGame game) {
 		super(game);
@@ -59,13 +66,43 @@ public class Overlay extends Component{
 	public SpriteComponent[] getPlayerIcons(){
 		return playerIcons;
 	}
+
+	public int[] getScores(){
+		return scoreValues;
+	}
+	
+	public void gameEnding(){
+		game.removeDialog("end");
+		
+		isGameEnding = true;
+		isGameStarting = false;
+		gameEndTimer = 2.0f;
+		
+		setBlurVisible(true);
+		blurColor.rgba[3] = 0.0f;
+		blurComponent.setColor(blurColor);
+	}
 	
 	public void gameStarting(){
+		game.removeDialog("start");
+		
 		isGameStarting = true;
+		isGameEnding = false;
 		gameStartTimer = 5.0f;
 		gameStartLabel.setText("" + (int)gameStartTimer);
 		gameStartLabel.setVisible(true);
 		setBlurVisible(true);
+		
+		PlayerManager playerManager = ((OverloadGame)game).getPlayerManager();
+		for (int i = 0; i < scoreTexts.length; ++i){
+			boolean enabled = playerManager.isPlayerEnabled(i);
+			ammoTexts[i].setVisible(enabled);
+			scoreTexts[i].setVisible(enabled);
+			ammoIcons[i].setVisible(enabled);
+			crossIcons[i].setVisible(false);
+			playerIcons[i].setVisible(enabled);
+			scoreIcons[i].setVisible(enabled);
+		}
 	}
 	
 	protected void initialize() {
@@ -86,10 +123,10 @@ public class Overlay extends Component{
 		
 		// Load score indicator icons
 		JSONArray scoreArrayJson = overlayJson.getJSONArray("score");
-		loadSpriteComponents(scoreArrayJson, sheet);
+		scoreIcons = loadSpriteComponents(scoreArrayJson, sheet);
 
 		JSONArray ammoArrayJson = overlayJson.getJSONArray("ammo");
-		loadSpriteComponents(ammoArrayJson, sheet);
+		ammoIcons = loadSpriteComponents(ammoArrayJson, sheet);
 		
 		JSONArray playerIconArrayJson = overlayJson.getJSONArray("icons");
 		playerIcons = loadSpriteComponents(playerIconArrayJson, sheet);
@@ -185,8 +222,24 @@ public class Overlay extends Component{
 				isGameStarting = false;
 				gameStartLabel.setVisible(false);
 				setBlurVisible(false);
-				((OverloadGame)game).startMatch();
 			}
+		}
+		
+		if (isGameEnding){
+			gameEndTimer -= deltaTime;
+			
+			if (gameEndTimer <= 0.0f){
+				isGameEnding = false;
+				blurColor.rgba[3] = 1.0f;
+				GameEndDialog endDialog = new GameEndDialog(game, "end");
+				endDialog.setVisible(true);
+				game.addDialog(endDialog);
+			}
+			else {
+				blurColor.rgba[3] += deltaTime * 0.5f;
+			}
+
+			blurComponent.setColor(blurColor);
 		}
 	}
 	
