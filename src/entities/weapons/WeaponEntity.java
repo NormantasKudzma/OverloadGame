@@ -121,6 +121,14 @@ public abstract class WeaponEntity extends Entity<SpriteAnimation>{
 		oldDirection = direction;
 	}
 	
+	public AmmoEntity getAmmo(){
+		return ammo;
+	}
+	
+	public BulletEntity getBullet(){
+		return bullet;
+	}
+	
 	public int getNumBullets(){
 		return numBullets;
 	}

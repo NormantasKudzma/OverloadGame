@@ -28,6 +28,7 @@ public class MapManager extends EntityManager{
 	private String backgroundLayer = null;
 	private String playersLayer = null;
 	private String weaponsLayer = null;
+	private Vector2 playerScale = null;
 	private ArrayList<String> lastMapLayers = new ArrayList<String>();
 	private ArrayList<String> mapList = new ArrayList<String>();
 	private ArrayList<String> mapPool = new ArrayList<String>();
@@ -38,6 +39,14 @@ public class MapManager extends EntityManager{
 	}
 
 	public void cleanUpLayers(){
+		if (playerScale != null){
+			Vector2 invScale = new Vector2(1.0f, 1.0f).div(playerScale);
+			PlayerManager playerManager = ((OverloadGame)game).getPlayerManager();
+			playerManager.scalePlayers(invScale);
+			((OverloadGame)game).getWeaponManager().scaleWeapons(invScale);
+			playerScale = null;
+		}
+		
 		Layer l = null;
 		for (String i : lastMapLayers){
 			if ((l = game.getLayer(i)) != null){
@@ -50,7 +59,7 @@ public class MapManager extends EntityManager{
 		lastMapLayers.clear();
 		
 		if (playersLayer != null){
-			game.getLayer(playersLayer).clear();
+			game.getLayer(playersLayer).clear();			
 			playersLayer = null;
 		}
 		backgroundLayer = null;
@@ -207,6 +216,12 @@ public class MapManager extends EntityManager{
 	private void loadPlayerPositions(JSONObject json, Vector2 mapSize) {
 		PlayerManager playerManager = ((OverloadGame)game).getPlayerManager();
 		
+		if (json.has("playerScale")){
+			playerScale = Vector2.fromJsonArray(json.getJSONArray("playerScale"));
+			playerManager.scalePlayers(playerScale);
+			((OverloadGame)game).getWeaponManager().scaleWeapons(playerScale);
+		}
+		
 		JSONArray playersArrayJson = json.getJSONArray("players");
 		for (int i = 0; i < playersArrayJson.length(); ++i){
 			JSONObject playerJson = playersArrayJson.getJSONObject(i);
@@ -214,10 +229,10 @@ public class MapManager extends EntityManager{
 			PlayerEntity player = ((OverloadGame)game).getPlayerManager().getPlayer(i);
 			if (player != null){
 				player.setPosition(position);
-			}
-			
-			if (playerManager.isPlayerEnabled(i)){
-				game.addEntity(playerManager.getPlayer(i), playersLayer);
+				
+				if (playerManager.isPlayerEnabled(i)){
+					game.addEntity(player, playersLayer);
+				}
 			}
 		}
 	}

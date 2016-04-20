@@ -2,6 +2,12 @@ package managers;
 
 import java.util.HashMap;
 
+import org.jbox2d.collision.shapes.CircleShape;
+import org.jbox2d.collision.shapes.PolygonShape;
+import org.jbox2d.collision.shapes.Shape;
+import org.jbox2d.common.Vec2;
+import org.jbox2d.dynamics.Body;
+import org.jbox2d.dynamics.Fixture;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
@@ -10,6 +16,7 @@ import utils.ConfigManager;
 import utils.Vector2;
 import engine.BaseGame;
 import engine.Entity;
+import entities.bullets.AmmoEntity;
 import entities.bullets.BulletEntity;
 import entities.weapons.WeaponEntity;
 import game.Paths;
@@ -168,6 +175,47 @@ public class WeaponManager extends EntityManager {
 			catch (Exception e){
 				e.printStackTrace();
 			}
+		}
+	}
+	
+	public void scaleWeapons(Vector2 scale){
+		for (WeaponEntity w : weaponMap.values()){
+			w.setScale(w.getScale().mul(scale));
+			
+			Body b = w.getPhysicsBody().getBody();
+			resizeColliders(b, scale);
+			
+			AmmoEntity ammo = w.getAmmo();
+			if (ammo != null){
+				ammo.setScale(ammo.getScale().mul(scale));
+				resizeColliders(ammo.getPhysicsBody().getBody(), scale);
+			}
+			
+			BulletEntity bullet = w.getBullet();
+			if (bullet != null){
+				bullet.setScale(bullet.getScale().mul(scale));
+				resizeColliders(bullet.getPhysicsBody().getBody(), scale);
+			}
+		}
+	}
+	
+	private void resizeColliders(Body b, Vector2 scale){
+		Fixture f = b.m_fixtureList;
+		while (f != null){
+			Shape s = f.getShape();
+			if (s instanceof PolygonShape){
+				PolygonShape poly = (PolygonShape)s;
+				for (int j = 0; j < poly.m_count; ++j){
+					Vec2 vert = poly.m_vertices[j];
+					poly.m_vertices[j].set(vert.x * scale.x, vert.y * scale.y);
+				}
+			}
+			if (s instanceof CircleShape){
+				CircleShape circ = (CircleShape)s;
+				circ.m_radius *= scale.x;
+			}
+			
+			f = f.m_next;
 		}
 	}
 }

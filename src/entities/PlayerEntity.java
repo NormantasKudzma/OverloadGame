@@ -257,6 +257,20 @@ public class PlayerEntity extends Entity<SpriteAnimation> {
 		}
 	}
 	
+	public void reset(){
+		if (currentWeapon != null){
+			currentWeapon.setVisible(false);
+			currentWeapon.detachFromPlayer();
+			currentWeapon = null;
+		}
+		
+		canJump = true;
+		canMove = true;
+		tryShoot = false;
+		jumpStarted = false;
+		movementDirection = 0.0f;
+	}
+	
 	public void setCategory(int category){
 		categoryMask = category;
 	}

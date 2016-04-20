@@ -99,6 +99,7 @@ public class Overlay extends Component{
 		for (int i = 0; i < scoreTexts.length; ++i){
 			boolean enabled = playerManager.isPlayerEnabled(i);
 			ammoTexts[i].setVisible(enabled);
+			ammoTexts[i].setText("0");
 			scoreTexts[i].setVisible(enabled);
 			ammoIcons[i].setVisible(enabled);
 			crossIcons[i].setVisible(false);
@@ -200,6 +201,21 @@ public class Overlay extends Component{
 		return addedComponents;
 	}
 	
+	public void reset(){
+		for (int i = 0; i < scoreTexts.length; ++i){
+			ammoTexts[i].setVisible(true);
+			ammoTexts[i].setText("0");
+			scoreTexts[i].setVisible(true);
+			scoreTexts[i].setText("0");
+			ammoIcons[i].setVisible(true);
+			crossIcons[i].setVisible(false);
+			playerIcons[i].setVisible(true);
+			scoreIcons[i].setVisible(true);
+			ammoValues[i] = 0;
+			scoreValues[i] = 0;
+		}
+	}
+	
 	public void setBlurVisible(boolean isVisible){
 		blurComponent.setVisible(isVisible);
 	}
@@ -236,7 +252,6 @@ public class Overlay extends Component{
 				GameEndDialog endDialog = new GameEndDialog(game, "end");
 				endDialog.setVisible(true);
 				game.addDialog(endDialog);
-				((OverloadGame)game).getPlayerManager().getPlayer(1).setPosition(Vector2.one);
 				((OverloadGame)game).getMapManager().cleanUpLayers();
 			}
 			else {

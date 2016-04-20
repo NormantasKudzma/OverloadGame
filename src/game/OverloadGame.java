@@ -20,7 +20,7 @@ public class OverloadGame extends BaseGame {
 	private Overlay overlay;
 	
 	public OverloadGame(){
-		
+		super();
 	}
 	
 	public MapManager getMapManager(){
@@ -53,7 +53,6 @@ public class OverloadGame extends BaseGame {
 		weaponManager.loadWeapons();
 		
 		GameStartDialog startDialog = new GameStartDialog(this, "start");
-		startDialog.setPosition(Vector2.one);
 		startDialog.setVisible(true);
 		addDialog(startDialog);
 	}

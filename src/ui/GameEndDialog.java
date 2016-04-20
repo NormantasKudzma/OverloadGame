@@ -12,6 +12,7 @@ import dialogs.Label;
 import dialogs.SpriteComponent;
 import engine.BaseGame;
 import game.OverloadGame;
+import graphics.Color;
 import graphics.SimpleFont;
 
 public class GameEndDialog extends BaseDialog{
@@ -24,7 +25,7 @@ public class GameEndDialog extends BaseDialog{
 		super.initialize();
 
 		final OverloadGame overload = (OverloadGame)game;
-		Overlay overlay = overload.getOverlay();
+		final Overlay overlay = overload.getOverlay();
 
 		int scores[] = overlay.getScores();
 		int winnerIndex = -1;
@@ -44,7 +45,7 @@ public class GameEndDialog extends BaseDialog{
 		title.setPosition(new Vector2(0.0f, 0.75f));
 		addChild(title);
 		
-		initializePlayerInfo(scores);
+		initializePlayerInfo(scores, winnerIndex);
 		
 		if (!isGameOver){
 			Button play = new Button(game, null, null, "PLAY"){
@@ -57,9 +58,26 @@ public class GameEndDialog extends BaseDialog{
 			play.setPosition(new Vector2(0.0f, -0.7f));
 			addChild(play);
 		}
+		else {			
+			Button back = new Button(game, null, null, "BACK"){
+				public void clickFunction() {
+					overlay.reset();
+					
+					GameStartDialog startDialog = new GameStartDialog(game, "start");
+					startDialog.setVisible(true);
+					game.addDialog(startDialog);
+					
+					GameEndDialog.this.setVisible(false);
+					game.removeDialog(GameEndDialog.this.name);
+				};
+			};
+			back.setScale(new Vector2(0.45f, 0.45f));
+			back.setPosition(new Vector2(0.0f, -0.7f));
+			addChild(back);
+		}
 	}
 	
-	private void initializePlayerInfo(int scores[]){
+	private void initializePlayerInfo(int scores[], int winnerIndex){
 		class Score implements Comparable<Score>{
 			public int index;
 			public int value;
@@ -108,9 +126,17 @@ public class GameEndDialog extends BaseDialog{
 			addChild(icon);
 			
 			int score = s.value;
-			SimpleFont text = new SimpleFont(score + " point" + (score == 1 ? "" : "s"), overlay.getFont().deriveFont(40.0f));		
+			
+			String scoreStr = score + " point" + (score == 1 ? "" : "s");
+			if (winnerIndex == index){
+				scoreStr += ", WINNER!";
+			}
+			SimpleFont text = new SimpleFont(scoreStr, overlay.getFont().deriveFont(40.0f));		
 			Label scoreLabel = new Label(game, text);
 			scoreLabel.setPosition(center.copy().add(0.5f, 0.0f));
+			if (winnerIndex == index){
+				scoreLabel.setColor(new Color(1.0f, 0.84f, 0.02f));
+			}
 			addChild(scoreLabel);
 		}
 	}

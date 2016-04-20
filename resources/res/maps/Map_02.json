@@ -204,6 +204,7 @@
 			"scale":"1"
 		}
 	],
+	"playerScale":[1.0, 1.0],
 	"players":[
 		{
 			"position":[10, 31]

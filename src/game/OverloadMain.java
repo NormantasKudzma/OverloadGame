@@ -1,18 +1,22 @@
 package game;
 
+import engine.EngineConfig;
 import engine.OverloadEngine;
 
 public class OverloadMain {
-	public static final String VERSION = "preview build 2";
+	public static final String VERSION = "v3";
 	public static final String GAME = "Overload";
 	
 	public static void main(String[] args){
-		OverloadEngine engine = new OverloadEngine();
 		OverloadGame game = new OverloadGame();
-		engine.setGame(game);
-		engine.setDebugDraw(false);
-		engine.setFullscreen(true);
-		engine.setTitle(GAME + " " + VERSION);
+		
+		EngineConfig config = new EngineConfig();
+		config.game = game;
+		config.isDebug = true;
+		config.isFullscreen = false;
+		config.title = GAME + " " + VERSION;
+		
+		OverloadEngine engine = new OverloadEngine(config);
 		engine.run();
 	}
 }

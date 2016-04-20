@@ -2,15 +2,28 @@
 	"spritesheet":"spritesheet_weapons.png",
 	"weapons":[
 		{
-			"name":"grenade",
+			"name":"pistol",
 			"animations":[
-				[{"x":96, "y":0, "w":32, "h":48}]
+				[{"x":0, "y":0, "w":48, "h":32}],
+				[{"x":48, "y":0, "w":48, "h":32}]
 			],
-			"scale":0.85,
-			"collider":[-16, -20, 16, 20],
-			"positionOffset":[29, -3],
-			"muzzleOffset":[60, -3],
-			"type":"entities.weapons.GrenadeEntity"
+			"scale":1.25,
+			"collider":[-18, -13, 18, 2],
+			"positionOffset":[30, 8],
+			"muzzleOffset":[22, 4],
+			"type":"entities.weapons.PistolEntity"
+		},
+		{
+			"name":"shotgun",
+			"animations":[
+				[{"x":0, "y":48, "w":48, "h":16}],
+				[{"x":48, "y":48, "w":48, "h":16}]
+			],
+			"scale":1.75,
+			"collider":[-18, -13, 18, 8],
+			"positionOffset":[4, 16],
+			"muzzleOffset":[62, 0],
+			"type":"entities.weapons.ShotgunEntity"
 		}
 	],
 	"bullets":[
