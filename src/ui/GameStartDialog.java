@@ -1,14 +1,14 @@
 package ui;
 
 import managers.PlayerManager;
+import ui.AnimatedLabel;
+import ui.BaseDialog;
+import ui.Button;
+import ui.CheckBox;
+import ui.Label;
+import ui.SpriteComponent;
 import utils.FastMath;
 import utils.Vector2;
-import dialogs.AnimatedLabel;
-import dialogs.BaseDialog;
-import dialogs.Button;
-import dialogs.CheckBox;
-import dialogs.Label;
-import dialogs.SpriteComponent;
 import engine.BaseGame;
 import game.OverloadGame;
 import game.OverloadMain;

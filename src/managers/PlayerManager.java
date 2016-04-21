@@ -199,25 +199,7 @@ public class PlayerManager extends EntityManager{
 		for (int i = 0; i < NUM_PLAYERS; ++i){
 			PlayerEntity p = playerEntities[i];
 			p.setScale(p.getScale().mul(scale));
-			
-			Body b = p.getPhysicsBody().getBody();
-			Fixture f = b.m_fixtureList;
-			while (f != null){
-				Shape s = f.getShape();
-				if (s instanceof PolygonShape){
-					PolygonShape poly = (PolygonShape)s;
-					for (int j = 0; j < poly.m_count; ++j){
-						Vec2 vert = poly.m_vertices[j];
-						poly.m_vertices[j].set(vert.x * scale.x, vert.y * scale.y);
-					}
-				}
-				if (s instanceof CircleShape){
-					CircleShape circ = (CircleShape)s;
-					circ.m_radius *= scale.x;
-				}
-				
-				f = f.m_next;
-			}
+			p.getPhysicsBody().resizeColliders(scale);
 		}
 	}
 	

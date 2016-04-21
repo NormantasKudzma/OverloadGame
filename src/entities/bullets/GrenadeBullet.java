@@ -2,7 +2,7 @@ package entities.bullets;
 
 import org.jbox2d.dynamics.Fixture;
 
-import physics.ICollidable;
+import physics.Collidable;
 import physics.PhysicsBody.EBodyType;
 import engine.BaseGame;
 import entities.PlayerEntity;
@@ -14,7 +14,7 @@ public class GrenadeBullet extends BulletEntity{
 	}
 
 	@Override
-	public void collisionStart(Fixture myFixture, Fixture otherFixture, ICollidable otherCollidable) {
+	public void collisionStart(Fixture myFixture, Fixture otherFixture, Collidable otherCollidable) {
 		if (otherCollidable instanceof PlayerEntity){
 			markForDestruction();
 		}

@@ -5,11 +5,11 @@ import java.util.ArrayList;
 import java.util.Collections;
 
 import managers.PlayerManager;
+import ui.BaseDialog;
+import ui.Button;
+import ui.Label;
+import ui.SpriteComponent;
 import utils.Vector2;
-import dialogs.BaseDialog;
-import dialogs.Button;
-import dialogs.Label;
-import dialogs.SpriteComponent;
 import engine.BaseGame;
 import game.OverloadGame;
 import graphics.Color;

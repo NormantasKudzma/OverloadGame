@@ -7,11 +7,11 @@ import managers.PlayerManager;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
+import ui.Component;
+import ui.Label;
+import ui.SpriteComponent;
 import utils.ConfigManager;
 import utils.Vector2;
-import dialogs.Component;
-import dialogs.Label;
-import dialogs.SpriteComponent;
 import engine.BaseGame;
 import engine.OverloadEngine;
 import game.OverloadGame;

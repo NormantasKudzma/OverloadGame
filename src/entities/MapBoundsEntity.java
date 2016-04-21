@@ -2,7 +2,7 @@ package entities;
 
 import org.jbox2d.dynamics.Fixture;
 
-import physics.ICollidable;
+import physics.Collidable;
 import physics.PhysicsBody.EBodyType;
 import physics.PhysicsBody.EMaskType;
 import utils.Vector2;
@@ -26,7 +26,7 @@ public class MapBoundsEntity extends WallEntity{
 	}
 	
 	@Override
-	public void collisionStart(Fixture myFixture, Fixture otherFixture, ICollidable otherCollidable) {
+	public void collisionStart(Fixture myFixture, Fixture otherFixture, Collidable otherCollidable) {
 		if (otherFixture.m_userData instanceof PlayerEntity){
 			((PlayerEntity)otherFixture.m_userData).setDead(true);
 		}

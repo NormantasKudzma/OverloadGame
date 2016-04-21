@@ -7,7 +7,7 @@ import java.util.HashMap;
 
 import org.jbox2d.dynamics.Fixture;
 
-import physics.ICollidable;
+import physics.Collidable;
 import physics.PhysicsBody;
 import ui.Overlay;
 import utils.Vector2;
@@ -118,7 +118,7 @@ public class PlayerEntity extends Entity<SpriteAnimation> {
 	}
 	
 	@Override
-	public void collisionEnd(Fixture myFixture, Fixture otherFixture, ICollidable otherCollidable) {
+	public void collisionEnd(Fixture myFixture, Fixture otherFixture, Collidable otherCollidable) {
 		if (myFixture == sensors.get(SensorType.FOOT)){
 			canJump = false;
 		}
@@ -133,7 +133,7 @@ public class PlayerEntity extends Entity<SpriteAnimation> {
 	}
 	
 	@Override
-	public void collisionStart(Fixture myFixture, Fixture otherFixture, ICollidable otherCollidable) {
+	public void collisionStart(Fixture myFixture, Fixture otherFixture, Collidable otherCollidable) {
 		if (!otherFixture.isSensor()){
 			if (myFixture == sensors.get(SensorType.FOOT)){
 				canJump = true;

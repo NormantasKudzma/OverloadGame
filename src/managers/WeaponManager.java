@@ -181,41 +181,19 @@ public class WeaponManager extends EntityManager {
 	public void scaleWeapons(Vector2 scale){
 		for (WeaponEntity w : weaponMap.values()){
 			w.setScale(w.getScale().mul(scale));
-			
-			Body b = w.getPhysicsBody().getBody();
-			resizeColliders(b, scale);
+			w.getPhysicsBody().resizeColliders(scale);
 			
 			AmmoEntity ammo = w.getAmmo();
 			if (ammo != null){
 				ammo.setScale(ammo.getScale().mul(scale));
-				resizeColliders(ammo.getPhysicsBody().getBody(), scale);
+				ammo.getPhysicsBody().resizeColliders(scale);
 			}
 			
 			BulletEntity bullet = w.getBullet();
 			if (bullet != null){
 				bullet.setScale(bullet.getScale().mul(scale));
-				resizeColliders(bullet.getPhysicsBody().getBody(), scale);
+				bullet.getPhysicsBody().resizeColliders(scale);
 			}
-		}
-	}
-	
-	private void resizeColliders(Body b, Vector2 scale){
-		Fixture f = b.m_fixtureList;
-		while (f != null){
-			Shape s = f.getShape();
-			if (s instanceof PolygonShape){
-				PolygonShape poly = (PolygonShape)s;
-				for (int j = 0; j < poly.m_count; ++j){
-					Vec2 vert = poly.m_vertices[j];
-					poly.m_vertices[j].set(vert.x * scale.x, vert.y * scale.y);
-				}
-			}
-			if (s instanceof CircleShape){
-				CircleShape circ = (CircleShape)s;
-				circ.m_radius *= scale.x;
-			}
-			
-			f = f.m_next;
 		}
 	}
 }

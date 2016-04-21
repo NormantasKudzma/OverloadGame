@@ -2,7 +2,7 @@ package entities.bullets;
 
 import org.jbox2d.dynamics.Fixture;
 
-import physics.ICollidable;
+import physics.Collidable;
 import physics.PhysicsBody;
 import utils.Vector2;
 import engine.BaseGame;
@@ -22,7 +22,7 @@ public class BulletEntity extends Entity<Sprite2D>{
 	}
 	
 	@Override
-	public void collisionStart(Fixture myFixture, Fixture otherFixture, ICollidable otherCollidable) {		
+	public void collisionStart(Fixture myFixture, Fixture otherFixture, Collidable otherCollidable) {		
 		if (otherFixture.isSensor()){
 			return;
 		}

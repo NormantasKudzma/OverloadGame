@@ -20,7 +20,7 @@ import entities.PlayerEntity;
 import entities.WallEntity;
 import game.OverloadGame;
 import game.Paths;
-import graphics.IRenderable;
+import graphics.Renderable;
 import graphics.Layer;
 import graphics.Sprite2D;
 
@@ -40,7 +40,7 @@ public class MapManager extends EntityManager{
 
 	public void cleanUpLayers(){
 		if (playerScale != null){
-			Vector2 invScale = new Vector2(1.0f, 1.0f).div(playerScale);
+			Vector2 invScale = Vector2.invert(playerScale);
 			PlayerManager playerManager = ((OverloadGame)game).getPlayerManager();
 			playerManager.scalePlayers(invScale);
 			((OverloadGame)game).getWeaponManager().scaleWeapons(invScale);
