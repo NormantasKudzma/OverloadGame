@@ -1,10 +1,5 @@
 package managers;
 
-import org.jbox2d.collision.shapes.CircleShape;
-import org.jbox2d.collision.shapes.PolygonShape;
-import org.jbox2d.collision.shapes.Shape;
-import org.jbox2d.common.Vec2;
-import org.jbox2d.dynamics.Body;
 import org.jbox2d.dynamics.Fixture;
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -205,5 +200,7 @@ public class PlayerManager extends EntityManager{
 	
 	public void setPlayerEnabled(int index, boolean enabled){
 		playerEnabled[index] = enabled;
+		playerEntities[index].setVisible(enabled);
+		playerEntities[index].getPhysicsBody().getBody().setActive(false);
 	}
 }

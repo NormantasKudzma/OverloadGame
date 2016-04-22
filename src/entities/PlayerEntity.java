@@ -264,11 +264,8 @@ public class PlayerEntity extends Entity<SpriteAnimation> {
 			currentWeapon = null;
 		}
 		
-		canJump = true;
-		canMove = true;
-		tryShoot = false;
-		jumpStarted = false;
-		movementDirection = 0.0f;
+		setHorizontalVelocity(0.0f);
+		setVerticalVelocity(0.0f);
 	}
 	
 	public void setCategory(int category){

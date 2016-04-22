@@ -24,6 +24,28 @@
 			"positionOffset":[4, 16],
 			"muzzleOffset":[62, 0],
 			"type":"entities.weapons.ShotgunEntity"
+		},
+		{
+			"name":"scimitar",
+			"animations":[
+				[{"x":0, "y":80, "w":64, "h":64}],
+				[{"x":0, "y":80, "w":64, "h":64}]
+			],
+			"scale":0.8,
+			"collider":[-22, -28, 22, 28],
+			"positionOffset":[33, 8],
+			"type":"entities.weapons.ScimitarEntity"
+		},
+		{
+			"name":"grenade",
+			"animations":[
+				[{"x":96, "y":0, "w":32, "h":48}]
+			],
+			"scale":0,85,
+			"collider":[-16, -20, 16, 20],
+			"positionOffset":[29, -3],
+			"muzzleOffset":[48, -3],
+			"type":"entities.weapons.GrenadeEntity"
 		}
 	],
 	"bullets":[
