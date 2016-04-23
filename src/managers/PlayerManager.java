@@ -18,7 +18,7 @@ import entities.PlayerEntity;
 import entities.PlayerEntity.SensorType;
 import game.OverloadGame;
 import game.Paths;
-import graphics.Sprite2D;
+import graphics.Sprite;
 import graphics.SpriteAnimation;
 
 public class PlayerManager extends EntityManager{
@@ -34,6 +34,12 @@ public class PlayerManager extends EntityManager{
 		super(game);
 	}
 	
+	public void destroy(){
+		for (int i = 0; i < playerEntities.length; ++i){
+			playerEntities[i].destroy();
+		}
+	}
+	
 	public PlayerEntity getPlayer(int index){
 		if (index < 0 || index >= playerEntities.length){
 			return null;
@@ -47,7 +53,7 @@ public class PlayerManager extends EntityManager{
 	
 	public void loadPlayers(){
 		JSONObject playerFileJson = ConfigManager.loadConfigAsJson(Paths.PLAYERS + "Players.json");
-		Sprite2D spriteSheet = new Sprite2D(Paths.SPRITESHEETS + playerFileJson.getString("spritesheet"));
+		Sprite spriteSheet = new Sprite(Paths.SPRITESHEETS + playerFileJson.getString("spritesheet"));
 		JSONArray playerArrayJson = playerFileJson.getJSONArray("players");
 		Vector2 playerScale = new Vector2((float)playerFileJson.getDouble("scale"), (float)playerFileJson.getDouble("scale"));
 		
@@ -137,12 +143,12 @@ public class PlayerManager extends EntityManager{
 		return collVerts;
 	}
 
-	private void loadAnimations(JSONObject playerJson, PlayerEntity player, Sprite2D spritesheet) {
+	private void loadAnimations(JSONObject playerJson, PlayerEntity player, Sprite spritesheet) {
 		JSONArray animationsJson = playerJson.getJSONArray("animations");
-		Sprite2D[][] spriteAnimations = new Sprite2D[animationsJson.length()][];
+		Sprite[][] spriteAnimations = new Sprite[animationsJson.length()][];
 		for (int j = 0; j < animationsJson.length(); ++j){
 			JSONArray animation = animationsJson.getJSONArray(j);
-			Sprite2D[] sprites = new Sprite2D[animation.length()];
+			Sprite[] sprites = new Sprite[animation.length()];
 			for (int k = 0; k < animation.length(); k++){
 				JSONObject frameJson = animation.getJSONObject(k);
 				
@@ -150,7 +156,7 @@ public class PlayerManager extends EntityManager{
 				int y = frameJson.getInt("y");
 				int w = frameJson.getInt("w");
 				int h = frameJson.getInt("h");				
-				sprites[k] = Sprite2D.getSpriteFromSheet(x, y, w, h, spritesheet);
+				sprites[k] = Sprite.getSpriteFromSheet(x, y, w, h, spritesheet);
 			}
 			spriteAnimations[j] = sprites;
 		}
@@ -180,6 +186,9 @@ public class PlayerManager extends EntityManager{
 		if (numAlive == 1 && aliveIndex != -1){
 			overlay.gameEnding();
 			overlay.addPoint(aliveIndex);
+		}
+		else if (numAlive <= 0 && !overlay.isUIBlurred()){
+			overlay.gameEnding();
 		}
 	}
 

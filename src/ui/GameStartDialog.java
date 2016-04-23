@@ -15,7 +15,7 @@ import game.OverloadMain;
 import game.Paths;
 import graphics.Color;
 import graphics.SimpleFont;
-import graphics.Sprite2D;
+import graphics.Sprite;
 
 public class GameStartDialog extends BaseDialog{
 	private CheckBox readyBox[];
@@ -26,6 +26,7 @@ public class GameStartDialog extends BaseDialog{
 
 	@Override
 	protected void initialize() {
+		System.out.println("Current avail memory " + Runtime.getRuntime().freeMemory() / 1000000 + "m");
 		super.initialize();
 		
 		AnimatedLabel title = new AnimatedLabel(OverloadMain.GAME){
@@ -99,7 +100,7 @@ public class GameStartDialog extends BaseDialog{
 			addChild(icon);
 			
 			SpriteComponent controls = new SpriteComponent(game);
-			controls.setSprite(new Sprite2D(Paths.UI + "player" + (i + 1) + "_controls.png"));
+			controls.setSprite(new Sprite(Paths.UI + "player" + (i + 1) + "_controls.png"));
 			controls.setPosition(center.copy().add(0.1f, 0.1f));
 			controls.setScale(0.4f, 0.4f);
 			addChild(controls);

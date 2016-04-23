@@ -1,5 +1,5 @@
 {
 	"maps":[
-		Map_02.json,
+		"Map_01.json", "Map_02.json",
 	]
 }

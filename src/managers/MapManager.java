@@ -22,7 +22,7 @@ import game.OverloadGame;
 import game.Paths;
 import graphics.Renderable;
 import graphics.Layer;
-import graphics.Sprite2D;
+import graphics.Sprite;
 
 public class MapManager extends EntityManager{
 	private String backgroundLayer = null;
@@ -66,6 +66,10 @@ public class MapManager extends EntityManager{
 		weaponsLayer = null;
 	}
 	
+	public void destroy(){
+		cleanUpLayers();
+	}
+	
 	public String getPlayersLayer(){
 		return playersLayer;
 	}
@@ -97,7 +101,7 @@ public class MapManager extends EntityManager{
 		game.addEntity(colliderEntity, backgroundLayer);
 	}
 
-	private void loadEntities(JSONObject json, HashMap<String, Sprite2D> spriteSheets, HashMap<String, Entity> entities, Vector2 mapSize) {
+	private void loadEntities(JSONObject json, HashMap<String, Sprite> spriteSheets, HashMap<String, Entity> entities, Vector2 mapSize) {
 		JSONArray entityArrayJson = json.getJSONArray("entities");
 		float gridSize = OverloadEngine.frameWidth / mapSize.x;
 		
@@ -108,12 +112,12 @@ public class MapManager extends EntityManager{
 				if (obj instanceof Entity){
 					Entity e = (Entity) obj;
 					e.initEntity(PhysicsBody.EBodyType.NON_INTERACTIVE);
-					Sprite2D sheet = spriteSheets.get(entityJson.get("sheet"));
+					Sprite sheet = spriteSheets.get(entityJson.get("sheet"));
 					int x = entityJson.getInt("x");
 					int y = entityJson.getInt("y");
 					int w = entityJson.getInt("w");
 					int h = entityJson.getInt("h");
-					e.setSprite(Sprite2D.getSpriteFromSheet(x, y, w, h, sheet));
+					e.setSprite(Sprite.getSpriteFromSheet(x, y, w, h, sheet));
 					e.setScale(e.getScale().mul((float)entityJson.getDouble("scale")).mul(gridSize / (float)w));
 					entities.put(entityJson.getString("name"), e);
 				}
@@ -169,7 +173,7 @@ public class MapManager extends EntityManager{
 		
 		JSONObject json = ConfigManager.loadConfigAsJson(path);
 		
-		HashMap<String, Sprite2D> spriteSheets = new HashMap<String, Sprite2D>();
+		HashMap<String, Sprite> spriteSheets = new HashMap<String, Sprite>();
 		HashMap<String, Entity> entities = new HashMap<String, Entity>();		
 
 		Vector2 mapSize = Vector2.fromJsonArray(json.getJSONArray("mapsize")).div(2.0f);
@@ -237,12 +241,12 @@ public class MapManager extends EntityManager{
 		}
 	}
 	
-	private void loadSpriteSheets(JSONObject json, HashMap<String, Sprite2D> spriteSheets) {
+	private void loadSpriteSheets(JSONObject json, HashMap<String, Sprite> spriteSheets) {
 		JSONArray spriteSheetJson = json.getJSONArray("spritesheets");
 		
 		for (int i = 0; i < spriteSheetJson.length(); ++i){
 			JSONObject sheet = spriteSheetJson.getJSONObject(i);
-			spriteSheets.put(sheet.getString("name"), new Sprite2D(Paths.SPRITESHEETS + sheet.getString("path")));
+			spriteSheets.put(sheet.getString("name"), new Sprite(Paths.SPRITESHEETS + sheet.getString("path")));
 		}
 	}
 }

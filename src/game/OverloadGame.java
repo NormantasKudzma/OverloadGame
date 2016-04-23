@@ -23,6 +23,14 @@ public class OverloadGame extends BaseGame {
 		super();
 	}
 	
+	@Override
+	public void destroy() {
+		mapManager.destroy();
+		playerManager.destroy();
+		weaponManager.destroy();
+		super.destroy();
+	}
+	
 	public MapManager getMapManager(){
 		return mapManager;
 	}

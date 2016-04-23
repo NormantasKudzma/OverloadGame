@@ -60,7 +60,7 @@ public class PlayerEntity extends Entity<SpriteAnimation> {
 	private boolean rightSensorTouching = false;
 	private boolean tryShoot = false;
 	private Vector2 movementVector = new Vector2();
-	private Vector2 scale = null;
+	private Vector2 scale = null;					// Separate scale, so sprite can be easily flipped
 	private WeaponEntity currentWeapon = null;
 	private HashMap<SensorType, Fixture> sensors = new HashMap<SensorType, Fixture>();
 	private AbstractController controller = null;
@@ -266,6 +266,7 @@ public class PlayerEntity extends Entity<SpriteAnimation> {
 		
 		setHorizontalVelocity(0.0f);
 		setVerticalVelocity(0.0f);
+		moveRight();
 	}
 	
 	public void setCategory(int category){
@@ -285,6 +286,9 @@ public class PlayerEntity extends Entity<SpriteAnimation> {
 	public void setScale(Vector2 scale) {
 		super.setScale(scale);
 		this.scale = scale.copy();
+		if (scale.x < 0){
+			scale.x = -scale.x;
+		}
 	}
 	
 	public final void shoot(){

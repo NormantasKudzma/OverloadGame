@@ -2,6 +2,7 @@ package entities.weapons;
 
 import managers.EntityManager;
 import physics.PhysicsBody;
+import physics.PhysicsBody.EBodyType;
 import utils.FastMath;
 import utils.Vector2;
 import engine.BaseGame;
@@ -9,8 +10,8 @@ import engine.Entity;
 import entities.PlayerEntity;
 import entities.bullets.AmmoEntity;
 import entities.bullets.BulletEntity;
+import entities.effects.EffectEntity;
 import game.OverloadGame;
-import graphics.Sprite2D;
 import graphics.SpriteAnimation;
 
 public abstract class WeaponEntity extends Entity<SpriteAnimation>{
@@ -42,6 +43,7 @@ public abstract class WeaponEntity extends Entity<SpriteAnimation>{
 	
 	protected AmmoEntity ammo = null;
 	protected BulletEntity bullet = null;
+	protected EffectEntity effect = null;
 	protected PlayerEntity player = null;
 	
 	public WeaponEntity(BaseGame game){
@@ -50,23 +52,18 @@ public abstract class WeaponEntity extends Entity<SpriteAnimation>{
 	
 	public void addChild(Entity e){
 		if (e instanceof AmmoEntity){
-			addAmmoEntity((AmmoEntity)e);
+			ammo = (AmmoEntity)e;
 		}
 		else if (e instanceof BulletEntity){
-			addBulletEntity((BulletEntity)e);
+			bullet = (BulletEntity)e;
 		}
-	}
-	
-	public void addAmmoEntity(AmmoEntity e){
-		ammo = e;
-	}
-	
-	public void addBulletEntity(BulletEntity e){
-		bullet = e;
+		else if (e instanceof EffectEntity){
+			effect = (EffectEntity)e;
+		}
 	}
 	
 	public boolean attachToPlayer(PlayerEntity e){
-		if (detachFromPlayer || isLifetimeFinite){
+		if (detachFromPlayer || isLifetimeFinite || isAttached){
 			return false;
 		}
 		
@@ -87,10 +84,51 @@ public abstract class WeaponEntity extends Entity<SpriteAnimation>{
 		we.shootCooldown = shootCooldown;
 		we.positionOffset = positionOffset;
 		we.muzzleOffset = muzzleOffset;
-		we.ammo = ammo;
-		we.bullet = bullet;
-		we.body.getBody().setActive(true);
+		
+		if (ammo != null){
+			we.ammo = (AmmoEntity)ammo.clone();
+		}
+		
+		if (bullet != null){
+			we.bullet = (BulletEntity)bullet.clone();
+		}
+		
+		if (effect != null){
+			we.effect = (EffectEntity)effect.clone();
+		}
+		
+		if (we.body.getType() == EBodyType.INTERACTIVE){
+			we.body.getBody().setActive(true);
+		}
 		return we;
+	}
+	
+	@Override
+	public void destroy() {
+		super.destroy();
+		
+		if (ammo != null){
+			ammo.destroy();
+			ammo = null;
+		}
+		
+		if (bullet != null){
+			bullet.destroy();
+			bullet = null;
+		}
+		
+		if (effect != null){
+			effect.destroy();
+			effect = null;
+		}
+		
+		if (player != null){
+			player.weaponDetached();
+			player = null;
+		}
+
+		positionOffset = null;
+		muzzleOffset = null;
 	}
 	
 	public void detachFromPlayer(){		
@@ -125,6 +163,10 @@ public abstract class WeaponEntity extends Entity<SpriteAnimation>{
 		return ammo;
 	}
 	
+	public EffectEntity getEffect(){
+		return effect;
+	}
+	
 	public BulletEntity getBullet(){
 		return bullet;
 	}
@@ -147,6 +189,14 @@ public abstract class WeaponEntity extends Entity<SpriteAnimation>{
 		body.getBody().setGravityScale(0.0f);
 	}
 	
+	protected boolean isSpawnFree(Vector2 position){
+		return true;
+	}
+	
+	protected void onDestroyFixtures(){
+		body.setCollisionFlags(EntityManager.NO_COLLISIONS, PhysicsBody.EMaskType.SET);
+	}
+	
 	protected void onShotReady(){
 		sprite.setState(WeaponAnimation.IDLE.getIndex());
 	}
@@ -161,19 +211,21 @@ public abstract class WeaponEntity extends Entity<SpriteAnimation>{
 	
 	public int tryShoot(){
 		if (shootTimer <= 0.0f && numBullets > 0){
-			--numBullets;
-			shootTimer = shootCooldown;
-			
 			Vector2 weaponDirection = getScale().x > 0 ? Vector2.right : Vector2.left;
 			Vector2 spawnPos = getPosition().copy().add(muzzleOffset.x * weaponDirection.x, muzzleOffset.y);
-			shoot(spawnPos, weaponDirection);
-			sprite.setState(WeaponAnimation.ON_COOLDOWN.getIndex());
-			if (numBullets <= 0){
-				if (player != null){
-					player.weaponDetached();
-					player = null;
+			if (isSpawnFree(spawnPos)){			
+				--numBullets;
+				shootTimer = shootCooldown;
+				
+				shoot(spawnPos, weaponDirection);
+				sprite.setState(WeaponAnimation.ON_COOLDOWN.getIndex());
+				if (numBullets <= 0){
+					if (player != null){
+						player.weaponDetached();
+						player = null;
+					}
+					detachFromPlayer();
 				}
-				detachFromPlayer();
 			}
 		}
 		return getNumBullets();
@@ -184,7 +236,7 @@ public abstract class WeaponEntity extends Entity<SpriteAnimation>{
 	// weaponDir - normalized weapon direction (left/right)
 	public abstract void shoot(Vector2 spawnPos, Vector2 weaponDir);
 	
-	protected AmmoEntity spawnAmmo(Vector2 pos){
+	public AmmoEntity spawnAmmo(Vector2 pos){
 		if (ammo != null){
 			AmmoEntity e = (AmmoEntity)ammo.clone();
 			e.setPosition(pos);
@@ -194,14 +246,14 @@ public abstract class WeaponEntity extends Entity<SpriteAnimation>{
 		return null;
 	}
 	
-	protected BulletEntity spawnBullet(Vector2 pos, Vector2 dir){
+	public BulletEntity spawnBullet(Vector2 pos, Vector2 dir){
 		if (bullet != null){
 			return spawnBullet(pos, dir, bullet.getSpeed());
 		}
 		return null;
 	}
 	
-	protected BulletEntity spawnBullet(Vector2 pos, Vector2 dir, float speed){
+	public BulletEntity spawnBullet(Vector2 pos, Vector2 dir, float speed){
 		if (bullet != null){
 			BulletEntity e = (BulletEntity)bullet.clone();
 			e.setDirection(dir);
@@ -216,13 +268,24 @@ public abstract class WeaponEntity extends Entity<SpriteAnimation>{
 		return null;
 	}
 	
+	public EffectEntity spawnEffect(Vector2 pos){
+		if (effect != null){
+			EffectEntity e = (EffectEntity)effect.clone();
+			e.setPosition(pos);
+			e.setVisible(false);
+			game.addEntity(e, ((OverloadGame)game).getMapManager().getWeaponsLayer());
+			return e;
+		}
+		return null;
+	}
+	
 	@Override
 	public void update(float deltaTime) {
 		super.update(deltaTime);
 		
 		if (destroyWeaponFixtures){
 			destroyWeaponFixtures = false;
-			body.setCollisionFlags(EntityManager.NO_COLLISIONS, PhysicsBody.EMaskType.SET);
+			onDestroyFixtures();
 		}
 		
 		if (detachFromPlayer){

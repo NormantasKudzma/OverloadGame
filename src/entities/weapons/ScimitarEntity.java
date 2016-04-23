@@ -1,7 +1,12 @@
 package entities.weapons;
 
+import org.jbox2d.dynamics.Fixture;
+
+import physics.Collidable;
+import physics.PhysicsBody.EMaskType;
 import utils.Vector2;
 import engine.BaseGame;
+import entities.PlayerEntity;
 
 public class ScimitarEntity extends MeleeWeapon {
 	private Vector2 impulseStrength = new Vector2(90.0f, 45.0f);
@@ -11,13 +16,30 @@ public class ScimitarEntity extends MeleeWeapon {
 		super(game);
 		shootCooldown = 0.7f;
 	}
-
+	
+	@Override
+	public void collisionStart(Fixture myFixture, Fixture otherFixture, Collidable otherCollidable) {
+		if (otherCollidable instanceof PlayerEntity && isAttached){
+			PlayerEntity target = (PlayerEntity)otherCollidable;
+			// Check reference equality!
+			if (target != player){
+				target.setDead(true);
+			}
+		}
+	}
+	
 	@Override
 	public void detachFromPlayer() {
 		if (player != null){
 			player.canMove(true);
 		}
+		super.onDestroyFixtures();
 		super.detachFromPlayer();
+	}
+	
+	@Override
+	protected void onDestroyFixtures() {
+		body.setCollisionFlags(player.getCategory(), EMaskType.EXCLUDE);
 	}
 	
 	@Override

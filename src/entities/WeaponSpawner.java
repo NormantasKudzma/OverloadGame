@@ -17,9 +17,9 @@ import engine.BaseGame;
 import engine.Entity;
 import entities.weapons.WeaponEntity;
 import game.OverloadGame;
-import graphics.Sprite2D;
+import graphics.Sprite;
 
-public class WeaponSpawner extends Entity<Sprite2D> implements QueryCallback{	
+public class WeaponSpawner extends Entity<Sprite> implements QueryCallback{	
 	protected boolean isSpawnFull = false;
 	protected float cooldown = 10.0f;
 	protected float cooldownTimer = 5.1f;

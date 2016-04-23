@@ -9,9 +9,9 @@ import engine.BaseGame;
 import engine.Entity;
 import entities.PlayerEntity;
 import entities.weapons.WeaponEntity;
-import graphics.Sprite2D;
+import graphics.Sprite;
 
-public class BulletEntity extends Entity<Sprite2D>{
+public class BulletEntity extends Entity<Sprite>{
 	protected float movementSpeed = 1.25f;
 	protected float totalLifetime = 1.0f;
 	protected Vector2 direction = new Vector2();

@@ -12,6 +12,7 @@ import org.json.JSONArray;
 import org.json.JSONObject;
 
 import physics.PhysicsBody;
+import physics.PhysicsBody.EBodyType;
 import utils.ConfigManager;
 import utils.Vector2;
 import engine.BaseGame;
@@ -20,7 +21,7 @@ import entities.bullets.AmmoEntity;
 import entities.bullets.BulletEntity;
 import entities.weapons.WeaponEntity;
 import game.Paths;
-import graphics.Sprite2D;
+import graphics.Sprite;
 import graphics.SpriteAnimation;
 
 public class WeaponManager extends EntityManager {
@@ -57,13 +58,11 @@ public class WeaponManager extends EntityManager {
 		}
 	}
 	
-	private void checkAdditional(JSONObject json, Entity e){
-		if (json.has("parent")){
-			WeaponEntity parent = weaponMap.get(json.getString("parent"));
-			if (parent != null){
-				parent.addChild(e);
-			}
+	public void destroy(){
+		for (WeaponEntity i : weaponMap.values()){
+			i.destroy();
 		}
+		weaponMap.clear();
 	}
 	
 	public WeaponEntity getWeapon(String name){
@@ -81,36 +80,55 @@ public class WeaponManager extends EntityManager {
 	
 	public void loadWeapons(){
 		JSONObject weaponFileJson = ConfigManager.loadConfigAsJson(Paths.WEAPONS + "Weapons.json");
-		Sprite2D sheet = new Sprite2D(Paths.SPRITESHEETS + weaponFileJson.getString("spritesheet"));
+		Sprite sheet = new Sprite(Paths.SPRITESHEETS + weaponFileJson.getString("spritesheet"));
 		
 		loadWeapons(weaponFileJson, sheet);
-		loadChildren(weaponFileJson, "bullets", sheet, BULLET_CATEGORY, BULLET_COLLIDER);
-		loadChildren(weaponFileJson, "ammo", sheet, AMMO_CATEGORY, AMMO_COLLIDER);	
+		loadChildren(weaponFileJson, "bullets", sheet, EBodyType.INTERACTIVE, BULLET_CATEGORY, BULLET_COLLIDER);
+		loadChildren(weaponFileJson, "ammo", sheet, EBodyType.INTERACTIVE, AMMO_CATEGORY, AMMO_COLLIDER);
+		loadChildren(weaponFileJson, "effects", sheet, EBodyType.NON_INTERACTIVE, NO_COLLISIONS, NO_COLLISIONS);	
 	}
 
-	private void loadChildren(JSONObject weaponFileJson, String arrayName, Sprite2D sheet, int category, int mask) {
+	private void loadChildren(JSONObject weaponFileJson, String arrayName, Sprite sheet, EBodyType type, int category, int mask) {
 		JSONArray childrenArrayJson = weaponFileJson.getJSONArray(arrayName);
 		JSONObject childJson = null;
 		for (int i = 0; i < childrenArrayJson.length(); ++i){
 			try {
 				childJson = childrenArrayJson.getJSONObject(i);
 				
-				int x = childJson.getInt("x");
-				int y = childJson.getInt("y");
-				int w = childJson.getInt("w");
-				int h = childJson.getInt("h");
-				Sprite2D sprite = Sprite2D.getSpriteFromSheet(x, y, w, h, sheet);
-				
 				Object obj = Class.forName(childJson.getString("type")).getDeclaredConstructor(BaseGame.class).newInstance(game);
 				Entity e = (Entity)obj;
-				e.initEntity(PhysicsBody.EBodyType.INTERACTIVE);
-				e.setSprite(sprite);
-				e.setScale(e.getScale().mul((float)childJson.getDouble("scale")));
-				e.getPhysicsBody().getBody().setActive(false);
-				attachCollider(childJson, e);
-				e.setCollisionFlags(category, mask);
+				e.initEntity(type);
+				if (type == EBodyType.INTERACTIVE){
+					e.getPhysicsBody().getBody().setActive(false);
+				}
 				
-				checkAdditional(childJson, e);
+				e.setScale(e.getScale().mul((float)childJson.getDouble("scale")));
+				
+				if (childJson.has("animations")){
+					JSONArray animArrayJson = childJson.getJSONArray("animations");
+					SpriteAnimation spriteAnim = spriteAnimationFromJson(animArrayJson, sheet);
+					e.setSprite(spriteAnim);
+				}
+				else {
+					int x = childJson.getInt("x");
+					int y = childJson.getInt("y");
+					int w = childJson.getInt("w");
+					int h = childJson.getInt("h");
+					Sprite sprite = Sprite.getSpriteFromSheet(x, y, w, h, sheet);
+					e.setSprite(sprite);
+				}
+
+				if (childJson.has("collider")){
+					attachCollider(childJson, e);
+					e.setCollisionFlags(category, mask);
+				}
+				
+				if (childJson.has("parent")){
+					WeaponEntity parent = weaponMap.get(childJson.getString("parent"));
+					if (parent != null){
+						parent.addChild(e);
+					}
+				}
 			}
 			catch (Exception e){
 				e.printStackTrace();
@@ -118,7 +136,7 @@ public class WeaponManager extends EntityManager {
 		}
 	}
 
-	private void loadWeapons(JSONObject weaponFileJson, Sprite2D sheet){
+	private void loadWeapons(JSONObject weaponFileJson, Sprite sheet){
 		JSONArray weaponArrayJson = weaponFileJson.getJSONArray("weapons");
 		JSONObject weaponJson = null;
 		for (int i = 0; i < weaponArrayJson.length(); ++i){
@@ -127,21 +145,7 @@ public class WeaponManager extends EntityManager {
 				
 				// Load weapon sprite animations (with all states)
 				JSONArray allAnimArrayJson = weaponJson.getJSONArray("animations");
-				SpriteAnimation spriteAnim = new SpriteAnimation();
-				Sprite2D animations[][] = new Sprite2D[allAnimArrayJson.length()][];
-				for (int j = 0; j < allAnimArrayJson.length(); ++j){
-					JSONArray animationArrayJson = allAnimArrayJson.getJSONArray(j);
-					animations[j] = new Sprite2D[animationArrayJson.length()];
-					for (int k = 0; k < animationArrayJson.length(); ++k){
-						JSONObject animationJson = animationArrayJson.getJSONObject(k);
-						int x = animationJson.getInt("x");
-						int y = animationJson.getInt("y");
-						int w = animationJson.getInt("w");
-						int h = animationJson.getInt("h");
-						animations[j][k] = Sprite2D.getSpriteFromSheet(x, y, w, h, sheet);
-					}
-				}
-				spriteAnim.setSpriteArray(animations);
+				SpriteAnimation spriteAnim = spriteAnimationFromJson(allAnimArrayJson, sheet);
 				
 				Object obj = Class.forName(weaponJson.getString("type")).getDeclaredConstructor(BaseGame.class).newInstance(game);
 				WeaponEntity e = (WeaponEntity)obj;
@@ -177,7 +181,7 @@ public class WeaponManager extends EntityManager {
 			}
 		}
 	}
-	
+
 	public void scaleWeapons(Vector2 scale){
 		for (WeaponEntity w : weaponMap.values()){
 			w.setScale(w.getScale().mul(scale));
@@ -195,5 +199,24 @@ public class WeaponManager extends EntityManager {
 				bullet.getPhysicsBody().resizeColliders(scale);
 			}
 		}
+	}
+	
+	private SpriteAnimation spriteAnimationFromJson(JSONArray animArrayJson, Sprite sheet) {
+		SpriteAnimation spriteAnim = new SpriteAnimation();
+		Sprite animations[][] = new Sprite[animArrayJson.length()][];
+		for (int j = 0; j < animArrayJson.length(); ++j){
+			JSONArray animationArrayJson = animArrayJson.getJSONArray(j);
+			animations[j] = new Sprite[animationArrayJson.length()];
+			for (int k = 0; k < animationArrayJson.length(); ++k){
+				JSONObject animationJson = animationArrayJson.getJSONObject(k);
+				int x = animationJson.getInt("x");
+				int y = animationJson.getInt("y");
+				int w = animationJson.getInt("w");
+				int h = animationJson.getInt("h");
+				animations[j][k] = Sprite.getSpriteFromSheet(x, y, w, h, sheet);
+			}
+		}
+		spriteAnim.setSpriteArray(animations);
+		return spriteAnim;
 	}
 }

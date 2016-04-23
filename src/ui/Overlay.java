@@ -18,7 +18,7 @@ import game.OverloadGame;
 import game.Paths;
 import graphics.Color;
 import graphics.SimpleFont;
-import graphics.Sprite2D;
+import graphics.Sprite;
 
 public class Overlay extends Component{
 	private Font overlayFont;
@@ -112,7 +112,7 @@ public class Overlay extends Component{
 		setPosition(new Vector2(0.0f, 1.92f));
 		
 		JSONObject overlayJson = ConfigManager.loadConfigAsJson(Paths.UI + "overlay.json");
-		Sprite2D sheet = new Sprite2D(Paths.SPRITESHEETS + overlayJson.getString("spritesheet"));
+		Sprite sheet = new Sprite(Paths.SPRITESHEETS + overlayJson.getString("spritesheet"));
 		
 		JSONArray blurJsonArray = overlayJson.getJSONArray("blur");
 		blurComponent = loadSpriteComponents(blurJsonArray, sheet)[0];
@@ -179,7 +179,7 @@ public class Overlay extends Component{
 		}
 	}
 	
-	private SpriteComponent[] loadSpriteComponents(JSONArray json, Sprite2D sheet){
+	private SpriteComponent[] loadSpriteComponents(JSONArray json, Sprite sheet){
 		SpriteComponent addedComponents[] = new SpriteComponent[json.length()];
 		for (int i = 0; i < json.length(); ++i){
 			JSONObject itemJson = json.getJSONObject(i);
@@ -189,7 +189,7 @@ public class Overlay extends Component{
 			int y = itemJson.getInt("y");
 			int w = itemJson.getInt("w");
 			int h = itemJson.getInt("h");
-			Sprite2D sprite = Sprite2D.getSpriteFromSheet(x, y, w, h, sheet);
+			Sprite sprite = Sprite.getSpriteFromSheet(x, y, w, h, sheet);
 			
 			SpriteComponent spriteComponent = new SpriteComponent(game);
 			spriteComponent.setSprite(sprite);

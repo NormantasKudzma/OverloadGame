@@ -45,7 +45,8 @@ public class GrenadeEntity extends WeaponEntity{
 		body.setGravityScale(1.0f);
 		e.setCollisionFlags(EntityManager.ALL_COLLISIONS, EntityManager.ALL_COLLISIONS);
 		e.applyImpulse(throwDirection);
-		e.setLifetime(3.0f);
+		e.setLifetime(2.5f);
+		e.setParent(this);
 		
 		AmmoEntity ammo = spawnAmmo(spawnPos);
 		ammo.applyImpulse(new Vector2(0.0f, 1.0f));
