@@ -6,7 +6,7 @@ import physics.PhysicsBody.EBodyType;
 import utils.FastMath;
 import utils.Vector2;
 import engine.BaseGame;
-import engine.Entity;
+import engine.GameObject;
 import entities.PlayerEntity;
 import entities.bullets.AmmoEntity;
 import entities.bullets.BulletEntity;
@@ -14,7 +14,7 @@ import entities.effects.EffectEntity;
 import game.OverloadGame;
 import graphics.SpriteAnimation;
 
-public abstract class WeaponEntity extends Entity<SpriteAnimation>{
+public abstract class WeaponEntity extends GameObject<SpriteAnimation>{
 	enum WeaponAnimation {
 		IDLE(0),
 		ON_COOLDOWN(1);
@@ -50,7 +50,7 @@ public abstract class WeaponEntity extends Entity<SpriteAnimation>{
 		super(game);
 	}
 	
-	public void addChild(Entity e){
+	public void addChild(GameObject e){
 		if (e instanceof AmmoEntity){
 			ammo = (AmmoEntity)e;
 		}
@@ -78,7 +78,7 @@ public abstract class WeaponEntity extends Entity<SpriteAnimation>{
 	
 	@Override
 	public WeaponEntity clone() {
-		Entity<SpriteAnimation> e = super.clone();
+		GameObject<SpriteAnimation> e = super.clone();
 		WeaponEntity we = (WeaponEntity)e;
 		we.numBullets = numBullets;
 		we.shootCooldown = shootCooldown;

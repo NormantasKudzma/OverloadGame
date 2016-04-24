@@ -6,12 +6,12 @@ import physics.Collidable;
 import physics.PhysicsBody;
 import utils.Vector2;
 import engine.BaseGame;
-import engine.Entity;
+import engine.GameObject;
 import entities.PlayerEntity;
 import entities.weapons.WeaponEntity;
 import graphics.Sprite;
 
-public class BulletEntity extends Entity<Sprite>{
+public class BulletEntity extends GameObject<Sprite>{
 	protected float movementSpeed = 1.25f;
 	protected float totalLifetime = 1.0f;
 	protected Vector2 direction = new Vector2();

@@ -10,7 +10,7 @@ import physics.Collidable;
 import physics.PhysicsWorld;
 import utils.Vector2;
 import engine.BaseGame;
-import engine.Entity;
+import engine.GameObject;
 import entities.PlayerEntity;
 import entities.effects.EffectEntity;
 import entities.weapons.WeaponEntity;
@@ -27,13 +27,13 @@ public class GrenadeBullet extends BulletEntity {
 		}
 		
 		public float reportFixture(Fixture f, Vec2 p1, Vec2 p2, float fraction) {
-			if (f.m_userData instanceof Entity){
+			if (f.m_userData instanceof GameObject){
 				boolean isAlive = true;
 				if (f.m_userData instanceof PlayerEntity){
 					isAlive = !((PlayerEntity)f.m_userData).isDead();
 				}
 				
-				if (((Entity)f.m_userData).isVisible() && isAlive){
+				if (((GameObject)f.m_userData).isVisible() && isAlive){
 					closest = f;
 				}
 			}

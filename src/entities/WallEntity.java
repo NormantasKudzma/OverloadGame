@@ -5,10 +5,10 @@ import org.jbox2d.dynamics.BodyType;
 import physics.PhysicsBody;
 
 import engine.BaseGame;
-import engine.Entity;
+import engine.GameObject;
 
 
-public class WallEntity extends Entity{
+public class WallEntity extends GameObject{
 	public WallEntity(BaseGame game){
 		super(game);
 	}

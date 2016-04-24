@@ -21,7 +21,7 @@ public class ShotgunEntity extends WeaponEntity{
 		float speed = 0.0f;
 		Vector2 direction = null;
 		for (int i = 0; i < shellsPerShot; ++i){
-			angle = OverloadRandom.nextRandom((int)(2.0f * maxAngle)) - maxAngle;
+			angle = OverloadRandom.nextRandom((int)(2.0f * maxAngle)) - maxAngle + 10.0f;
 			direction = weaponDir.copy().rotate(angle);
 			
 			BulletEntity e = spawnBullet(spawnPos, direction);

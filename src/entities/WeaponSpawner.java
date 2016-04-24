@@ -14,12 +14,12 @@ import physics.PhysicsWorld;
 import utils.OverloadRandom;
 import utils.Vector2;
 import engine.BaseGame;
-import engine.Entity;
+import engine.GameObject;
 import entities.weapons.WeaponEntity;
 import game.OverloadGame;
 import graphics.Sprite;
 
-public class WeaponSpawner extends Entity<Sprite> implements QueryCallback{	
+public class WeaponSpawner extends GameObject<Sprite> implements QueryCallback{	
 	protected boolean isSpawnFull = false;
 	protected float cooldown = 10.0f;
 	protected float cooldownTimer = 5.1f;

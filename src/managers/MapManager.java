@@ -13,7 +13,7 @@ import utils.ConfigManager;
 import utils.ICloneable;
 import utils.Vector2;
 import engine.BaseGame;
-import engine.Entity;
+import engine.GameObject;
 import engine.OverloadEngine;
 import entities.MapBoundsEntity;
 import entities.PlayerEntity;
@@ -54,6 +54,7 @@ public class MapManager extends EntityManager{
 					l.destroy();
 				}
 				l.clear();
+				game.removeLayer(i);
 			}
 		}
 		lastMapLayers.clear();
@@ -101,7 +102,7 @@ public class MapManager extends EntityManager{
 		game.addEntity(colliderEntity, backgroundLayer);
 	}
 
-	private void loadEntities(JSONObject json, HashMap<String, Sprite> spriteSheets, HashMap<String, Entity> entities, Vector2 mapSize) {
+	private void loadEntities(JSONObject json, HashMap<String, Sprite> spriteSheets, HashMap<String, GameObject> entities, Vector2 mapSize) {
 		JSONArray entityArrayJson = json.getJSONArray("entities");
 		float gridSize = OverloadEngine.frameWidth / mapSize.x;
 		
@@ -109,8 +110,8 @@ public class MapManager extends EntityManager{
 			try {
 				JSONObject entityJson = entityArrayJson.getJSONObject(i);
 				Object obj = Class.forName(entityJson.getString("type")).getDeclaredConstructor(BaseGame.class).newInstance(game);
-				if (obj instanceof Entity){
-					Entity e = (Entity) obj;
+				if (obj instanceof GameObject){
+					GameObject e = (GameObject) obj;
 					e.initEntity(PhysicsBody.EBodyType.NON_INTERACTIVE);
 					Sprite sheet = spriteSheets.get(entityJson.get("sheet"));
 					int x = entityJson.getInt("x");
@@ -128,7 +129,7 @@ public class MapManager extends EntityManager{
 		}
 	}
 	
-	private void loadLayer(JSONObject json, BaseGame game, HashMap<String, Entity> mapEntities, Vector2 mapSize) {
+	private void loadLayer(JSONObject json, BaseGame game, HashMap<String, GameObject> mapEntities, Vector2 mapSize) {
 		String layerName = json.getString("name");
 		int index = json.getInt("index");
 		Layer layer = new Layer(layerName, index);
@@ -140,8 +141,8 @@ public class MapManager extends EntityManager{
 				JSONArray scaleJson = entityJson.getJSONArray("scale");
 				Vector2 tileScale = Vector2.fromJsonArray(scaleJson);
 				JSONArray positionJson = entityJson.getJSONArray("position");
-				Entity e = mapEntities.get(entityJson.getString("entity"));
-				Entity clone = (Entity)e.clone();
+				GameObject e = mapEntities.get(entityJson.getString("entity"));
+				GameObject clone = (GameObject)e.clone();
 				clone.setScale(e.getScale().copy().mul(tileScale));
 				clone.setPosition(Vector2.fromJsonArray(positionJson).div(mapSize));
 				layer.addEntity(clone);
@@ -174,7 +175,7 @@ public class MapManager extends EntityManager{
 		JSONObject json = ConfigManager.loadConfigAsJson(path);
 		
 		HashMap<String, Sprite> spriteSheets = new HashMap<String, Sprite>();
-		HashMap<String, Entity> entities = new HashMap<String, Entity>();		
+		HashMap<String, GameObject> entities = new HashMap<String, GameObject>();		
 
 		Vector2 mapSize = Vector2.fromJsonArray(json.getJSONArray("mapsize")).div(2.0f);
 		

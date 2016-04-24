@@ -14,13 +14,13 @@ import utils.Vector2;
 import controls.AbstractController;
 import controls.ControllerEventListener;
 import engine.BaseGame;
-import engine.Entity;
+import engine.GameObject;
 import entities.weapons.WeaponEntity;
 import game.OverloadGame;
 import game.OverloadMain;
 import graphics.SpriteAnimation;
 
-public class PlayerEntity extends Entity<SpriteAnimation> {
+public class PlayerEntity extends GameObject<SpriteAnimation> {
 	public enum SensorType {
 		FOOT,
 		LEFT,

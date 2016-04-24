@@ -16,7 +16,7 @@ import physics.PhysicsBody.EBodyType;
 import utils.ConfigManager;
 import utils.Vector2;
 import engine.BaseGame;
-import engine.Entity;
+import engine.GameObject;
 import entities.bullets.AmmoEntity;
 import entities.bullets.BulletEntity;
 import entities.weapons.WeaponEntity;
@@ -31,7 +31,7 @@ public class WeaponManager extends EntityManager {
 		super(game);
 	}
 
-	private void attachCollider(JSONObject childJson, Entity e) {
+	private void attachCollider(JSONObject childJson, GameObject e) {
 		if (childJson.has("collider")){
 			JSONArray collJson = childJson.getJSONArray("collider");
 			if (collJson.length() == 4){
@@ -96,7 +96,7 @@ public class WeaponManager extends EntityManager {
 				childJson = childrenArrayJson.getJSONObject(i);
 				
 				Object obj = Class.forName(childJson.getString("type")).getDeclaredConstructor(BaseGame.class).newInstance(game);
-				Entity e = (Entity)obj;
+				GameObject e = (GameObject)obj;
 				e.initEntity(type);
 				if (type == EBodyType.INTERACTIVE){
 					e.getPhysicsBody().getBody().setActive(false);

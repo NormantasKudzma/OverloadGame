@@ -14,7 +14,7 @@ public class GrenadeEntity extends WeaponEntity{
 	public GrenadeEntity(BaseGame game) {
 		super(game);
 		numBullets = 2;
-		shootCooldown = 1.5f;
+		shootCooldown = 1.2f;
 	}
 
 	@Override

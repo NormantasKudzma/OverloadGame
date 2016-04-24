@@ -1,10 +1,10 @@
 package entities.effects;
 
 import engine.BaseGame;
-import engine.Entity;
+import engine.GameObject;
 import graphics.SpriteAnimation;
 
-public class EffectEntity extends Entity<SpriteAnimation>{
+public class EffectEntity extends GameObject<SpriteAnimation>{
 	public float duration = 0.0f;
 	
 	public EffectEntity(BaseGame game) {
