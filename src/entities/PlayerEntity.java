@@ -119,16 +119,16 @@ public class PlayerEntity extends GameObject<SpriteAnimation> {
 	
 	@Override
 	public void collisionEnd(Fixture myFixture, Fixture otherFixture, Collidable otherCollidable) {
-		if (myFixture == sensors.get(SensorType.FOOT)){
-			canJump = false;
-		}
-		
-		if (myFixture == sensors.get(SensorType.LEFT)){
-			leftSensorTouching = false;
-		}
-		
-		if (myFixture == sensors.get(SensorType.RIGHT)){
-			rightSensorTouching = false;
+		if (otherCollidable instanceof GameObject && !otherFixture.isSensor()){
+			if (myFixture == sensors.get(SensorType.FOOT)){
+				canJump = false;
+			}
+			else if (myFixture == sensors.get(SensorType.LEFT)){
+				leftSensorTouching = false;
+			}
+			else if (myFixture == sensors.get(SensorType.RIGHT)){
+				rightSensorTouching = false;
+			}
 		}
 	}
 	
