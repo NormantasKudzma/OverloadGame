@@ -52,6 +52,7 @@ public class GameEndDialog extends BaseDialog{
 				public void clickFunction() {		
 					overload.loadMap();
 					GameEndDialog.this.setVisible(false);
+					game.removeDialog(GameEndDialog.this.name);
 				};
 			};
 			play.setScale(new Vector2(0.45f, 0.45f));
@@ -63,9 +64,12 @@ public class GameEndDialog extends BaseDialog{
 				public void clickFunction() {
 					overlay.reset();
 					
-					GameStartDialog startDialog = new GameStartDialog(game, "start");
-					startDialog.setVisible(true);
-					game.addDialog(startDialog);
+					GameStartDialog dialog = (GameStartDialog)game.getDialog("start");
+					if (dialog == null){
+						dialog = new GameStartDialog(game, "start");
+						game.addDialog(dialog);
+					}
+					dialog.setVisible(true);
 					
 					GameEndDialog.this.setVisible(false);
 					game.removeDialog(GameEndDialog.this.name);

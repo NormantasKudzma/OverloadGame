@@ -23,7 +23,7 @@
 				[{"x":0,"y":0,"w":128,"h":160}, {"x":128,"y":0,"w":128,"h":160}, {"x":256,"y":0,"w":128,"h":160}],
 				[{"x":384,"y":0,"w":128,"h":160}]
 			],
-			"controlmethod":"LWJGLKEYBOARDCONTROLLER",
+			"controlmethod":"KEYBOARD_CONTROLLER",
 			"controlindex":0,
 			"controls":[
 				{"keymask":30, "method":"moveLeft"},
@@ -38,7 +38,7 @@
 				[{"x":0,"y":160,"w":128,"h":160}, {"x":128,"y":160,"w":128,"h":160}, {"x":256,"y":160,"w":128,"h":160}],
 				[{"x":384,"y":160,"w":128,"h":160}]
 			],
-			"controlmethod":"LWJGLKEYBOARDCONTROLLER",
+			"controlmethod":"KEYBOARD_CONTROLLER",
 			"controlindex":0,
 			"controls":[
 				{"keymask":203, "method":"moveLeft"},
@@ -53,7 +53,7 @@
 				[{"x":0,"y":320,"w":128,"h":160}, {"x":128,"y":320,"w":128,"h":160}, {"x":256,"y":320,"w":128,"h":160}],
 				[{"x":384,"y":320,"w":128,"h":160}]
 			],
-			"controlmethod":"USBCONTROLLER",
+			"controlmethod":"USB_CONTROLLER",
 			"controlindex":1,
 			"controls":[
 				{"keymask":545460846592, "method":"moveLeft"},
@@ -68,7 +68,7 @@
 				[{"x":0,"y":480,"w":128,"h":160}, {"x":128,"y":480,"w":128,"h":160}, {"x":256,"y":480,"w":128,"h":160}],
 				[{"x":384,"y":480,"w":128,"h":160}]
 			],
-			"controlmethod":"USBCONTROLLER",
+			"controlmethod":"USB_CONTROLLER",
 			"controlindex":0,
 			"controls":[
 				{"keymask":545460846592, "method":"moveLeft"},

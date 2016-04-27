@@ -71,9 +71,7 @@ public class Overlay extends Component{
 		return scoreValues;
 	}
 	
-	public void gameEnding(){
-		game.removeDialog("end");
-		
+	public void gameEnding(){		
 		isGameEnding = true;
 		isGameStarting = false;
 		gameEndTimer = 2.0f;
@@ -83,9 +81,7 @@ public class Overlay extends Component{
 		blurComponent.setColor(blurColor);
 	}
 	
-	public void gameStarting(){
-		game.removeDialog("start");
-		
+	public void gameStarting(){		
 		isGameStarting = true;
 		isGameEnding = false;
 		gameStartTimer = 5.0f;
