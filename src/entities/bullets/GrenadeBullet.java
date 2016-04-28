@@ -72,7 +72,6 @@ public class GrenadeBullet extends BulletEntity {
 			if (closest != null && closest.m_userData instanceof PlayerEntity){
 				PlayerEntity target = (PlayerEntity)closest.m_userData;
 				float dist = Vector2.distance(getPosition(), target.getPosition());
-				System.out.println("Dist to " + i + " : " + dist);
 				if (dist < blastRadius){
 					target.setDead(true);
 				}

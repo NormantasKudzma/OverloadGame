@@ -1,11 +1,15 @@
 package game;
 
+import java.util.ArrayList;
+
 import managers.MapManager;
 import managers.PlayerManager;
 import managers.WeaponManager;
 import ui.GameStartDialog;
 import ui.Overlay;
 import utils.Vector2;
+import audio.MusicManager;
+import audio.SoundManager;
 import engine.BaseGame;
 import graphics.Layer;
 
@@ -60,13 +64,43 @@ public class OverloadGame extends BaseGame {
 		playerManager.loadPlayers();
 		weaponManager.loadWeapons();
 		
+		new Thread(){
+			public void run() {
+				loadMusic();
+				loadSounds();
+			};
+		}.start();
+		
 		GameStartDialog startDialog = new GameStartDialog(this, "start");
 		startDialog.setVisible(true);
 		addDialog(startDialog);
 	}
 	
+	private void loadMusic(){
+		musicManager = new MusicManager<String>();
+		
+		ArrayList<String> musicList = new ArrayList<String>();
+		musicList.add(Paths.MUSIC + "tr 2.ogg");
+		//musicList.add(Paths.MUSIC + "Clouds in a dream.ogg");
+		
+		ArrayList<String> musicKeys = new ArrayList<String>();
+		musicKeys.add("1");
+		//musicKeys.add("2");
+
+		musicManager.loadAll(musicList, musicKeys);
+		musicManager.playAll(musicKeys, true, true);			
+	}
+	
 	public void loadMap(){
 		mapManager.loadNextMap();
 		overlay.gameStarting();
+	}
+	
+	private void loadSounds(){
+		soundManager = new SoundManager<ESound>();
+		
+		for (ESound i : ESound.values()){
+			soundManager.loadAudio(i.getPath(), i.getType(), i);
+		}
 	}
 }

@@ -9,6 +9,7 @@ import physics.PhysicsBody.EMaskType;
 import utils.Vector2;
 import engine.BaseGame;
 import entities.PlayerEntity;
+import game.ESound;
 
 public class ScimitarEntity extends MeleeWeapon {
 	private Vector2 impulseStrength = new Vector2(90.0f, 45.0f);
@@ -53,6 +54,8 @@ public class ScimitarEntity extends MeleeWeapon {
 		currentImpulse = impulseStrength.copy().mul(weaponDir.x, 1.0f);
 		body.setCollisionFlags(PlayerManager.WEAPON_COLLIDER & ~player.getCategory(), EMaskType.SET);
 		attackStarted = true;
+		
+		game.getSoundManager().play(ESound.SWORD_SLASH, false);
 	}
 	
 	@Override

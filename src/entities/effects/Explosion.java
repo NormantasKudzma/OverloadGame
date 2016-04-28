@@ -1,6 +1,7 @@
 package entities.effects;
 
 import engine.BaseGame;
+import game.ESound;
 import graphics.SpriteAnimation;
 
 public class Explosion extends EffectEntity{
@@ -24,5 +25,7 @@ public class Explosion extends EffectEntity{
 		super.start();
 		setVisible(true);
 		setLifetime(duration);
+
+		game.getSoundManager().play(ESound.EXPLODE, false);
 	}
 }

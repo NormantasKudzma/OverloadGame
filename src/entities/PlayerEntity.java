@@ -16,6 +16,7 @@ import controls.ControllerEventListener;
 import engine.BaseGame;
 import engine.GameObject;
 import entities.weapons.WeaponEntity;
+import game.ESound;
 import game.OverloadGame;
 import game.OverloadMain;
 import graphics.SpriteAnimation;
@@ -140,6 +141,7 @@ public class PlayerEntity extends GameObject<SpriteAnimation> {
 				jumpStarted = false;
 				jumpLength = 0;
 				sprite.setState(AnimationState.RUN.index());
+				game.getSoundManager().play(ESound.LAND, false);
 			}
 			else if (myFixture == sensors.get(SensorType.LEFT)){
 				leftSensorTouching = true;
@@ -244,8 +246,11 @@ public class PlayerEntity extends GameObject<SpriteAnimation> {
 	public final void moveUp(){
 		if (canJump || (jumpStarted && jumpLength < MAX_JUMP_LENGTH)){
 			movementVector.y = jumpStrength;
-			jumpStarted = true;
 			sprite.setState(AnimationState.JUMP.index());
+			if (!jumpStarted){
+				game.getSoundManager().play(ESound.JUMP, false);
+			}
+			jumpStarted = true;
 		}
 	}
 

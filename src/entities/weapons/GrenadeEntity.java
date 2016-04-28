@@ -8,6 +8,7 @@ import utils.Vector2;
 import engine.BaseGame;
 import entities.bullets.AmmoEntity;
 import entities.bullets.BulletEntity;
+import game.ESound;
 
 public class GrenadeEntity extends WeaponEntity{
 
@@ -51,5 +52,7 @@ public class GrenadeEntity extends WeaponEntity{
 		AmmoEntity ammo = spawnAmmo(spawnPos);
 		ammo.applyImpulse(new Vector2(0.0f, 1.0f));
 		ammo.setLifetime(0.5f);
+		
+		game.getSoundManager().play(ESound.THROW, false);
 	}
 }

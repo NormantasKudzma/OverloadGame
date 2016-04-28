@@ -4,6 +4,7 @@ import utils.OverloadRandom;
 import utils.Vector2;
 import engine.BaseGame;
 import entities.bullets.BulletEntity;
+import game.ESound;
 
 public class ShotgunEntity extends WeaponEntity{
 	protected int shellsPerShot = 4;
@@ -16,7 +17,7 @@ public class ShotgunEntity extends WeaponEntity{
 	}
 	
 	@Override
-	public void shoot(Vector2 spawnPos, Vector2 weaponDir) {		
+	public void shoot(Vector2 spawnPos, Vector2 weaponDir) {
 		float angle = 0.0f;
 		float speed = 0.0f;
 		Vector2 direction = null;
@@ -33,5 +34,7 @@ public class ShotgunEntity extends WeaponEntity{
 			e.setMovementSpeed(speed);
 			e.setLifetime(e.getLifetime() * 0.4f);
 		}
+		
+		game.getSoundManager().play(ESound.SHOTGUN_SHOOT, false);
 	}
 }
