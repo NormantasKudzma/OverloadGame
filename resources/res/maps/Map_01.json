@@ -160,82 +160,38 @@
 			"scale":"1"
 		},
 		{
-			"comment":"cactus 1",
-			"name":"cactus1",
-			"type":"entities.WallEntity",
-			"sheet":"0",
-			"x":"256",
-			"y":"256",
-			"w":"128",
-			"h":"128",
-			"scale":"2"
-		},
-		{
-			"comment":"cactus 2",
-			"name":"cactus2",
+			"comment":"snowman",
+			"name":"snowman",
 			"type":"entities.WallEntity",
 			"sheet":"0",
 			"x":"384",
 			"y":"256",
-			"w":"128",
-			"h":"128",
-			"scale":"2"
+			"w":"192",
+			"h":"256",
+			"scale":"3"
 		},
 		{
-			"comment":"skeleton on ground",
-			"name":"skeleton",
+			"comment":"tree",
+			"name":"tree",
 			"type":"entities.WallEntity",
 			"sheet":"0",
-			"x":"0",
-			"y":"384",
+			"x":"576",
+			"y":"256",
 			"w":"256",
-			"h":"64",
+			"h":"320",
 			"scale":"4"
 		},
 		{
-			"comment":"bush - green",
-			"name":"bush1",
+			"comment":"crystals",
+			"name":"crystals",
 			"type":"entities.WallEntity",
 			"sheet":"0",
 			"x":"0",
-			"y":"448",
-			"w":"128",
-			"h":"64",
-			"scale":"2"
-		},
-		{
-			"comment":"bush - brown",
-			"name":"bush2",
-			"type":"entities.WallEntity",
-			"sheet":"0",
-			"x":"128",
-			"y":"448",
-			"w":"128",
-			"h":"64",
-			"scale":"2"
-		},
-		{
-			"comment":"thorny bush",
-			"name":"bush3",
-			"type":"entities.WallEntity",
-			"sheet":"0",
-			"x":"384",
 			"y":"384",
 			"w":"128",
 			"h":"128",
 			"scale":"2"
 		},
-		{
-			"comment":"wooden box",
-			"name":"box",
-			"type":"entities.WallEntity",
-			"sheet":"0",
-			"x":"128",
-			"y":"256",
-			"w":"128",
-			"h":"128",
-			"scale":"1"
-		}
 	],
 	"playerScale":[1.0, 1.0],
 	"players":[
@@ -274,6 +230,11 @@
 				
 				{"position":[18, 6], "scale":[1,1], "entity":"spawner"},
 				{"position":[62, 6], "scale":[1,1], "entity":"spawner"},
+				
+				{"position":[44, 25], "scale":[1,1], "entity":"snowman"},
+				{"position":[7.75, 10], "scale":[1,1], "entity":"tree"},
+				{"position":[66, 21], "scale":[1,1], "entity":"crystals"},
+				{"position":[16, 39], "scale":[-1,1], "entity":"crystals"},
 			]
 		},
 		{
@@ -458,15 +419,15 @@
 	"colliders":[
 		[{"x":38,"y":39},{"x":38,"y":60},{"x":42,"y":60},{"x":42,"y":39}],
 		
-		[{"x":10,"y":35},{"x":10,"y":37},{"x":18,"y":37},{"x":18,"y":35}],
-		[{"x":62,"y":35},{"x":62,"y":37},{"x":70,"y":37},{"x":70,"y":35}],
+		[{"x":10,"y":36},{"x":10,"y":37},{"x":18,"y":37},{"x":18,"y":36}],
+		[{"x":62,"y":36},{"x":62,"y":37},{"x":70,"y":37},{"x":70,"y":36}],
 		[{"x":34,"y":31},{"x":34,"y":33},{"x":46,"y":33},{"x":46,"y":31}],
 		[{"x":2,"y":29},{"x":2,"y":31},{"x":6,"y":31},{"x":6,"y":29}],
 		[{"x":32,"y":29},{"x":32,"y":31},{"x":36,"y":31},{"x":36,"y":29}],
 		[{"x":44,"y":29},{"x":44,"y":31},{"x":48,"y":31},{"x":48,"y":29}],
 		[{"x":74,"y":29},{"x":74,"y":31},{"x":78,"y":31},{"x":78,"y":29}],
-		[{"x":24,"y":27},{"x":24,"y":29},{"x":34,"y":29},{"x":34,"y":27}],
-		[{"x":46,"y":27},{"x":46,"y":29},{"x":56,"y":29},{"x":56,"y":27}],
+		[{"x":24,"y":28},{"x":24,"y":29},{"x":34,"y":29},{"x":34,"y":28}],
+		[{"x":46,"y":28},{"x":46,"y":29},{"x":56,"y":29},{"x":56,"y":28}],
 		[{"x":2,"y":19},{"x":2,"y":21},{"x":12,"y":21},{"x":12,"y":19}],
 		[{"x":32,"y":19},{"x":32,"y":21},{"x":48,"y":21},{"x":48,"y":19}],
 		[{"x":68,"y":19},{"x":68,"y":21},{"x":78,"y":21},{"x":78,"y":19}],

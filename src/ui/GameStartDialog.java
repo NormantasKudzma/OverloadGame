@@ -29,6 +29,8 @@ public class GameStartDialog extends BaseDialog{
 		System.out.println("Current avail memory " + Runtime.getRuntime().freeMemory() / 1000000 + "m");
 		super.initialize();
 		
+		Overlay overlay = ((OverloadGame)game).getOverlay();
+		
 		AnimatedLabel title = new AnimatedLabel(OverloadMain.GAME){
 			float progress = 0.0f;
 			float offset = 0.0f;
@@ -45,7 +47,7 @@ public class GameStartDialog extends BaseDialog{
 				setScale(getScale().add(offset, offset));
 			}
 		};
-		title.setFont(((OverloadGame)game).getOverlay().getFont().deriveFont(90.0f));
+		title.setFont(overlay.getFont().deriveFont(90.0f));
 		title.setInfinite(true);
 		title.setPosition(new Vector2(0.0f, 0.8f));
 		title.setScale(new Vector2(0.95f, 0.95f));
@@ -81,6 +83,19 @@ public class GameStartDialog extends BaseDialog{
 		play.setPosition(new Vector2(0.0f, -0.7f));
 		addChild(play);
 
+		Button credits = new Button(game, null, null, "About"){
+			@Override
+			public void clickFunction() {
+				CreditsDialog creditsDialog = new CreditsDialog(game, "credits");
+				game.addDialog(creditsDialog);
+				creditsDialog.setVisible(true);
+				GameStartDialog.this.setVisible(false);
+			}
+		};
+		credits.setPosition(new Vector2(0.85f, -0.85f));
+		credits.setScale(new Vector2(0.36f, 0.25f));
+		addChild(credits);
+		
 		initializePlayerInfo();
 	}
 	
