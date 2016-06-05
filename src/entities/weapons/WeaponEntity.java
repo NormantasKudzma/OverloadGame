@@ -14,7 +14,7 @@ import entities.effects.EffectEntity;
 import game.OverloadGame;
 import graphics.SpriteAnimation;
 
-public abstract class WeaponEntity extends GameObject<SpriteAnimation>{
+public abstract class WeaponEntity extends GameObject {
 	enum WeaponAnimation {
 		IDLE(0),
 		ON_COOLDOWN(1);
@@ -78,8 +78,8 @@ public abstract class WeaponEntity extends GameObject<SpriteAnimation>{
 	
 	@Override
 	public WeaponEntity clone() {
-		GameObject<SpriteAnimation> e = super.clone();
-		WeaponEntity we = (WeaponEntity)e;
+		GameObject gameObject = super.clone();
+		WeaponEntity we = (WeaponEntity)gameObject;
 		we.numBullets = numBullets;
 		we.shootCooldown = shootCooldown;
 		we.positionOffset = positionOffset;
@@ -198,7 +198,9 @@ public abstract class WeaponEntity extends GameObject<SpriteAnimation>{
 	}
 	
 	protected void onShotReady(){
-		sprite.setState(WeaponAnimation.IDLE.getIndex());
+		if (sprite instanceof SpriteAnimation){
+			((SpriteAnimation)sprite).setState(WeaponAnimation.IDLE.getIndex());
+		}
 	}
 	
 	public void setMuzzleOffset(Vector2 offset){
@@ -218,7 +220,9 @@ public abstract class WeaponEntity extends GameObject<SpriteAnimation>{
 				shootTimer = shootCooldown;
 				
 				shoot(spawnPos, weaponDirection);
-				sprite.setState(WeaponAnimation.ON_COOLDOWN.getIndex());
+				if (sprite instanceof SpriteAnimation){
+					((SpriteAnimation)sprite).setState(WeaponAnimation.ON_COOLDOWN.getIndex());
+				}
 				if (numBullets <= 0){
 					if (player != null){
 						player.weaponDetached();

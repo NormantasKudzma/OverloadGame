@@ -2,9 +2,10 @@ package entities.effects;
 
 import engine.BaseGame;
 import game.ESound;
+import graphics.Renderable;
 import graphics.SpriteAnimation;
 
-public class Explosion extends EffectEntity{
+public class Explosion extends EffectEntity {
 	public Explosion(BaseGame game) {
 		super(game);
 	}
@@ -15,8 +16,11 @@ public class Explosion extends EffectEntity{
 	}
 
 	@Override
-	public void setSprite(SpriteAnimation spr) {
-		spr.setFrameDelay(0.015f);
+	public void setSprite(Renderable spr) {
+		if (spr instanceof SpriteAnimation){
+			SpriteAnimation anim = (SpriteAnimation)spr;
+			anim.setFrameDelay(0.015f);
+		}
 		super.setSprite(spr);
 	}
 	

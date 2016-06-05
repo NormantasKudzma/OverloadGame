@@ -8,7 +8,7 @@ import engine.BaseGame;
 import engine.GameObject;
 
 
-public class WallEntity extends GameObject{
+public class WallEntity extends GameObject {
 	public WallEntity(BaseGame game){
 		super(game);
 	}

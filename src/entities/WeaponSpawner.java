@@ -19,7 +19,7 @@ import entities.weapons.WeaponEntity;
 import game.OverloadGame;
 import graphics.Sprite;
 
-public class WeaponSpawner extends GameObject<Sprite> implements QueryCallback{	
+public class WeaponSpawner extends GameObject implements QueryCallback{	
 	protected boolean isSpawnFull = false;
 	protected float cooldown = 10.0f;
 	protected float cooldownTimer = 5.1f;
@@ -66,9 +66,10 @@ public class WeaponSpawner extends GameObject<Sprite> implements QueryCallback{
 	protected void trySpawn(){
 		isSpawnFull = false;
 		if (spawnAABB == null){
+			Vector2 halfSize = getSprite().getSize().copy().mul(0.5f);
 			Vector2 spawnPos = getPosition().copy().add(spawnOffset);
-			Vec2 upperBound = spawnPos.add(getSprite().getHalfSize()).toVec2();
-			Vec2 lowerBound = spawnPos.copy().sub(getSprite().getHalfSize()).toVec2();
+			Vec2 upperBound = spawnPos.add(halfSize).toVec2();
+			Vec2 lowerBound = spawnPos.copy().sub(halfSize).toVec2();
 			spawnAABB = new AABB(lowerBound, upperBound);
 		}
 		PhysicsWorld.getInstance().getWorld().queryAABB(this, spawnAABB);

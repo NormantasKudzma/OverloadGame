@@ -117,7 +117,7 @@ public class Overlay extends Component{
 		JSONArray backgroundArrayJson = overlayJson.getJSONArray("background");
 		SpriteComponent bgComponents[] = loadSpriteComponents(backgroundArrayJson, sheet);
 		for (SpriteComponent i : bgComponents){
-			i.getSprite().setInternalScale((int)(OverloadEngine.frameWidth * 0.25f), (int)(OverloadEngine.frameHeight * 0.08f));
+			((Sprite)i.getSprite()).setInternalScale((int)(OverloadEngine.frameWidth * 0.25f), (int)(OverloadEngine.frameHeight * 0.08f));
 		}
 		
 		// Load score indicator icons

@@ -21,7 +21,7 @@ import game.OverloadGame;
 import game.OverloadMain;
 import graphics.SpriteAnimation;
 
-public class PlayerEntity extends GameObject<SpriteAnimation> {
+public class PlayerEntity extends GameObject {
 	public enum SensorType {
 		FOOT,
 		LEFT,

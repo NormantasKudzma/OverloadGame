@@ -11,7 +11,7 @@ import entities.PlayerEntity;
 import entities.weapons.WeaponEntity;
 import graphics.Sprite;
 
-public class BulletEntity extends GameObject<Sprite>{
+public class BulletEntity extends GameObject {
 	protected float movementSpeed = 1.25f;
 	protected float totalLifetime = 1.0f;
 	protected Vector2 direction = new Vector2();
