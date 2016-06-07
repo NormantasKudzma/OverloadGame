@@ -53,8 +53,9 @@ public class GameStartDialog extends BaseDialog{
 		title.setScale(new Vector2(0.95f, 0.95f));
 		addChild(title);
 		
-		Button play = new Button(game, null, null, "PLAY"){
-			public void clickFunction() {
+		Button play = new Button(game, "PLAY");
+		OnClickListener playListener = new OnClickListener(){
+			public void clickFunction(Vector2 pos) {
 				int numPlayers = 0;
 				
 				OverloadGame overload = (OverloadGame)game;
@@ -79,19 +80,22 @@ public class GameStartDialog extends BaseDialog{
 				GameStartDialog.this.setVisible(false);
 			};
 		};
+		play.setClickListener(playListener);
 		play.setScale(new Vector2(0.45f, 0.45f));
 		play.setPosition(new Vector2(0.0f, -0.7f));
 		addChild(play);
 
-		Button credits = new Button(game, null, null, "About"){
+		Button credits = new Button(game, "About");
+		OnClickListener creditsListener = new OnClickListener(){
 			@Override
-			public void clickFunction() {
+			public void clickFunction(Vector2 pos) {
 				CreditsDialog creditsDialog = new CreditsDialog(game, "credits");
 				game.addDialog(creditsDialog);
 				creditsDialog.setVisible(true);
 				GameStartDialog.this.setVisible(false);
 			}
 		};
+		credits.setClickListener(creditsListener);
 		credits.setPosition(new Vector2(0.85f, -0.85f));
 		credits.setScale(new Vector2(0.36f, 0.25f));
 		addChild(credits);

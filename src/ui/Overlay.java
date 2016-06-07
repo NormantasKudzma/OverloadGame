@@ -20,7 +20,7 @@ import graphics.Color;
 import graphics.SimpleFont;
 import graphics.Sprite;
 
-public class Overlay extends Component{
+public class Overlay extends Composite {
 	private Font overlayFont;
 	private Label ammoTexts[];
 	private Label scoreTexts[];
@@ -105,6 +105,7 @@ public class Overlay extends Component{
 	}
 	
 	protected void initialize() {
+		super.initialize();
 		setPosition(new Vector2(0.0f, 1.92f));
 		
 		JSONObject overlayJson = ConfigManager.loadConfigAsJson(Paths.UI + "overlay.json");
@@ -154,7 +155,7 @@ public class Overlay extends Component{
 		gameStartLabel = new Label(game, new SimpleFont("0", overlayFont.deriveFont(110.0f)));
 		gameStartLabel.setPosition(Vector2.one);
 		gameStartLabel.setVisible(false);
-		game.addEntity(gameStartLabel);
+		game.addObject(gameStartLabel);
 	}
 	
 	public boolean isUIBlurred(){

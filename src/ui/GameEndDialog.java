@@ -48,20 +48,23 @@ public class GameEndDialog extends BaseDialog{
 		initializePlayerInfo(scores, winnerIndex);
 		
 		if (!isGameOver){
-			Button play = new Button(game, null, null, "PLAY"){
-				public void clickFunction() {		
+			Button play = new Button(game, "PLAY");
+			OnClickListener playListener = new OnClickListener(){
+				public void clickFunction(Vector2 pos) {		
 					overload.loadMap();
 					GameEndDialog.this.setVisible(false);
 					game.removeDialog(GameEndDialog.this.name);
 				};
 			};
+			play.setClickListener(playListener);
 			play.setScale(new Vector2(0.45f, 0.45f));
 			play.setPosition(new Vector2(0.0f, -0.7f));
 			addChild(play);
 		}
 		else {			
-			Button back = new Button(game, null, null, "BACK"){
-				public void clickFunction() {
+			Button back = new Button(game, "BACK");
+			OnClickListener backListener = new OnClickListener(){
+				public void clickFunction(Vector2 pos) {
 					overlay.reset();
 					
 					GameStartDialog dialog = (GameStartDialog)game.getDialog("start");
@@ -75,6 +78,7 @@ public class GameEndDialog extends BaseDialog{
 					game.removeDialog(GameEndDialog.this.name);
 				};
 			};
+			back.setClickListener(backListener);
 			back.setScale(new Vector2(0.45f, 0.45f));
 			back.setPosition(new Vector2(0.0f, -0.7f));
 			addChild(back);

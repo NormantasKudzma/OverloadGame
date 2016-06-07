@@ -13,8 +13,9 @@ public class CreditsDialog extends BaseDialog {
 	protected void initialize() {
 		super.initialize();
 		
-		Button back = new Button(game, null, null, "BACK"){
-			public void clickFunction() {				
+		Button back = new Button(game, "BACK");
+		OnClickListener backListener = new OnClickListener(){
+			public void clickFunction(Vector2 pos) {				
 				GameStartDialog dialog = (GameStartDialog)game.getDialog("start");
 				if (dialog == null){
 					dialog = new GameStartDialog(game, "start");
@@ -24,8 +25,9 @@ public class CreditsDialog extends BaseDialog {
 				
 				CreditsDialog.this.setVisible(false);
 				game.removeDialog(CreditsDialog.this.name);
-			};
+			}
 		};
+		back.setClickListener(backListener);
 		back.setScale(new Vector2(0.45f, 0.45f));
 		back.setPosition(new Vector2(0.0f, -0.7f));
 		addChild(back);

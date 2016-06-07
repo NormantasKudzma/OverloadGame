@@ -99,7 +99,7 @@ public class MapManager extends EntityManager{
 		}
 		colliderEntity.setCollisionFlags(WALL_CATEGORY, WALL_COLLIDER);
 		
-		game.addEntity(colliderEntity, backgroundLayer);
+		game.addObject(colliderEntity, backgroundLayer);
 	}
 
 	private void loadEntities(JSONObject json, HashMap<String, Sprite> spriteSheets, HashMap<String, GameObject> entities, Vector2 mapSize) {
@@ -145,7 +145,7 @@ public class MapManager extends EntityManager{
 				GameObject clone = (GameObject)e.clone();
 				clone.setScale(e.getScale().copy().mul(tileScale));
 				clone.setPosition(Vector2.fromJsonArray(positionJson).div(mapSize));
-				layer.addEntity(clone);
+				layer.addObject(clone);
 			}
 			catch (Exception e){
 				e.printStackTrace();
@@ -194,7 +194,7 @@ public class MapManager extends EntityManager{
 		MapBoundsEntity mapBoundsEntity = new MapBoundsEntity(game);
 		mapBoundsEntity.initEntity(EBodyType.INTERACTIVE);
 		mapBoundsEntity.setCollisionFlags(WALL_CATEGORY, WALL_COLLIDER);
-		game.addEntity(mapBoundsEntity, backgroundLayer);
+		game.addObject(mapBoundsEntity, backgroundLayer);
 	}
 
 	private void loadMapPool(){
@@ -236,7 +236,7 @@ public class MapManager extends EntityManager{
 				player.setPosition(position);
 				
 				if (playerManager.isPlayerEnabled(i)){
-					game.addEntity(player, playersLayer);
+					game.addObject(player, playersLayer);
 				}
 			}
 		}

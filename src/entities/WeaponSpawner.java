@@ -91,7 +91,7 @@ public class WeaponSpawner extends GameObject implements QueryCallback{
 				weapon = weapon.clone();
 				weapon.getPhysicsBody().getBody().setActive(true);
 				weapon.setPosition(getPosition().copy().add(spawnOffset));
-				game.addEntity(weapon, ((OverloadGame)game).getMapManager().getWeaponsLayer());
+				game.addObject(weapon, ((OverloadGame)game).getMapManager().getWeaponsLayer());
 			}
 		}
 	}

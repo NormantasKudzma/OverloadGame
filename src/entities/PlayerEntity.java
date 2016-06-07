@@ -18,7 +18,7 @@ import engine.GameObject;
 import entities.weapons.WeaponEntity;
 import game.ESound;
 import game.OverloadGame;
-import game.OverloadMain;
+import graphics.Renderable;
 import graphics.SpriteAnimation;
 
 public class PlayerEntity extends GameObject {
@@ -69,6 +69,7 @@ public class PlayerEntity extends GameObject {
 	
 	private OverloadGame overloadGame;
 	private Overlay overlay;
+	private SpriteAnimation animation;
 	
 	public PlayerEntity(BaseGame game) {
 		super(game);
@@ -140,7 +141,7 @@ public class PlayerEntity extends GameObject {
 				canJump = true;
 				jumpStarted = false;
 				jumpLength = 0;
-				sprite.setState(AnimationState.RUN.index());
+				animation.setState(AnimationState.RUN.index());
 				game.getSoundManager().play(ESound.LAND, false);
 			}
 			else if (myFixture == sensors.get(SensorType.LEFT)){
@@ -246,7 +247,7 @@ public class PlayerEntity extends GameObject {
 	public final void moveUp(){
 		if (canJump || (jumpStarted && jumpLength < MAX_JUMP_LENGTH)){
 			movementVector.y = jumpStrength;
-			sprite.setState(AnimationState.JUMP.index());
+			animation.setState(AnimationState.JUMP.index());
 			if (!jumpStarted){
 				game.getSoundManager().play(ESound.JUMP, false);
 			}
@@ -296,6 +297,13 @@ public class PlayerEntity extends GameObject {
 		}
 	}
 	
+	public void setSprite(Renderable spr){
+		super.setSprite(spr);
+		if (spr instanceof SpriteAnimation){
+			animation = (SpriteAnimation)spr;
+		}
+	}
+	
 	public final void shoot(){
 		tryShoot = true;
 	}
@@ -338,10 +346,10 @@ public class PlayerEntity extends GameObject {
 				}
 				setHorizontalVelocity(movementVector.x);
 				movementDirection = 0.0f;
-				sprite.setPaused(false);
+				animation.setPaused(false);
 			}
 			else {
-				sprite.setPaused(true);
+				animation.setPaused(true);
 				if (Math.abs(movementVector.x) > 0.0f){
 					setHorizontalVelocity(movementVector.x * 0.5f);
 					movementVector.x = 0.0f;

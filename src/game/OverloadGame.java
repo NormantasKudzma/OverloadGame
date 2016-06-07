@@ -58,7 +58,7 @@ public class OverloadGame extends BaseGame {
 		
 		Layer overlayLayer = new Layer("overlay", 1);
 		overlay = new Overlay(this);
-		overlayLayer.addEntity(overlay);
+		overlayLayer.addObject(overlay);
 		addLayer(overlayLayer);
 		
 		playerManager.loadPlayers();

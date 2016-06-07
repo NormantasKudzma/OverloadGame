@@ -244,7 +244,7 @@ public abstract class WeaponEntity extends GameObject {
 		if (ammo != null){
 			AmmoEntity e = (AmmoEntity)ammo.clone();
 			e.setPosition(pos);
-			game.addEntity(e, ((OverloadGame)game).getMapManager().getWeaponsLayer());
+			game.addObject(e, ((OverloadGame)game).getMapManager().getWeaponsLayer());
 			return e;
 		}
 		return null;
@@ -266,7 +266,7 @@ public abstract class WeaponEntity extends GameObject {
 				e.getPhysicsBody().setCollisionFlags(player.getCategory(), PhysicsBody.EMaskType.EXCLUDE);
 			}
 			e.setPosition(pos);
-			game.addEntity(e, ((OverloadGame)game).getMapManager().getWeaponsLayer());
+			game.addObject(e, ((OverloadGame)game).getMapManager().getWeaponsLayer());
 			return e;
 		}
 		return null;
@@ -277,7 +277,7 @@ public abstract class WeaponEntity extends GameObject {
 			EffectEntity e = (EffectEntity)effect.clone();
 			e.setPosition(pos);
 			e.setVisible(false);
-			game.addEntity(e, ((OverloadGame)game).getMapManager().getWeaponsLayer());
+			game.addObject(e, ((OverloadGame)game).getMapManager().getWeaponsLayer());
 			return e;
 		}
 		return null;
