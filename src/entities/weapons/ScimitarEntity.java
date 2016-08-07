@@ -4,12 +4,12 @@ import managers.PlayerManager;
 
 import org.jbox2d.dynamics.Fixture;
 
-import physics.Collidable;
-import physics.PhysicsBody.EMaskType;
-import utils.Vector2;
-import engine.BaseGame;
+import com.ovl.engine.BaseGame;
+import com.ovl.physics.Collidable;
+import com.ovl.physics.PhysicsBody.EMaskType;
+import com.ovl.utils.Vector2;
+
 import entities.PlayerEntity;
-import game.ESound;
 
 public class ScimitarEntity extends MeleeWeapon {
 	private Vector2 impulseStrength = new Vector2(90.0f, 45.0f);
@@ -55,7 +55,7 @@ public class ScimitarEntity extends MeleeWeapon {
 		body.setCollisionFlags(PlayerManager.WEAPON_COLLIDER & ~player.getCategory(), EMaskType.SET);
 		attackStarted = true;
 		
-		game.getSoundManager().play(ESound.SWORD_SLASH, false);
+		//game.getSoundManager().play(ESound.SWORD_SLASH, false);
 	}
 	
 	@Override

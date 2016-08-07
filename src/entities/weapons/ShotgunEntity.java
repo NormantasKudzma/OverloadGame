@@ -1,10 +1,10 @@
 package entities.weapons;
 
-import utils.OverloadRandom;
-import utils.Vector2;
-import engine.BaseGame;
+import com.ovl.engine.BaseGame;
+import com.ovl.utils.OverloadRandom;
+import com.ovl.utils.Vector2;
+
 import entities.bullets.BulletEntity;
-import game.ESound;
 
 public class ShotgunEntity extends WeaponEntity{
 	protected int shellsPerShot = 4;
@@ -35,6 +35,6 @@ public class ShotgunEntity extends WeaponEntity{
 			e.setLifetime(e.getLifetime() * 0.4f);
 		}
 		
-		game.getSoundManager().play(ESound.SHOTGUN_SHOOT, false);
+		//game.getSoundManager().play(ESound.SHOTGUN_SHOOT, false);
 	}
 }

@@ -9,15 +9,15 @@ import org.jbox2d.collision.AABB;
 import org.jbox2d.common.Vec2;
 import org.jbox2d.dynamics.Fixture;
 
-import physics.PhysicsBody.EBodyType;
-import physics.PhysicsWorld;
-import utils.OverloadRandom;
-import utils.Vector2;
-import engine.BaseGame;
-import engine.GameObject;
+import com.ovl.engine.BaseGame;
+import com.ovl.engine.GameObject;
+import com.ovl.physics.PhysicsBody.EBodyType;
+import com.ovl.physics.PhysicsWorld;
+import com.ovl.utils.OverloadRandom;
+import com.ovl.utils.Vector2;
+
 import entities.weapons.WeaponEntity;
 import game.OverloadGame;
-import graphics.Sprite;
 
 public class WeaponSpawner extends GameObject implements QueryCallback{	
 	protected boolean isSpawnFull = false;

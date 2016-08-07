@@ -2,18 +2,11 @@ package entities;
 
 import org.jbox2d.dynamics.Fixture;
 
-import physics.Collidable;
-import physics.PhysicsBody.EBodyType;
-import physics.PhysicsBody.EMaskType;
-import utils.Vector2;
-import engine.BaseGame;
+import com.ovl.physics.Collidable;
+import com.ovl.physics.PhysicsBody.EBodyType;
+import com.ovl.utils.Vector2;
 
-public class MapBoundsEntity extends WallEntity{
-
-	public MapBoundsEntity(BaseGame game) {
-		super(game);
-	}
-	
+public class MapBoundsEntity extends WallEntity{	
 	@Override
 	public void initEntity(EBodyType type) {
 		super.initEntity(type);

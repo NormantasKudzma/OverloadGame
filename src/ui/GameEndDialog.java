@@ -1,19 +1,22 @@
 package ui;
 
-import java.awt.Font;
+import game.OverloadGame;
+
 import java.util.ArrayList;
 import java.util.Collections;
 
 import managers.PlayerManager;
-import ui.BaseDialog;
-import ui.Button;
-import ui.Label;
-import ui.SpriteComponent;
-import utils.Vector2;
-import engine.BaseGame;
-import game.OverloadGame;
-import graphics.Color;
-import graphics.SimpleFont;
+
+import com.ovl.engine.BaseGame;
+import com.ovl.graphics.Color;
+import com.ovl.graphics.CustomFont;
+import com.ovl.graphics.SimpleFont;
+import com.ovl.ui.BaseDialog;
+import com.ovl.ui.Button;
+import com.ovl.ui.Label;
+import com.ovl.ui.OnClickListener;
+import com.ovl.ui.SpriteComponent;
+import com.ovl.utils.Vector2;
 
 public class GameEndDialog extends BaseDialog{
 	public GameEndDialog(BaseGame game, String name) {
@@ -39,8 +42,8 @@ public class GameEndDialog extends BaseDialog{
 			}
 		}
 		
-		Font labelFont = overlay.getFont().deriveFont(80.0f);
-		SimpleFont labelText = new SimpleFont(isGameOver ? "Final scores :" : "Leaderboard", labelFont);
+		CustomFont labelFont = overlay.getFont().deriveFont(80.0f);
+		SimpleFont labelText = SimpleFont.create(isGameOver ? "Final scores :" : "Leaderboard", labelFont);
 		Label title = new Label(game, labelText);
 		title.setPosition(new Vector2(0.0f, 0.75f));
 		addChild(title);
@@ -139,7 +142,7 @@ public class GameEndDialog extends BaseDialog{
 			if (winnerIndex == index){
 				scoreStr += ", WINNER!";
 			}
-			SimpleFont text = new SimpleFont(scoreStr, overlay.getFont().deriveFont(40.0f));		
+			SimpleFont text = SimpleFont.create(scoreStr, overlay.getFont().deriveFont(40.0f));		
 			Label scoreLabel = new Label(game, text);
 			scoreLabel.setPosition(center.copy().add(0.5f, 0.0f));
 			if (winnerIndex == index){

@@ -1,8 +1,7 @@
 package entities.bullets;
 
-import engine.BaseGame;
-import engine.GameObject;
-import graphics.Sprite;
+import com.ovl.engine.BaseGame;
+import com.ovl.engine.GameObject;
 
 public class AmmoEntity extends GameObject {
 	public AmmoEntity(BaseGame game){

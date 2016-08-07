@@ -1,10 +1,10 @@
 package entities.weapons;
 
-import utils.OverloadRandom;
-import utils.Vector2;
-import engine.BaseGame;
+import com.ovl.engine.BaseGame;
+import com.ovl.utils.OverloadRandom;
+import com.ovl.utils.Vector2;
+
 import entities.bullets.BulletEntity;
-import game.ESound;
 
 public class PistolEntity extends WeaponEntity{
 	protected float maxAngle = 3.0f;
@@ -24,6 +24,6 @@ public class PistolEntity extends WeaponEntity{
 		e.getPhysicsBody().getBody().setGravityScale(0.035f);
 		e.setMovementSpeed(e.getSpeed() * 0.75f);
 		
-		game.getSoundManager().play(ESound.PISTOL_SHOOT, false);
+		//game.getSoundManager().play(ESound.PISTOL_SHOOT, false);
 	}
 }

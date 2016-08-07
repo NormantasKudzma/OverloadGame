@@ -1,21 +1,23 @@
 package ui;
 
-import managers.PlayerManager;
-import ui.AnimatedLabel;
-import ui.BaseDialog;
-import ui.Button;
-import ui.CheckBox;
-import ui.Label;
-import ui.SpriteComponent;
-import utils.FastMath;
-import utils.Vector2;
-import engine.BaseGame;
 import game.OverloadGame;
 import game.OverloadMain;
 import game.Paths;
-import graphics.Color;
-import graphics.SimpleFont;
-import graphics.Sprite;
+import managers.PlayerManager;
+
+import com.ovl.engine.BaseGame;
+import com.ovl.graphics.Color;
+import com.ovl.graphics.SimpleFont;
+import com.ovl.graphics.Sprite;
+import com.ovl.ui.AnimatedLabel;
+import com.ovl.ui.BaseDialog;
+import com.ovl.ui.Button;
+import com.ovl.ui.CheckBox;
+import com.ovl.ui.Label;
+import com.ovl.ui.OnClickListener;
+import com.ovl.ui.SpriteComponent;
+import com.ovl.utils.FastMath;
+import com.ovl.utils.Vector2;
 
 public class GameStartDialog extends BaseDialog{
 	private CheckBox readyBox[];
@@ -67,7 +69,7 @@ public class GameStartDialog extends BaseDialog{
 				}
 				
 				if (numPlayers < 2){
-					SimpleFont text = new SimpleFont("You must select at least two players");
+					SimpleFont text = SimpleFont.create("You must select at least two players");
 					text.setFont(overload.getOverlay().getFont().deriveFont(48.0f));
 					Label error = new Label(game, text);
 					error.setLifetime(2.0f);
@@ -124,7 +126,7 @@ public class GameStartDialog extends BaseDialog{
 			controls.setScale(0.4f, 0.4f);
 			addChild(controls);
 			
-			SimpleFont text = new SimpleFont("Player " + (i + 1) + " ready?", overlay.getFont().deriveFont(22.0f));		
+			SimpleFont text = SimpleFont.create("Player " + (i + 1) + " ready?", overlay.getFont().deriveFont(22.0f));		
 			readyBox[i] = new CheckBox(game);
 			readyBox[i].setPosition(center.copy().add(-0.16f, -0.12f));
 			readyBox[i].setText(text);

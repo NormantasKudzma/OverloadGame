@@ -4,22 +4,23 @@ import org.jbox2d.dynamics.Fixture;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
-import physics.PhysicsBody;
 import ui.Overlay;
-import utils.ConfigManager;
-import utils.Vector2;
-import controls.AbstractController;
-import controls.ControllerEventListener;
-import controls.ControllerKeybind;
-import controls.ControllerManager;
-import controls.EController;
-import engine.BaseGame;
+
+import com.ovl.controls.Controller;
+import com.ovl.controls.ControllerEventListener;
+import com.ovl.controls.ControllerKeybind;
+import com.ovl.controls.ControllerManager;
+import com.ovl.engine.BaseGame;
+import com.ovl.graphics.Sprite;
+import com.ovl.graphics.SpriteAnimation;
+import com.ovl.physics.PhysicsBody;
+import com.ovl.utils.ConfigManager;
+import com.ovl.utils.Vector2;
+
 import entities.PlayerEntity;
 import entities.PlayerEntity.SensorType;
 import game.OverloadGame;
 import game.Paths;
-import graphics.Sprite;
-import graphics.SpriteAnimation;
 
 public class PlayerManager extends EntityManager{
 	public static final int PLAYER_COLLIDERS[] = {EntityManager.PLAYER1_CATEGORY, 
@@ -112,9 +113,9 @@ public class PlayerManager extends EntityManager{
 	}
 
 	private void loadControls(JSONObject playerJson, PlayerEntity player) {
-		EController controlMethod = EController.getFromString(playerJson.getString("controlmethod"));
+		Controller.Type controlMethod = Controller.Type.getFromString(playerJson.getString("controlmethod"));
 		int controllerIndex = playerJson.getInt("controlindex");
-		AbstractController controller = ControllerManager.getInstance().getController(controlMethod, controllerIndex);
+		Controller controller = ControllerManager.getInstance().getController(controlMethod, controllerIndex);
 		
 		if (controller != null){
 			JSONArray controlsArrayJson = playerJson.getJSONArray("controls");

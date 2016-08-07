@@ -1,27 +1,31 @@
 package ui;
 
+import game.OverloadGame;
+import game.Paths;
+
 import java.awt.Font;
+import java.awt.GraphicsEnvironment;
+import java.net.URL;
 
 import managers.PlayerManager;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
 
-import ui.Component;
-import ui.Label;
-import ui.SpriteComponent;
-import utils.ConfigManager;
-import utils.Vector2;
-import engine.BaseGame;
-import engine.OverloadEngine;
-import game.OverloadGame;
-import game.Paths;
-import graphics.Color;
-import graphics.SimpleFont;
-import graphics.Sprite;
+import com.ovl.engine.BaseGame;
+import com.ovl.engine.OverloadEngine;
+import com.ovl.graphics.Color;
+import com.ovl.graphics.CustomFont;
+import com.ovl.graphics.SimpleFont;
+import com.ovl.graphics.Sprite;
+import com.ovl.ui.Composite;
+import com.ovl.ui.Label;
+import com.ovl.ui.SpriteComponent;
+import com.ovl.utils.ConfigManager;
+import com.ovl.utils.Vector2;
 
 public class Overlay extends Composite {
-	private Font overlayFont;
+	private CustomFont overlayFont;
 	private Label ammoTexts[];
 	private Label scoreTexts[];
 	private int ammoValues[];
@@ -59,7 +63,7 @@ public class Overlay extends Composite {
 		}
 	}
 	
-	public Font getFont(){
+	public CustomFont getFont(){
 		return overlayFont;
 	}
 
@@ -117,8 +121,11 @@ public class Overlay extends Composite {
 		
 		JSONArray backgroundArrayJson = overlayJson.getJSONArray("background");
 		SpriteComponent bgComponents[] = loadSpriteComponents(backgroundArrayJson, sheet);
+		
+		int w = (int)(OverloadEngine.getInstance().frameWidth * 0.25f);
+		int h = (int)(OverloadEngine.getInstance().frameHeight * 0.08f);
 		for (SpriteComponent i : bgComponents){
-			((Sprite)i.getSprite()).setInternalScale((int)(OverloadEngine.frameWidth * 0.25f), (int)(OverloadEngine.frameHeight * 0.08f));
+			((Sprite)i.getSprite()).setInternalScale(w, h);
 		}
 		
 		// Load score indicator icons
@@ -140,7 +147,7 @@ public class Overlay extends Composite {
 		// Load score texts
 		String fontPath = Paths.FONTS + overlayJson.getString("font");
 		
-		overlayFont = ConfigManager.loadFont(fontPath, 16);
+		overlayFont = OverloadEngine.getInstance().renderer.getFontBuilder().buildFont(fontPath).deriveFont(16.0f);
 		scoreTexts = new Label[PlayerManager.NUM_PLAYERS];
 		ammoTexts = new Label[PlayerManager.NUM_PLAYERS];
 		ammoValues = new int[PlayerManager.NUM_PLAYERS];
@@ -152,7 +159,7 @@ public class Overlay extends Composite {
 		JSONArray ammoTextArrayJson = overlayJson.getJSONArray("ammoTexts");
 		loadLabels(ammoTextArrayJson, ammoTexts); 
 		
-		gameStartLabel = new Label(game, new SimpleFont("0", overlayFont.deriveFont(110.0f)));
+		gameStartLabel = new Label(game, SimpleFont.create("0", overlayFont.deriveFont(110.0f)));
 		gameStartLabel.setPosition(Vector2.one);
 		gameStartLabel.setVisible(false);
 		game.addObject(gameStartLabel);
@@ -168,7 +175,7 @@ public class Overlay extends Composite {
 			JSONArray posJson = textJson.getJSONArray("pos");
 			float fontSize = (float)textJson.getDouble("size");
 			
-			SimpleFont textFont = new SimpleFont("0", overlayFont.deriveFont(fontSize));
+			SimpleFont textFont = SimpleFont.create("0", overlayFont.deriveFont(fontSize));
 			Label textLabel = new Label(game, textFont);
 			textLabel.setPosition(Vector2.fromJsonArray(posJson));
 			addChild(textLabel);

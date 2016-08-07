@@ -2,27 +2,22 @@ package managers;
 
 import java.util.HashMap;
 
-import org.jbox2d.collision.shapes.CircleShape;
-import org.jbox2d.collision.shapes.PolygonShape;
-import org.jbox2d.collision.shapes.Shape;
-import org.jbox2d.common.Vec2;
-import org.jbox2d.dynamics.Body;
-import org.jbox2d.dynamics.Fixture;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
-import physics.PhysicsBody;
-import physics.PhysicsBody.EBodyType;
-import utils.ConfigManager;
-import utils.Vector2;
-import engine.BaseGame;
-import engine.GameObject;
+import com.ovl.engine.BaseGame;
+import com.ovl.engine.GameObject;
+import com.ovl.graphics.Sprite;
+import com.ovl.graphics.SpriteAnimation;
+import com.ovl.physics.PhysicsBody;
+import com.ovl.physics.PhysicsBody.EBodyType;
+import com.ovl.utils.ConfigManager;
+import com.ovl.utils.Vector2;
+
 import entities.bullets.AmmoEntity;
 import entities.bullets.BulletEntity;
 import entities.weapons.WeaponEntity;
 import game.Paths;
-import graphics.Sprite;
-import graphics.SpriteAnimation;
 
 public class WeaponManager extends EntityManager {
 	private HashMap<String, WeaponEntity> weaponMap = new HashMap<String, WeaponEntity>();

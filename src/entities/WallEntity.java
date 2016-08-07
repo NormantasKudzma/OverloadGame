@@ -2,16 +2,10 @@ package entities;
 
 import org.jbox2d.dynamics.BodyType;
 
-import physics.PhysicsBody;
-
-import engine.BaseGame;
-import engine.GameObject;
-
+import com.ovl.physics.PhysicsBody;
+import com.ovl.engine.GameObject;
 
 public class WallEntity extends GameObject {
-	public WallEntity(BaseGame game){
-		super(game);
-	}
 	
 	@Override
 	public void initEntity(PhysicsBody.EBodyType type) {

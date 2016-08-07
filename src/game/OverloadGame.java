@@ -1,17 +1,23 @@
 package game;
 
-import java.util.ArrayList;
-
 import managers.MapManager;
 import managers.PlayerManager;
 import managers.WeaponManager;
+
+import org.lwjgl.input.Keyboard;
+
 import ui.GameStartDialog;
 import ui.Overlay;
-import utils.Vector2;
-import audio.MusicManager;
-import audio.SoundManager;
-import engine.BaseGame;
-import graphics.Layer;
+
+import com.ovl.controls.Controller;
+import com.ovl.controls.ControllerEventListener;
+import com.ovl.controls.ControllerManager;
+import com.ovl.controls.pc.KeyboardController;
+import com.ovl.controls.pc.MouseController;
+import com.ovl.engine.BaseGame;
+import com.ovl.engine.OverloadEngine;
+import com.ovl.graphics.Layer;
+import com.ovl.utils.Vector2;
 
 public class OverloadGame extends BaseGame {
 	public static Vector2 GRAVITY = new Vector2(0.0f, -4.8f);
@@ -56,6 +62,33 @@ public class OverloadGame extends BaseGame {
 		super.init();
 		physicsWorld.getWorld().setGravity(GRAVITY.toVec2());
 		
+		MouseController c = (MouseController) ControllerManager.getInstance().getController(Controller.Type.TYPE_MOUSE);
+		c.addKeybind(0, new ControllerEventListener() {
+			@Override
+			public void handleEvent(long eventArg, Vector2 pos, int... params) {
+				if (params[0] == 1) {
+					onClick(pos);
+				}
+			}		
+		});
+
+		c.setMouseMoveListener(new ControllerEventListener() {
+			@Override
+			public void handleEvent(long eventArg, Vector2 pos, int... params) {
+				onHover(pos);
+			}			
+		});
+		c.startController();
+	
+		Controller k = ControllerManager.getInstance().getController(Controller.Type.TYPE_KEYBOARD);
+		k.addKeybind(Keyboard.KEY_ESCAPE, new ControllerEventListener(){
+			@Override
+			public void handleEvent(long eventArg, Vector2 pos, int... params) {
+				OverloadEngine.getInstance().requestClose();
+			}			
+		});
+		k.startController();
+		
 		Layer overlayLayer = new Layer("overlay", 1);
 		overlay = new Overlay(this);
 		overlayLayer.addObject(overlay);
@@ -77,7 +110,7 @@ public class OverloadGame extends BaseGame {
 	}
 	
 	private void loadMusic(){
-		musicManager = new MusicManager<String>();
+		/*musicManager = new MusicManager<String>();
 		
 		ArrayList<String> musicList = new ArrayList<String>();
 		musicList.add(Paths.MUSIC + "tr 2.ogg");
@@ -88,7 +121,7 @@ public class OverloadGame extends BaseGame {
 		//musicKeys.add("2");
 
 		musicManager.loadAll(musicList, musicKeys);
-		musicManager.playAll(musicKeys, true, true);			
+		musicManager.playAll(musicKeys, true, true);	*/		
 	}
 	
 	public void loadMap(){
@@ -97,10 +130,10 @@ public class OverloadGame extends BaseGame {
 	}
 	
 	private void loadSounds(){
-		soundManager = new SoundManager<ESound>();
+		/*soundManager = new SoundManager<ESound>();
 		
 		for (ESound i : ESound.values()){
 			soundManager.loadAudio(i.getPath(), i.getType(), i);
-		}
+		}*/
 	}
 }

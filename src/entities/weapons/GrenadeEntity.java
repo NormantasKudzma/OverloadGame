@@ -4,11 +4,12 @@ import managers.EntityManager;
 
 import org.jbox2d.dynamics.Body;
 
-import utils.Vector2;
-import engine.BaseGame;
+import com.ovl.engine.BaseGame;
+import com.ovl.utils.Vector2;
+
 import entities.bullets.AmmoEntity;
 import entities.bullets.BulletEntity;
-import game.ESound;
+
 
 public class GrenadeEntity extends WeaponEntity{
 
@@ -53,6 +54,6 @@ public class GrenadeEntity extends WeaponEntity{
 		ammo.applyImpulse(new Vector2(0.0f, 1.0f));
 		ammo.setLifetime(0.5f);
 		
-		game.getSoundManager().play(ESound.THROW, false);
+		//game.getSoundManager().play(ESound.THROW, false);
 	}
 }

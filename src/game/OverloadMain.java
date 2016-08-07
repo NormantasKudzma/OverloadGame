@@ -1,7 +1,8 @@
 package game;
 
-import engine.EngineConfig;
-import engine.OverloadEngine;
+import com.ovl.engine.EngineConfig;
+import com.ovl.engine.OverloadEngine;
+import com.ovl.engine.pc.OverloadEnginePc;
 
 public class OverloadMain {
 	public static final String VERSION = "v5";
@@ -13,10 +14,10 @@ public class OverloadMain {
 		EngineConfig config = new EngineConfig();
 		config.game = game;
 		config.isDebug = true;
-		config.isFullscreen = false;
+		//config.isFullscreen = false;
 		config.title = GAME + " " + VERSION;
 		
-		OverloadEngine engine = new OverloadEngine(config);
+		OverloadEngine engine = new OverloadEnginePc(config);
 		engine.run();
 	}
 }

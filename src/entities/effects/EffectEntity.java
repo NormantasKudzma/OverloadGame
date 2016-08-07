@@ -1,8 +1,8 @@
 package entities.effects;
 
-import engine.BaseGame;
-import engine.GameObject;
-import graphics.SpriteAnimation;
+import com.ovl.engine.BaseGame;
+import com.ovl.engine.GameObject;
+import com.ovl.graphics.SpriteAnimation;
 
 public class EffectEntity extends GameObject {
 	public float duration = 0.0f;
@@ -23,6 +23,7 @@ public class EffectEntity extends GameObject {
 			anim.setState(0);
 			duration = anim.getDuration();
 			anim.setPaused(false);
+			spriteUpdatable = anim;
 		}
 	}
 	

@@ -1,7 +1,10 @@
 package ui;
 
-import utils.Vector2;
-import engine.BaseGame;
+import com.ovl.engine.BaseGame;
+import com.ovl.ui.BaseDialog;
+import com.ovl.ui.Button;
+import com.ovl.ui.OnClickListener;
+import com.ovl.utils.Vector2;
 
 public class CreditsDialog extends BaseDialog {
 

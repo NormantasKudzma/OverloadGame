@@ -7,19 +7,18 @@ import java.util.HashMap;
 
 import org.jbox2d.dynamics.Fixture;
 
-import physics.Collidable;
-import physics.PhysicsBody;
+import com.ovl.physics.Collidable;
+import com.ovl.physics.PhysicsBody;
 import ui.Overlay;
-import utils.Vector2;
-import controls.AbstractController;
-import controls.ControllerEventListener;
-import engine.BaseGame;
-import engine.GameObject;
+import com.ovl.utils.Vector2;
+import com.ovl.controls.Controller;
+import com.ovl.controls.ControllerEventListener;
+import com.ovl.engine.BaseGame;
+import com.ovl.engine.GameObject;
 import entities.weapons.WeaponEntity;
-import game.ESound;
 import game.OverloadGame;
-import graphics.Renderable;
-import graphics.SpriteAnimation;
+import com.ovl.graphics.Renderable;
+import com.ovl.graphics.SpriteAnimation;
 
 public class PlayerEntity extends GameObject {
 	public enum SensorType {
@@ -64,7 +63,7 @@ public class PlayerEntity extends GameObject {
 	private Vector2 scale = null;					// Separate scale, so sprite can be easily flipped
 	private WeaponEntity currentWeapon = null;
 	private HashMap<SensorType, Fixture> sensors = new HashMap<SensorType, Fixture>();
-	private AbstractController controller = null;
+	private Controller controller = null;
 	private ArrayList<ControllerEventListener> controls = new ArrayList<ControllerEventListener>();
 	
 	private OverloadGame overloadGame;
@@ -77,7 +76,7 @@ public class PlayerEntity extends GameObject {
 		overlay = overloadGame.getOverlay();
 	}
 	
-	public final ControllerEventListener getEventListenerForMethod(AbstractController controller, final String methodName) {
+	public final ControllerEventListener getEventListenerForMethod(Controller controller, final String methodName) {
 		try {
 			if (this.controller == null){
 				this.controller = controller;
@@ -142,7 +141,7 @@ public class PlayerEntity extends GameObject {
 				jumpStarted = false;
 				jumpLength = 0;
 				animation.setState(AnimationState.RUN.index());
-				game.getSoundManager().play(ESound.LAND, false);
+				//game.getSoundManager().play(ESound.LAND, false);
 			}
 			else if (myFixture == sensors.get(SensorType.LEFT)){
 				leftSensorTouching = true;
@@ -249,7 +248,7 @@ public class PlayerEntity extends GameObject {
 			movementVector.y = jumpStrength;
 			animation.setState(AnimationState.JUMP.index());
 			if (!jumpStarted){
-				game.getSoundManager().play(ESound.JUMP, false);
+				//game.getSoundManager().play(ESound.JUMP, false);
 			}
 			jumpStarted = true;
 		}

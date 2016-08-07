@@ -1,6 +1,6 @@
 package managers;
 
-import engine.BaseGame;
+import com.ovl.engine.BaseGame;
 
 public class EntityManager {
 	public static final int NO_COLLISIONS		= 0x0000_0000;

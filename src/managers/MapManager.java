@@ -7,22 +7,21 @@ import java.util.HashMap;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
-import physics.PhysicsBody;
-import physics.PhysicsBody.EBodyType;
-import utils.ConfigManager;
-import utils.ICloneable;
-import utils.Vector2;
-import engine.BaseGame;
-import engine.GameObject;
-import engine.OverloadEngine;
+import com.ovl.engine.BaseGame;
+import com.ovl.engine.GameObject;
+import com.ovl.engine.OverloadEngine;
+import com.ovl.graphics.Layer;
+import com.ovl.graphics.Sprite;
+import com.ovl.physics.PhysicsBody;
+import com.ovl.physics.PhysicsBody.EBodyType;
+import com.ovl.utils.ConfigManager;
+import com.ovl.utils.Vector2;
+
 import entities.MapBoundsEntity;
 import entities.PlayerEntity;
 import entities.WallEntity;
 import game.OverloadGame;
 import game.Paths;
-import graphics.Renderable;
-import graphics.Layer;
-import graphics.Sprite;
 
 public class MapManager extends EntityManager{
 	private String backgroundLayer = null;
@@ -83,7 +82,7 @@ public class MapManager extends EntityManager{
 		JSONArray colliderArrayJson = json.getJSONArray("colliders");
 		JSONArray mapSizeJson = json.getJSONArray("mapsize");
 		Vector2 mapSize = Vector2.fromJsonArray(mapSizeJson).div(2.0f);
-		WallEntity colliderEntity = new WallEntity(game);
+		WallEntity colliderEntity = new WallEntity();
 		colliderEntity.initEntity(PhysicsBody.EBodyType.INTERACTIVE);
 		colliderEntity.setVisible(false);
 		
@@ -104,7 +103,7 @@ public class MapManager extends EntityManager{
 
 	private void loadEntities(JSONObject json, HashMap<String, Sprite> spriteSheets, HashMap<String, GameObject> entities, Vector2 mapSize) {
 		JSONArray entityArrayJson = json.getJSONArray("entities");
-		float gridSize = OverloadEngine.frameWidth / mapSize.x;
+		float gridSize = OverloadEngine.getInstance().frameWidth / mapSize.x;
 		
 		for (int i = 0; i < entityArrayJson.length(); ++i){
 			try {
@@ -191,7 +190,7 @@ public class MapManager extends EntityManager{
 		loadPlayerPositions(json, mapSize);
 		loadColliders(json, game);
 		
-		MapBoundsEntity mapBoundsEntity = new MapBoundsEntity(game);
+		MapBoundsEntity mapBoundsEntity = new MapBoundsEntity();
 		mapBoundsEntity.initEntity(EBodyType.INTERACTIVE);
 		mapBoundsEntity.setCollisionFlags(WALL_CATEGORY, WALL_COLLIDER);
 		game.addObject(mapBoundsEntity, backgroundLayer);

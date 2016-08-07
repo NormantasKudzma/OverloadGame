@@ -1,9 +1,8 @@
 package entities.effects;
 
-import engine.BaseGame;
-import game.ESound;
-import graphics.Renderable;
-import graphics.SpriteAnimation;
+import com.ovl.engine.BaseGame;
+import com.ovl.graphics.Renderable;
+import com.ovl.graphics.SpriteAnimation;
 
 public class Explosion extends EffectEntity {
 	public Explosion(BaseGame game) {
@@ -30,6 +29,6 @@ public class Explosion extends EffectEntity {
 		setVisible(true);
 		setLifetime(duration);
 
-		game.getSoundManager().play(ESound.EXPLODE, false);
+		//game.getSoundManager().play(ESound.EXPLODE, false);
 	}
 }

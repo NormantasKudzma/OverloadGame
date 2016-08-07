@@ -2,14 +2,14 @@ package entities.bullets;
 
 import org.jbox2d.dynamics.Fixture;
 
-import physics.Collidable;
-import physics.PhysicsBody;
-import utils.Vector2;
-import engine.BaseGame;
-import engine.GameObject;
+import com.ovl.engine.BaseGame;
+import com.ovl.engine.GameObject;
+import com.ovl.physics.Collidable;
+import com.ovl.physics.PhysicsBody;
+import com.ovl.utils.Vector2;
+
 import entities.PlayerEntity;
 import entities.weapons.WeaponEntity;
-import graphics.Sprite;
 
 public class BulletEntity extends GameObject {
 	protected float movementSpeed = 1.25f;

@@ -1,6 +1,6 @@
 package entities.weapons;
 
-import engine.BaseGame;
+import com.ovl.engine.BaseGame;
 
 public abstract class MeleeWeapon extends WeaponEntity {
 

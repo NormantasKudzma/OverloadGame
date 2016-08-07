@@ -1,18 +1,20 @@
 package entities.weapons;
 
 import managers.EntityManager;
-import physics.PhysicsBody;
-import physics.PhysicsBody.EBodyType;
-import utils.FastMath;
-import utils.Vector2;
-import engine.BaseGame;
-import engine.GameObject;
+
+import com.ovl.engine.BaseGame;
+import com.ovl.engine.GameObject;
+import com.ovl.graphics.SpriteAnimation;
+import com.ovl.physics.PhysicsBody;
+import com.ovl.physics.PhysicsBody.EBodyType;
+import com.ovl.utils.FastMath;
+import com.ovl.utils.Vector2;
+
 import entities.PlayerEntity;
 import entities.bullets.AmmoEntity;
 import entities.bullets.BulletEntity;
 import entities.effects.EffectEntity;
 import game.OverloadGame;
-import graphics.SpriteAnimation;
 
 public abstract class WeaponEntity extends GameObject {
 	enum WeaponAnimation {
